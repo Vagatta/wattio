@@ -57,18 +57,34 @@ export const POST: APIRoute = async ({ request }) => {
   const attachment = Buffer.from(await file.arrayBuffer()).toString('base64');
   const resend = new Resend(apiKey);
 
-  const { error } = await resend.emails.send({
-    from,
-    to: [OWNER_EMAIL],
-    replyTo: email,
-    subject: `Nueva factura Wattio — ${email}`,
-    text: `El usuario ${email} ha enviado una factura para revisión. La factura se adjunta a este email.`,
-    html: `<p>El usuario <strong>${email.replace(/[&<>"']/g, '')}</strong> ha enviado una factura para revisión.</p><p>La factura se encuentra adjunta a este email.</p>`,
-    attachments: [{ filename: safeName, content: attachment }],
-  });
+  const requestId = crypto.randomUUID();
 
-  if (error) {
-    return json({ error: 'No se pudo enviar la factura. Inténtalo de nuevo en unos minutos.' }, 502);
+  try {
+    const { error } = await resend.emails.send({
+      from,
+      to: [OWNER_EMAIL],
+      replyTo: email,
+      subject: `Nueva factura Wattio — ${email}`,
+      text: `El usuario ${email} ha enviado una factura para revisión. La factura se adjunta a este email.`,
+      html: `<p>El usuario <strong>${email.replace(/[&<>"']/g, '')}</strong> ha enviado una factura para revisión.</p><p>La factura se encuentra adjunta a este email.</p>`,
+      attachments: [{ filename: safeName, content: attachment }],
+    });
+
+    if (error) {
+      console.error('Wattio Resend rejection', {
+        requestId,
+        name: error.name,
+        message: error.message,
+        statusCode: error.statusCode,
+      });
+      return json({ error: 'Resend no aceptó el envío. Revisa la configuración del remitente en Vercel.', requestId }, 502);
+    }
+  } catch (error) {
+    console.error('Wattio email transport failure', {
+      requestId,
+      message: error instanceof Error ? error.message : 'Unknown email transport error',
+    });
+    return json({ error: 'No se pudo conectar con el servicio de email.', requestId }, 502);
   }
 
   return json({ ok: true });

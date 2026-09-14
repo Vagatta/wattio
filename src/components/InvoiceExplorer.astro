@@ -1,0 +1,49 @@
+---
+import Icon from './Icon.astro';
+const concepts = [
+  { name: 'Consumo', key: 'consumo', icon: 'sun' as const, title: 'La energía que sí utilizas.', text: 'Los kWh que consumes y su precio. Tus hábitos y los horarios de uso ayudan a entender esta parte de la factura.' },
+  { name: 'Potencia', key: 'potencia', icon: 'plug' as const, title: 'Lo que pagas por tenerla disponible.', text: 'La capacidad para usar varios aparatos a la vez. Es un coste fijo, incluso cuando no estás consumiendo energía.' },
+  { name: 'Extras', key: 'extras', icon: 'plus' as const, title: 'Lo que conviene mirar dos veces.', text: 'Servicios de mantenimiento y otros conceptos. Revisar qué incluyen es tan importante como conocer su precio.' },
+];
+---
+<div class="invoice-explorer" data-concept="consumo">
+  <div class="invoice-stage">
+    <div class="light-aperture" aria-hidden="true"><div></div></div>
+    <svg class="contour" viewBox="0 0 560 520" fill="none" aria-hidden="true">
+      <path d="M20 380C35 210 480 90 530 270S135 580 55 385 425-35 510 170" stroke="currentColor" />
+    </svg>
+    <div class="invoice-paper">
+      <div class="paper-header"><span class="paper-brand"><Icon name="bolt" size={17} />wattio</span><span>Ejemplo de factura</span></div>
+      <div class="paper-heading"><span>Tu suministro</span><strong>Electricidad</strong><span>Una lectura más clara.</span></div>
+      <div class="paper-wave" aria-hidden="true">
+        {Array.from({ length: 32 }, (_, i) => <i style={`--bar: ${22 + Math.round(Math.sin(i * .37) * 16 + Math.cos(i * .79) * 6)}px`}></i>)}
+      </div>
+      <div class="paper-row" data-line="consumo"><span><i></i>Consumo de energía</span><b>kWh</b></div>
+      <div class="paper-row" data-line="potencia"><span><i></i>Potencia contratada</span><b>kW</b></div>
+      <div class="paper-row" data-line="extras"><span><i></i>Servicios adicionales</span><b>€</b></div>
+      <div class="paper-bottom"><span>No solo el total.<br />También lo que hay detrás.</span><Icon name="bolt" size={29} /></div>
+    </div>
+    <div class="reading-lens" aria-hidden="true"><div class="lens-top"><Icon name="bolt" size={18} /><span>En claro</span></div><strong id="lens-term">Consumo</strong><span id="lens-unit">Lo que utilizas</span><div class="lens-rule"></div></div>
+  </div>
+  <div class="explorer-console">
+    <div class="concept-controls" role="group" aria-label="Explorar conceptos de una factura">
+      {concepts.map((concept, index) => <button type="button" data-concept-button={concept.key} data-title={concept.title} data-explanation={concept.text} aria-pressed={index === 0 ? 'true' : 'false'} aria-controls="concept-explanation"><Icon name={concept.icon} size={17} />{concept.name}</button>)}
+    </div>
+    <div id="concept-explanation" class="concept-explanation" aria-live="polite" aria-atomic="true"><strong>{concepts[0].title}</strong><p>{concepts[0].text}</p></div>
+    <p class="example-note">Ejemplo ilustrativo. No es un análisis de tu factura.</p>
+  </div>
+</div>
+<script>
+  const explorer = document.querySelector<HTMLElement>('.invoice-explorer');
+  const conceptButtons = document.querySelectorAll<HTMLButtonElement>('[data-concept-button]');
+  const subtitles: Record<string, string> = { consumo: 'Lo que utilizas', potencia: 'Lo que tienes disponible', extras: 'Lo que viene añadido' };
+  conceptButtons.forEach(button => button.addEventListener('click', () => {
+    const key = button.dataset.conceptButton!;
+    if (explorer) explorer.dataset.concept = key;
+    conceptButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+    document.querySelector('#lens-term')!.textContent = button.textContent;
+    document.querySelector('#lens-unit')!.textContent = subtitles[key];
+    document.querySelector('#concept-explanation strong')!.textContent = button.dataset.title!;
+    document.querySelector('#concept-explanation p')!.textContent = button.dataset.explanation!;
+  }));
+</script>

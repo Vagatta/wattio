@@ -1,0 +1,184 @@
+---
+import '@fontsource-variable/manrope';
+import Icon from '../components/Icon.astro';
+import InvoiceExplorer from '../components/InvoiceExplorer.astro';
+import '../styles/wattio.css';
+
+const whatsappNumber = '34646583077';
+const whatsappMessage = 'Hola, Wattio. Quiero revisar mi factura de luz.';
+const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+
+const faqs = [
+  { question: '¿Qué parte de la factura se revisa?', answer: 'El precio de la energía, la potencia contratada y los servicios adicionales. El objetivo es entender qué pagas y qué opciones encajan con tu consumo.' },
+  { question: '¿Me garantiza Wattio que voy a ahorrar?', answer: 'No. El ahorro depende de tu tarifa, de tu consumo y de las alternativas disponibles. Si tu situación ya es buena, una revisión también puede ayudarte a confirmarlo.' },
+  { question: '¿Tengo que cambiar de compañía?', answer: 'No. Conocer otras opciones no implica contratar nada. Cualquier cambio debe ser una decisión tuya, después de conocer sus condiciones.' },
+  { question: '¿Qué ocurre si selecciono una factura ahora?', answer: 'Esta versión es una demostración. Puedes probar la selección de un PDF o una imagen, pero el archivo no se envía ni se analiza. No hace falta usar una factura con datos personales.' },
+  { question: '¿Puedo enviarla por WhatsApp?', answer: 'Sí. Pulsa «Enviar por WhatsApp» para abrir el chat con Wattio en el +34 646 58 30 77. Adjunta la foto o el PDF y envía el mensaje desde WhatsApp. El archivo que selecciones en esta web no se transfiere al chat automáticamente.' },
+];
+const steps = [
+  { number: '1', icon: 'document' as const, title: 'Tu factura, tal cual.', text: 'Una foto legible o un PDF. No necesitas copiar números ni entender cada concepto.' },
+  { number: '2', icon: 'bolt' as const, title: 'Le damos una vuelta.', text: 'Consumo, potencia y extras. Una revisión que mire más allá del importe final.' },
+  { number: '3', icon: 'check' as const, title: 'Tú tienes la última palabra.', text: 'Entiende tus opciones antes de decidir. Sin dar por hecho que debas cambiar.' },
+];
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#180e2c" />
+    <meta name="description" content="Conoce Wattio: una forma más clara de entender tu factura de luz, tu consumo y tus opciones. Prueba nuestra experiencia de selección de factura." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Wattio — Tu luz, sin puntos ciegos</title>
+  </head>
+  <body>
+    <a href="#top" class="skip-link">Saltar al contenido</a>
+    <header class="nav-wrap">
+      <a class="brand" href="#top" aria-label="Wattio, inicio"><span class="brand-mark"><Icon name="bolt" size={23} /></span><span translate="no">wattio</span></a>
+      <nav class="desktop-nav" aria-label="Navegación principal"><a href="#como-funciona">Cómo funciona</a><a href="#faq">Preguntas frecuentes</a></nav>
+      <div class="nav-actions">
+        <a class="nav-cta" href="#revisar">Revisar mi factura<Icon name="arrow" size={18} /></a>
+        <button class="menu-toggle" type="button" aria-label="Menú" aria-expanded="false" aria-controls="mobile-navigation"><Icon name="menu" size={20} /></button>
+      </div>
+      <nav id="mobile-navigation" class="mobile-nav" aria-label="Navegación móvil" hidden><a href="#como-funciona">Cómo funciona</a><a href="#faq">Preguntas frecuentes</a><a href="#revisar">Revisar mi factura</a></nav>
+    </header>
+
+    <main id="top" tabindex="-1">
+      <section class="hero container" aria-labelledby="hero-heading">
+        <div class="hero-copy">
+          <p class="hero-intro"><span></span> Otra forma de mirar tu factura.</p>
+          <h1 id="hero-heading">Tu luz,<br />sin puntos<br />ciegos.</h1>
+          <p class="hero-description">¿Pagas de más? La respuesta está en tu factura. Te ayudamos a entenderla, sin perderte entre tarifas y letra pequeña.</p>
+          <a class="button primary" href="#revisar">Revisar mi factura<Icon name="arrow" size={21} /></a>
+          <p class="hero-caption"><Icon name="document" size={16} /> Una foto o un PDF. Ese es el principio.</p>
+        </div>
+        <div class="hero-object"><InvoiceExplorer /></div>
+        <div class="hero-foot"><span>Menos dudas. Más control sobre tu energía.</span><a href="#como-funciona">Conoce Wattio<Icon name="arrow" size={16} /></a></div>
+      </section>
+
+      <section class="how-section" id="como-funciona" aria-labelledby="how-heading">
+        <div class="container">
+          <div class="section-intro"><span class="section-index">Cómo funciona</span><p>No necesitas ser experto.<br />Solo tener tu factura a mano.</p></div>
+          <h2 id="how-heading">La luz es complicada.<br />Revisarla no debería serlo.</h2>
+          <div class="process">
+            <svg class="process-line" viewBox="0 0 1120 120" preserveAspectRatio="none" aria-hidden="true"><path d="M20 55H290Q325 55 345 82T402 55H682Q715 55 736 28T793 55H1100" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
+            {steps.map(step => <article class="process-step"><div class="step-visual"><span class="step-symbol"><Icon name={step.icon} size={29} /></span><span class="step-number">{step.number}</span></div><h3>{step.title}</h3><p>{step.text}</p></article>)}
+          </div>
+          <div class="principle"><span class="principle-symbol"><Icon name="shield" size={25} /></span><p>Una revisión no es un compromiso.<br /><strong>Entender primero. Decidir después.</strong></p><a href="#faq">Resuelve tus dudas<Icon name="arrow" size={18} /></a></div>
+        </div>
+      </section>
+
+      <section class="upload-section container" id="revisar" aria-labelledby="upload-heading">
+        <div class="upload-copy">
+          <span class="section-index">Tu factura es el punto de partida</span>
+          <h2 id="upload-heading">Vamos a verla<br />con otros ojos.</h2>
+          <p>No más capturas que no entiendes.<br />No más conceptos que pasas por alto.</p>
+          <div class="upload-seal" aria-hidden="true"><svg viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="55" stroke="currentColor" /><circle cx="60" cy="60" r="47" stroke="currentColor" stroke-dasharray="1 8" stroke-width="3" /><path d="m67 27-30 38h23l-7 28 32-40H62l5-26Z" fill="currentColor" /></svg></div>
+        </div>
+        <div class="upload-card">
+          <div class="upload-card-top"><span class="file-heading"><Icon name="document" size={20} />Tu factura de luz</span><span class="demo-label">Demo local</span></div>
+          <div class="dropzone" id="invoice-dropzone">
+            <div class="file-art" aria-hidden="true"><div class="file-back"></div><div class="file-front"><Icon name="bolt" size={26} /><i></i><i></i></div><span class="file-add"><Icon name="plus" size={17} /></span></div>
+            <label class="file-label" for="invoice"><span class="file-prompt">Elige tu factura</span><span>o arrástrala hasta aquí</span><input id="invoice" name="invoice" type="file" accept="application/pdf,image/jpeg,image/png" aria-describedby="file-help file-status" /></label>
+            <p id="file-help">PDF, JPG o PNG de hasta 10&nbsp;MB.</p>
+          </div>
+          <div class="selected-file" id="selected-file" hidden><span class="selected-file-icon"><Icon name="document" size={23} /></span><div><strong id="file-name"></strong><span id="file-size"></span></div><button type="button" id="remove-file" aria-label="Quitar archivo"><Icon name="close" size={18} /></button></div>
+          <p id="file-status" class="file-status" role="status" aria-live="polite">Puedes probar con un archivo de ejemplo.</p>
+          <div class="local-notice"><Icon name="shield" size={19} /><p><strong>Tu archivo se queda en tu dispositivo.</strong> Esta demo no envía documentos ni calcula ahorros.</p></div>
+          <noscript><p class="file-status">Activa JavaScript para probar la selección local. No se enviará ningún archivo.</p></noscript>
+          <div class="whatsapp-option">
+            <a class="whatsapp-cta" href={whatsappUrl} target="_blank" rel="noopener noreferrer" aria-describedby="whatsapp-help"><Icon name="whatsapp" size={22} />Enviar por WhatsApp</a>
+            <p id="whatsapp-help" class="whatsapp-note">Adjunta la foto o el PDF dentro del chat. El archivo seleccionado aquí no se transfiere a WhatsApp.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="faq container" id="faq" aria-labelledby="faq-heading">
+        <div class="faq-intro"><span class="section-index">Antes de empezar</span><h2 id="faq-heading">Todo claro.<br />Desde el principio.</h2><p>También lo que Wattio puede<br />y no puede hacer.</p></div>
+        <div class="faq-list">{faqs.map((faq, index) => <details name="questions"><summary><span class="faq-number">{String(index + 1).padStart(2, '0')}</span><span>{faq.question}</span><span class="faq-plus"><Icon name="plus" size={20} /></span></summary><p>{faq.answer}</p></details>)}</div>
+      </section>
+    </main>
+
+    <footer class="footer container">
+      <div class="footer-top"><p>La energía, sin tanto misterio.</p><a href="#top">Volver al inicio<Icon name="arrow" size={18} /></a></div>
+      <div class="footer-signature" aria-hidden="true"><Icon name="bolt" size={180} /><span translate="no">wattio</span></div>
+      <div class="footer-bottom"><span>© {new Date().getFullYear()} Wattio</span><a class="footer-whatsapp" href={whatsappUrl} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={17} />WhatsApp: +34 646 58 30 77</a><a href="#revisar">Sobre esta demo</a></div>
+    </footer>
+  </body>
+</html>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle')!;
+  const mobileNav = document.querySelector<HTMLElement>('#mobile-navigation')!;
+  function closeMenu() {
+    mobileNav.hidden = true;
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+  toggle.addEventListener('click', () => {
+    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+    mobileNav.hidden = isOpen;
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+  });
+  mobileNav.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !mobileNav.hidden) { closeMenu(); toggle.focus(); }
+  });
+  document.addEventListener('click', event => {
+    if (!mobileNav.hidden && event.target instanceof Node && !mobileNav.contains(event.target) && !toggle.contains(event.target)) closeMenu();
+  });
+  matchMedia('(min-width: 761px)').addEventListener('change', event => { if (event.matches) closeMenu(); });
+
+  const input = document.querySelector<HTMLInputElement>('#invoice')!;
+  const dropzone = document.querySelector<HTMLElement>('.dropzone')!;
+  const selected = document.querySelector<HTMLElement>('#selected-file')!;
+  const status = document.querySelector<HTMLElement>('#file-status')!;
+  const name = document.querySelector<HTMLElement>('#file-name')!;
+  const size = document.querySelector<HTMLElement>('#file-size')!;
+  const remove = document.querySelector<HTMLButtonElement>('#remove-file')!;
+  function selectFile(file?: File) {
+    if (!file) return;
+    const allowed: Record<string, RegExp> = { 'application/pdf': /\.pdf$/i, 'image/jpeg': /\.jpe?g$/i, 'image/png': /\.png$/i };
+    const error = !allowed[file.type]?.test(file.name) ? 'Elige un archivo PDF, JPG o PNG.' : file.size === 0 ? 'El archivo está vacío. Elige otro documento.' : file.size > 10 * 1024 * 1024 ? 'El archivo supera los 10 MB. Elige uno más pequeño.' : '';
+    status.dataset.error = String(Boolean(error));
+    input.setAttribute('aria-invalid', String(Boolean(error)));
+    selected.hidden = Boolean(error);
+    if (error) {
+      input.value = '';
+      name.textContent = '';
+      size.textContent = '';
+      status.textContent = error;
+      return;
+    }
+    name.textContent = file.name;
+    size.textContent = new Intl.NumberFormat('es', { maximumFractionDigits: 1 }).format(file.size / 1024) + ' KB';
+    status.textContent = 'Archivo seleccionado en tu dispositivo. No se ha enviado ni analizado.';
+  }
+  input.addEventListener('change', () => selectFile(input.files?.[0]));
+  remove.addEventListener('click', () => {
+    input.value = '';
+    selected.hidden = true;
+    name.textContent = '';
+    size.textContent = '';
+    status.dataset.error = 'false';
+    input.removeAttribute('aria-invalid');
+    status.textContent = 'Archivo retirado. Puedes elegir otro.';
+    input.focus({ preventScroll: true });
+  });
+  let dragDepth = 0;
+  dropzone.addEventListener('dragenter', event => { event.preventDefault(); dragDepth++; dropzone.classList.add('is-dragging'); });
+  dropzone.addEventListener('dragover', event => event.preventDefault());
+  dropzone.addEventListener('dragleave', () => { if (--dragDepth <= 0) { dragDepth = 0; dropzone.classList.remove('is-dragging'); } });
+  dropzone.addEventListener('drop', event => {
+    event.preventDefault();
+    dragDepth = 0;
+    dropzone.classList.remove('is-dragging');
+    input.value = '';
+    const files = event.dataTransfer?.files;
+    if (files?.length && files.length > 1) {
+      status.textContent = 'Elige una sola factura cada vez.';
+      status.dataset.error = 'true';
+      return;
+    }
+    selectFile(files?.[0]);
+  });
+</script>

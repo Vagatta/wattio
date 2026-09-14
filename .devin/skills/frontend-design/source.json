@@ -1,0 +1,7 @@
+{
+  "repository": "https://github.com/anthropics/skills",
+  "source": "https://raw.githubusercontent.com/anthropics/skills/main/skills/frontend-design/SKILL.md",
+  "licenseSource": "https://raw.githubusercontent.com/anthropics/skills/main/skills/frontend-design/LICENSE.txt",
+  "retrieved": "2026-09-14",
+  "installation": "Local copy of reviewed upstream skill and license. No scripts, hooks, MCP servers or installers."
+}

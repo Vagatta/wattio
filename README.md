@@ -1,43 +1,48 @@
-# Astro Starter Kit: Minimal
+# Wattio
+
+Landing de Wattio para revisar facturas eléctricas. Astro + Vercel + Resend.
+
+## Desarrollo
 
 ```sh
-npm create astro@latest -- --template minimal
+npm install
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+La aplicación funciona como una landing con subida local de archivos. Para enviar una factura realmente por email hacen falta las variables de Resend descritas en `.env.example`.
 
-## 🚀 Project Structure
+## Envío de facturas
 
-Inside of your Astro project, you'll see the following folders and files:
+El formulario pide el email de la persona y una factura en PDF, JPG o PNG de hasta 10 MB. Al confirmar:
+
+1. El endpoint server-side valida email, tipo y tamaño.
+2. Resend envía la factura adjunta a `diego.sanmiguel.delpozo1314@gmail.com`.
+3. La interfaz muestra una confirmación al usuario.
+
+La factura no se envía al seleccionar el archivo; solo al pulsar **Enviar factura a Wattio**. No se manda una copia automática al usuario todavía.
+
+Configura en Vercel:
 
 ```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+RESEND_API_KEY=re_...
+RESEND_FROM_EMAIL=Wattio <hola@tu-dominio-verificado.com>
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+`RESEND_FROM_EMAIL` debe usar un dominio verificado en Resend. No guardes la API key en Git ni en el navegador.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Despliegue
 
-Any static assets, like images, can be placed in the `public/` directory.
+El proyecto usa el adaptador oficial de Astro para Vercel y renderizado server-side para la API:
 
-## 🧞 Commands
+```sh
+npm run build
+npm run preview
+```
 
-All commands are run from the root of the project, from a terminal:
+## Verificación
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+```sh
+npm run test:ui
+```
 
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Las pruebas utilizan archivos sintéticos y no envían ningún email real.

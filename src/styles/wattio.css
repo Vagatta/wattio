@@ -133,7 +133,20 @@ h3 { font-size: 21px; font-weight: 650; letter-spacing: -.6px; }
 .upload-seal { width: 93px; color: #a778c1; margin-top: 35px; transform: rotate(-12deg); }
 .upload-seal svg { display: block; width: 100%; height: auto; }
 .upload-card { min-width: 0; padding: 25px; border: 1px solid #bd8fdd40; border-radius: 25px; background: #261537; box-shadow: 0 16px 65px #08021124; }
+.upload-card.is-submitted > *:not(.submission-success) { display: none; }
 .upload-card-top { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 22px; }
+.email-field { display: grid; gap: 8px; margin-bottom: 18px; color: #ddccea; font-size: 12px; font-weight: 600; }
+.email-field input { width: 100%; min-height: 46px; padding: 0 14px; border: 1px solid #bd8fdd55; border-radius: 10px; color: #f8f2ff; background: #321c45; outline: none; font-size: 13px; }
+.email-field input::placeholder { color: #a98dbd; }
+.email-field input:focus { border-color: #e0b9ff; box-shadow: 0 0 0 3px #bd8fdd35; }
+.send-invoice { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 51px; margin-top: 18px; padding: 0 17px 0 20px; border: 0; border-radius: 12px; color: #261235; background: #d8b4f5; font-size: 13px; font-weight: 750; }
+.send-invoice:hover { background: #e5cfff; }
+.send-invoice:disabled { cursor: wait; opacity: .65; }
+.submission-success { display: grid; justify-items: center; min-height: 350px; align-content: center; padding: 30px; text-align: center; }
+.success-mark { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; color: #241139; background: #d8b4f5; }
+.submission-success h3 { margin-top: 22px; font-size: 25px; }
+.submission-success p { max-width: 300px; margin-top: 10px; color: #cbb8d9; font-size: 13px; line-height: 1.8; }
+.submission-success a { display: inline-flex; gap: 12px; align-items: center; margin-top: 22px; color: #e0c9f5; font-size: 12px; }
 .file-heading { display: inline-flex; gap: 9px; align-items: center; font-size: 13px; font-weight: 600; }
 .file-heading svg { color: #d0abeb; }
 .demo-label { padding: 5px 9px; border-radius: 5px; border: 1px solid #c9a1dc40; font-size: 10px; color: #d5bce5; white-space: nowrap; }

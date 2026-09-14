@@ -16,7 +16,7 @@ La selección de archivos es local: no presentar documentos como enviados, ni ej
 - Iconos compartidos: src/components/Icon.astro. Sistema visual: src/styles/wattio.css.
 - Fuente Manrope alojada localmente mediante @fontsource-variable/manrope.
 - Build: `npm.cmd run build` en PowerShell, `npm run build` en otros shells.
-- Pruebas Chromium: `npm.cmd run test:ui`. Compila y verifica la versión de producción mediante preview en 127.0.0.1:4322, sin interferir con el dev server. Configuración: .devin/playwright.config.ts.
+- Pruebas Chromium: `npm.cmd run test:ui`. Compila y verifica la aplicación server-side mediante un dev server aislado en 127.0.0.1:4322, sin interferir con el dev server principal. Configuración: .devin/playwright.config.ts.
 - Preparar navegador de pruebas si falta: `npx.cmd playwright install chromium`.
 - Capturas y resultados en .devin/test-results/, excluidos de Git.
 - En esta sesión de Windows el proceso puede conservar un PATH antiguo. Node está en C:\Program Files\nodejs. Añadir esa ruta solo al PATH del proceso si es necesario; usar npm.cmd sin cambiar las políticas de PowerShell.

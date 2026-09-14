@@ -72,6 +72,21 @@ test('file selection validates locally and does not send data', async ({ page })
   expect(posts).toEqual([]);
 });
 
+test('successful submission shows a confirmation without sending a real email', async ({ page }) => {
+  let requestSeen = false;
+  await page.route('**/api/submit-invoice', async route => {
+    requestSeen = true;
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true }) });
+  });
+  await page.goto('/');
+  await page.locator('#sender-email').fill('persona@example.com');
+  await page.locator('#invoice').setInputFiles({ name: 'factura.pdf', mimeType: 'application/pdf', buffer: Buffer.from('%PDF-1.4 synthetic') });
+  await page.getByRole('button', { name: 'Enviar factura a Wattio' }).click();
+  await expect(page.locator('#submission-success')).toBeVisible();
+  await expect(page.locator('#submission-success')).toContainText('Factura recibida');
+  expect(requestSeen).toBe(true);
+});
+
 test('WhatsApp links use the approved number and a fixed message without attaching files', async ({ page }) => {
   await page.goto('/');
   const links = page.locator('a[href^="https://wa.me/"]');

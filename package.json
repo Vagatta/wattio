@@ -13,8 +13,10 @@
     "test:ui": "npm run build && playwright test --config .devin/playwright.config.ts"
   },
   "dependencies": {
+    "@astrojs/vercel": "11.0.10",
     "@fontsource-variable/manrope": "5.2.8",
-    "astro": "^7.3.2"
+    "astro": "^7.3.2",
+    "resend": "6.26.0"
   },
   "allowScripts": {
     "esbuild": true

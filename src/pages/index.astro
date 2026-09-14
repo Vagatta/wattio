@@ -75,8 +75,9 @@ const steps = [
           <p>No más capturas que no entiendes.<br />No más conceptos que pasas por alto.</p>
           <div class="upload-seal" aria-hidden="true"><svg viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="55" stroke="currentColor" /><circle cx="60" cy="60" r="47" stroke="currentColor" stroke-dasharray="1 8" stroke-width="3" /><path d="m67 27-30 38h23l-7 28 32-40H62l5-26Z" fill="currentColor" /></svg></div>
         </div>
-        <div class="upload-card">
-          <div class="upload-card-top"><span class="file-heading"><Icon name="document" size={20} />Tu factura de luz</span><span class="demo-label">Demo local</span></div>
+        <form class="upload-card" id="invoice-form">
+          <div class="upload-card-top"><span class="file-heading"><Icon name="document" size={20} />Tu factura de luz</span><span class="demo-label">Envío seguro</span></div>
+          <label class="email-field">¿Dónde te respondemos?<input id="sender-email" name="email" type="email" autocomplete="email" placeholder="tu@email.com" required /></label>
           <div class="dropzone" id="invoice-dropzone">
             <div class="file-art" aria-hidden="true"><div class="file-back"></div><div class="file-front"><Icon name="bolt" size={26} /><i></i><i></i></div><span class="file-add"><Icon name="plus" size={17} /></span></div>
             <label class="file-label" for="invoice"><span class="file-prompt">Elige tu factura</span><span>o arrástrala hasta aquí</span><input id="invoice" name="invoice" type="file" accept="application/pdf,image/jpeg,image/png" aria-describedby="file-help file-status" /></label>
@@ -84,13 +85,16 @@ const steps = [
           </div>
           <div class="selected-file" id="selected-file" hidden><span class="selected-file-icon"><Icon name="document" size={23} /></span><div><strong id="file-name"></strong><span id="file-size"></span></div><button type="button" id="remove-file" aria-label="Quitar archivo"><Icon name="close" size={18} /></button></div>
           <p id="file-status" class="file-status" role="status" aria-live="polite">Puedes probar con un archivo de ejemplo.</p>
-          <div class="local-notice"><Icon name="shield" size={19} /><p><strong>Tu archivo se queda en tu dispositivo.</strong> Esta demo no envía documentos ni calcula ahorros.</p></div>
-          <noscript><p class="file-status">Activa JavaScript para probar la selección local. No se enviará ningún archivo.</p></noscript>
+          <div class="local-notice"><Icon name="shield" size={19} /><p><strong>Se envía solo cuando tú lo confirmas.</strong> La factura se manda a Wattio por una conexión segura.</p></div>
+          <noscript><p class="file-status">Activa JavaScript para enviar la factura. No se enviará ningún archivo automáticamente.</p></noscript>
+          <button class="send-invoice" id="send-invoice" type="submit">Enviar factura a Wattio<Icon name="arrow" size={19} /></button>
+          <p id="submit-status" class="file-status" role="status" aria-live="polite"></p>
           <div class="whatsapp-option">
             <a class="whatsapp-cta" href={whatsappUrl} target="_blank" rel="noopener noreferrer" aria-describedby="whatsapp-help"><Icon name="whatsapp" size={22} />Enviar por WhatsApp</a>
             <p id="whatsapp-help" class="whatsapp-note">Adjunta la foto o el PDF dentro del chat. El archivo seleccionado aquí no se transfiere a WhatsApp.</p>
           </div>
-        </div>
+          <div class="submission-success" id="submission-success" tabindex="-1" hidden><span class="success-mark"><Icon name="check" size={28} /></span><h3>Factura recibida.</h3><p>La hemos enviado para revisión. Gracias por confiar en Wattio.</p><a href="#top">Volver al inicio<Icon name="arrow" size={17} /></a></div>
+        </form>
       </section>
 
       <section class="faq container" id="faq" aria-labelledby="faq-heading">
@@ -135,6 +139,11 @@ const steps = [
   const name = document.querySelector<HTMLElement>('#file-name')!;
   const size = document.querySelector<HTMLElement>('#file-size')!;
   const remove = document.querySelector<HTMLButtonElement>('#remove-file')!;
+  const form = document.querySelector<HTMLFormElement>('#invoice-form')!;
+  const senderEmail = document.querySelector<HTMLInputElement>('#sender-email')!;
+  const sendButton = document.querySelector<HTMLButtonElement>('#send-invoice')!;
+  const submitStatus = document.querySelector<HTMLElement>('#submit-status')!;
+  const success = document.querySelector<HTMLElement>('#submission-success')!;
   function selectFile(file?: File) {
     if (!file) return;
     const allowed: Record<string, RegExp> = { 'application/pdf': /\.pdf$/i, 'image/jpeg': /\.jpe?g$/i, 'image/png': /\.png$/i };
@@ -163,6 +172,37 @@ const steps = [
     input.removeAttribute('aria-invalid');
     status.textContent = 'Archivo retirado. Puedes elegir otro.';
     input.focus({ preventScroll: true });
+  });
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    const file = input.files?.[0];
+    if (!file) {
+      status.dataset.error = 'true';
+      status.textContent = 'Selecciona una factura antes de enviarla.';
+      dropzone.focus();
+      return;
+    }
+    if (!senderEmail.checkValidity()) {
+      senderEmail.reportValidity();
+      return;
+    }
+    sendButton.disabled = true;
+    sendButton.textContent = 'Enviando…';
+    submitStatus.textContent = '';
+    submitStatus.dataset.error = 'false';
+    try {
+      const response = await fetch('/api/submit-invoice', { method: 'POST', body: new FormData(form) });
+      const result = await response.json() as { ok?: boolean; error?: string };
+      if (!response.ok || !result.ok) throw new Error(result.error ?? 'No se pudo enviar la factura.');
+      form.classList.add('is-submitted');
+      success.hidden = false;
+      success.focus();
+    } catch (error) {
+      sendButton.disabled = false;
+      sendButton.textContent = 'Enviar factura a Wattio';
+      submitStatus.dataset.error = 'true';
+      submitStatus.textContent = error instanceof Error ? error.message : 'No se pudo enviar la factura. Inténtalo de nuevo.';
+    }
   });
   let dragDepth = 0;
   dropzone.addEventListener('dragenter', event => { event.preventDefault(); dragDepth++; dropzone.classList.add('is-dragging'); });

@@ -24,3 +24,4 @@ pnpm-debug.log*
 .idea/
 .devin/test-results/
 .devin/playwright-report/
+.vercel/

@@ -39,19 +39,20 @@ La promesa debe presentarse como una estimación o revisión, no como un ahorro 
 
 ## Initial scope
 
-- Landing pública estática.
+- Landing pública en Astro desplegable en Vercel.
 - Hero orientado a subir una factura.
 - Explicación visual del proceso.
-- Formulario o zona de subida preparada para conectar más adelante.
-- CTA de WhatsApp preparada como enlace configurable.
+- Formulario con email de contacto y factura adjunta.
+- Endpoint server-side que envía la factura a Wattio mediante Resend.
+- Confirmación inmediata en pantalla después de un envío correcto.
+- CTA de WhatsApp con número verificado y mensaje preparado.
 - Bloque de confianza, privacidad y preguntas frecuentes.
 
 ## Out of scope for now
 
-- Backend.
 - Supabase.
 - Autenticación.
 - Panel privado.
 - Cálculo real de tarifas.
-- Integraciones de producción con WhatsApp.
+- Email automático de confirmación al usuario.
 - Promesas de ahorro cuantificadas sin datos validados.

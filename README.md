@@ -19,13 +19,15 @@ El formulario pide el email de la persona y permite adjuntar hasta 10 archivos P
 2. Resend envía la factura adjunta a `diego.sanmiguel.delpozo1314@gmail.com`.
 3. La interfaz muestra una confirmación al usuario.
 
-La factura no se envía al seleccionar el archivo; solo al pulsar **Enviar factura a Wattio**. No se manda una copia automática al usuario todavía.
+La factura no se envía al seleccionar el archivo; solo al pulsar **Enviar factura a Wattio**. Las variables `WATTIO_COPY_EMAIL` y `WATTIO_COPY_EMAIL_2` reciben una copia oculta del mismo email y sus adjuntos cuando están configuradas.
 
 Configura en Vercel:
 
 ```text
 RESEND_API_KEY=re_...
 RESEND_FROM_EMAIL=Wattio <hola@tu-dominio-verificado.com>
+WATTIO_COPY_EMAIL=jorge.maeso.2012@gmail.com
+WATTIO_COPY_EMAIL_2=otro-destinatario@tu-dominio.com
 ```
 
 `RESEND_FROM_EMAIL` debe usar un dominio verificado en Resend. No guardes la API key en Git ni en el navegador.

@@ -4,7 +4,7 @@
 
 Landing Astro estática en español, sin Supabase ni backend. Mantener el nombre Wattio y el rayo reconocible. La referencia del menú es estética, no una fuente de números de teléfono, enlaces ni promesas comerciales.
 
-La selección de archivos permite hasta 10 PDF/JPG/PNG con un máximo conjunto de 4 MB por el límite de petición de Vercel. No presentar documentos como enviados antes de confirmar el formulario, ni ejemplos como análisis reales. No inventar ahorros, gratuidad, testimonios o tiempos de respuesta. WhatsApp autorizado por el usuario: +34646583077. Usar enlaces wa.me con mensaje fijo; la factura seleccionada localmente no se adjunta automáticamente. No cambiar el número sin confirmación.
+La selección de archivos permite hasta 10 PDF/JPG/PNG con un máximo conjunto de 4 MB por el límite de petición de Vercel. No presentar documentos como enviados antes de confirmar el formulario, ni ejemplos como análisis reales. Las copias de email se configuran mediante WATTIO_COPY_EMAIL y WATTIO_COPY_EMAIL_2 como BCC. No inventar ahorros, gratuidad, testimonios o tiempos de respuesta. WhatsApp autorizado por el usuario: +34646583077. Usar enlaces wa.me con mensaje fijo; la factura seleccionada localmente no se adjunta automáticamente. No cambiar el número sin confirmación.
 
 ## Skills
 

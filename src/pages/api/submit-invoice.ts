@@ -2,6 +2,9 @@ import type { APIRoute } from 'astro';
 import { Resend } from 'resend';
 
 const OWNER_EMAIL = 'diego.sanmiguel.delpozo1314@gmail.com';
+const COPY_EMAILS = [import.meta.env.WATTIO_COPY_EMAIL, import.meta.env.WATTIO_COPY_EMAIL_2]
+  .map(email => email?.trim())
+  .filter((email): email is string => Boolean(email));
 const MAX_TOTAL_SIZE = 4 * 1024 * 1024;
 const MAX_FILES = 10;
 const ALLOWED_TYPES = new Set(['application/pdf', 'image/jpeg', 'image/png']);
@@ -68,6 +71,7 @@ export const POST: APIRoute = async ({ request }) => {
     const { error } = await resend.emails.send({
       from,
       to: [OWNER_EMAIL],
+      bcc: COPY_EMAILS.length ? COPY_EMAILS : undefined,
       replyTo: email,
       subject: `Nueva factura Wattio — ${email}`,
       text: `El usuario ${email} ha enviado ${files.length} factura${files.length === 1 ? '' : 's'} para revisión. Se adjuntan a este email.`,

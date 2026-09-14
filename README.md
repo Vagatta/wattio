@@ -13,7 +13,7 @@ La aplicación funciona como una landing con subida local de archivos. Para envi
 
 ## Envío de facturas
 
-El formulario pide el email de la persona y una factura en PDF, JPG o PNG de hasta 10 MB. Al confirmar:
+El formulario pide el email de la persona y permite adjuntar hasta 10 archivos PDF, JPG o PNG, con un máximo conjunto de 4 MB para respetar el límite de las funciones de Vercel. Al confirmar:
 
 1. El endpoint server-side valida email, tipo y tamaño.
 2. Resend envía la factura adjunta a `diego.sanmiguel.delpozo1314@gmail.com`.

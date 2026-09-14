@@ -80,10 +80,10 @@ const steps = [
           <label class="email-field">¿Dónde te respondemos?<input id="sender-email" name="email" type="email" autocomplete="email" placeholder="tu@email.com" required /></label>
           <div class="dropzone" id="invoice-dropzone">
             <div class="file-art" aria-hidden="true"><div class="file-back"></div><div class="file-front"><Icon name="bolt" size={26} /><i></i><i></i></div><span class="file-add"><Icon name="plus" size={17} /></span></div>
-            <label class="file-label" for="invoice"><span class="file-prompt">Elige tu factura</span><span>o arrástrala hasta aquí</span><input id="invoice" name="invoice" type="file" accept="application/pdf,image/jpeg,image/png" aria-describedby="file-help file-status" /></label>
-            <p id="file-help">PDF, JPG o PNG de hasta 10&nbsp;MB.</p>
+            <label class="file-label" for="invoice"><span class="file-prompt">Elige tus facturas</span><span>o arrástralas hasta aquí</span><input id="invoice" name="invoice" type="file" multiple accept="application/pdf,image/jpeg,image/png" aria-describedby="file-help file-status" /></label>
+            <p id="file-help">PDF, JPG o PNG · hasta 10 archivos · 4&nbsp;MB en total.</p>
           </div>
-          <div class="selected-file" id="selected-file" hidden><span class="selected-file-icon"><Icon name="document" size={23} /></span><div><strong id="file-name"></strong><span id="file-size"></span></div><button type="button" id="remove-file" aria-label="Quitar archivo"><Icon name="close" size={18} /></button></div>
+          <div class="selected-files" id="selected-files" hidden aria-live="polite"></div>
           <p id="file-status" class="file-status" role="status" aria-live="polite">Puedes probar con un archivo de ejemplo.</p>
           <div class="local-notice"><Icon name="shield" size={19} /><p><strong>Se envía solo cuando tú lo confirmas.</strong> La factura se manda a Wattio por una conexión segura.</p></div>
           <noscript><p class="file-status">Activa JavaScript para enviar la factura. No se enviará ningún archivo automáticamente.</p></noscript>
@@ -132,53 +132,70 @@ const steps = [
   });
   matchMedia('(min-width: 761px)').addEventListener('change', event => { if (event.matches) closeMenu(); });
 
+  const MAX_TOTAL_SIZE = 4 * 1024 * 1024;
+  const MAX_FILES = 10;
   const input = document.querySelector<HTMLInputElement>('#invoice')!;
   const dropzone = document.querySelector<HTMLElement>('.dropzone')!;
-  const selected = document.querySelector<HTMLElement>('#selected-file')!;
+  const selected = document.querySelector<HTMLElement>('#selected-files')!;
   const status = document.querySelector<HTMLElement>('#file-status')!;
-  const name = document.querySelector<HTMLElement>('#file-name')!;
-  const size = document.querySelector<HTMLElement>('#file-size')!;
-  const remove = document.querySelector<HTMLButtonElement>('#remove-file')!;
   const form = document.querySelector<HTMLFormElement>('#invoice-form')!;
   const senderEmail = document.querySelector<HTMLInputElement>('#sender-email')!;
   const sendButton = document.querySelector<HTMLButtonElement>('#send-invoice')!;
   const submitStatus = document.querySelector<HTMLElement>('#submit-status')!;
   const success = document.querySelector<HTMLElement>('#submission-success')!;
-  function selectFile(file?: File) {
-    if (!file) return;
-    const allowed: Record<string, RegExp> = { 'application/pdf': /\.pdf$/i, 'image/jpeg': /\.jpe?g$/i, 'image/png': /\.png$/i };
-    const error = !allowed[file.type]?.test(file.name) ? 'Elige un archivo PDF, JPG o PNG.' : file.size === 0 ? 'El archivo está vacío. Elige otro documento.' : file.size > 10 * 1024 * 1024 ? 'El archivo supera los 10 MB. Elige uno más pequeño.' : '';
-    status.dataset.error = String(Boolean(error));
-    input.setAttribute('aria-invalid', String(Boolean(error)));
-    selected.hidden = Boolean(error);
-    if (error) {
-      input.value = '';
-      name.textContent = '';
-      size.textContent = '';
-      status.textContent = error;
-      return;
-    }
-    name.textContent = file.name;
-    size.textContent = new Intl.NumberFormat('es', { maximumFractionDigits: 1 }).format(file.size / 1024) + ' KB';
-    status.textContent = 'Archivo seleccionado en tu dispositivo. No se ha enviado ni analizado.';
+  let selectedFiles: File[] = [];
+  const allowed: Record<string, RegExp> = { 'application/pdf': /\.pdf$/i, 'image/jpeg': /\.jpe?g$/i, 'image/png': /\.png$/i };
+  const formatSize = (bytes: number) => new Intl.NumberFormat('es', { maximumFractionDigits: 1 }).format(bytes / 1024) + ' KB';
+  function syncInput() {
+    const dataTransfer = new DataTransfer();
+    selectedFiles.forEach(file => dataTransfer.items.add(file));
+    input.files = dataTransfer.files;
   }
-  input.addEventListener('change', () => selectFile(input.files?.[0]));
-  remove.addEventListener('click', () => {
-    input.value = '';
-    selected.hidden = true;
-    name.textContent = '';
-    size.textContent = '';
+  function renderFiles() {
+    selected.innerHTML = '';
+    selected.hidden = selectedFiles.length === 0;
+    selectedFiles.forEach((file, index) => {
+      const item = document.createElement('div');
+      item.className = 'selected-file';
+      item.innerHTML = `<span class="selected-file-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9l-6-6Zm0 0v6h6" /></svg></span><div><strong></strong><span>${formatSize(file.size)}</span></div><button type="button" data-remove-file="${index}" aria-label="Quitar ${file.name}"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6" /></svg></button>`;
+      item.querySelector('strong')!.textContent = file.name;
+      selected.append(item);
+    });
+    const total = selectedFiles.reduce((sum, file) => sum + file.size, 0);
     status.dataset.error = 'false';
     input.removeAttribute('aria-invalid');
-    status.textContent = 'Archivo retirado. Puedes elegir otro.';
+    status.textContent = selectedFiles.length ? `${selectedFiles.length} archivo${selectedFiles.length === 1 ? '' : 's'} seleccionado${selectedFiles.length === 1 ? '' : 's'} · ${formatSize(total)} de 4 MB.` : 'Puedes elegir varias facturas de una vez.';
+  }
+  function addFiles(files: File[]) {
+    const combined = [...selectedFiles, ...files];
+    const duplicateSafe = combined.filter((file, index, all) => all.findIndex(item => item.name === file.name && item.size === file.size && item.lastModified === file.lastModified) === index);
+    const invalid = duplicateSafe.find(file => !allowed[file.type]?.test(file.name) || file.size === 0);
+    const total = duplicateSafe.reduce((sum, file) => sum + file.size, 0);
+    const error = duplicateSafe.length > MAX_FILES ? `Puedes seleccionar hasta ${MAX_FILES} archivos.` : invalid ? `${invalid.name} no es un PDF, JPG o PNG válido o está vacío.` : total > MAX_TOTAL_SIZE ? 'El tamaño total supera los 4 MB. Retira algún archivo para continuar.' : '';
+    if (error) {
+      status.dataset.error = 'true';
+      status.textContent = error;
+      input.setAttribute('aria-invalid', 'true');
+      return;
+    }
+    selectedFiles = duplicateSafe;
+    syncInput();
+    renderFiles();
+  }
+  input.addEventListener('change', () => addFiles(Array.from(input.files ?? [])));
+  selected.addEventListener('click', event => {
+    const button = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-remove-file]');
+    if (!button) return;
+    selectedFiles.splice(Number(button.dataset.removeFile), 1);
+    syncInput();
+    renderFiles();
     input.focus({ preventScroll: true });
   });
   form.addEventListener('submit', async event => {
     event.preventDefault();
-    const file = input.files?.[0];
-    if (!file) {
+    if (!selectedFiles.length) {
       status.dataset.error = 'true';
-      status.textContent = 'Selecciona una factura antes de enviarla.';
+      status.textContent = 'Selecciona al menos una factura antes de enviarla.';
       dropzone.focus();
       return;
     }
@@ -212,13 +229,6 @@ const steps = [
     event.preventDefault();
     dragDepth = 0;
     dropzone.classList.remove('is-dragging');
-    input.value = '';
-    const files = event.dataTransfer?.files;
-    if (files?.length && files.length > 1) {
-      status.textContent = 'Elige una sola factura cada vez.';
-      status.dataset.error = 'true';
-      return;
-    }
-    selectFile(files?.[0]);
+    addFiles(Array.from(event.dataTransfer?.files ?? []));
   });
 </script>

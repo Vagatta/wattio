@@ -50,7 +50,7 @@ test('mobile menu supports navigation and Escape', async ({ page }) => {
   await expect(menu).toHaveAttribute('aria-expanded', 'false');
 });
 
-test('file selection validates locally and does not send data', async ({ page }) => {
+test('multiple file selection validates total size and does not send before submit', async ({ page }) => {
   const posts: string[] = [];
   page.on('request', request => { if (request.method() === 'POST') posts.push(request.url()); });
   await page.goto('/');
@@ -59,16 +59,22 @@ test('file selection validates locally and does not send data', async ({ page })
   await expect(page.locator('#file-status')).toContainText('PDF, JPG o PNG');
   await input.setInputFiles({ name: 'vacio.pdf', mimeType: 'application/pdf', buffer: Buffer.alloc(0) });
   await expect(page.locator('#file-status')).toContainText('vacío');
-  await input.setInputFiles({ name: 'grande.pdf', mimeType: 'application/pdf', buffer: Buffer.alloc(11 * 1024 * 1024) });
-  await expect(page.locator('#file-status')).toContainText('10 MB');
-  const name = 'factura-de-prueba-sin-datos-personales-'.repeat(4) + '.pdf';
-  await input.setInputFiles({ name, mimeType: 'application/pdf', buffer: Buffer.from('%PDF-1.4 synthetic') });
-  await expect(page.locator('#file-name')).toHaveText(name);
-  await expect(page.locator('#file-status')).toContainText('No se ha enviado');
+  await input.setInputFiles({ name: 'grande.pdf', mimeType: 'application/pdf', buffer: Buffer.alloc(5 * 1024 * 1024) });
+  await expect(page.locator('#file-status')).toContainText('4 MB');
+  const files = [
+    { name: 'factura-enero.pdf', mimeType: 'application/pdf', buffer: Buffer.from('%PDF-1.4 january') },
+    { name: 'factura-febrero.jpg', mimeType: 'image/jpeg', buffer: Buffer.from('synthetic image') },
+  ];
+  await input.setInputFiles(files);
+  await expect(page.locator('#selected-files')).toContainText('factura-enero.pdf');
+  await expect(page.locator('#selected-files')).toContainText('factura-febrero.jpg');
+  await expect(page.locator('#file-status')).toContainText('2 archivos seleccionados');
+  await expect.poll(() => input.evaluate(element => (element as HTMLInputElement).files?.length)).toBe(2);
+  await page.getByRole('button', { name: 'Quitar factura-enero.pdf' }).click();
+  await expect(page.locator('#selected-files')).not.toContainText('factura-enero.pdf');
+  await expect(page.locator('#selected-files')).toContainText('factura-febrero.jpg');
+  await expect.poll(() => input.evaluate(element => (element as HTMLInputElement).files?.length)).toBe(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  await page.getByRole('button', { name: 'Quitar archivo' }).click();
-  await expect(input).toHaveValue('');
-  await expect(page.locator('#selected-file')).toBeHidden();
   expect(posts).toEqual([]);
 });
 

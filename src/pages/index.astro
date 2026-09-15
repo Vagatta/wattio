@@ -12,7 +12,7 @@ const faqs = [
   { question: '¿Qué parte de la factura se revisa?', answer: 'El precio de la energía, la potencia contratada y los servicios adicionales. El objetivo es entender qué pagas y qué opciones encajan con tu consumo.' },
   { question: '¿Me garantiza Wattio que voy a ahorrar?', answer: 'No. El ahorro depende de tu tarifa, de tu consumo y de las alternativas disponibles. Si tu situación ya es buena, una revisión también puede ayudarte a confirmarlo.' },
   { question: '¿Tengo que cambiar de compañía?', answer: 'No. Conocer otras opciones no implica contratar nada. Cualquier cambio debe ser una decisión tuya, después de conocer sus condiciones.' },
-  { question: '¿Qué ocurre si selecciono una factura ahora?', answer: 'Esta versión es una demostración. Puedes probar la selección de un PDF o una imagen, pero el archivo no se envía ni se analiza. No hace falta usar una factura con datos personales.' },
+  { question: '¿Qué ocurre cuando selecciono una factura?', answer: 'Nada hasta que tú confirmes. Los archivos se quedan en tu dispositivo y solo se envían a Wattio por email cuando pulsas «Enviar factura a Wattio».' },
   { question: '¿Puedo enviarla por WhatsApp?', answer: 'Sí. Pulsa «Enviar por WhatsApp» para abrir el chat con Wattio en el +34 646 58 30 77. Adjunta la foto o el PDF y envía el mensaje desde WhatsApp. El archivo que selecciones en esta web no se transfiere al chat automáticamente.' },
 ];
 const steps = [
@@ -27,7 +27,7 @@ const steps = [
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#180e2c" />
-    <meta name="description" content="Conoce Wattio: una forma más clara de entender tu factura de luz, tu consumo y tus opciones. Prueba nuestra experiencia de selección de factura." />
+    <meta name="description" content="Envía tu factura de luz a Wattio y entiende qué pagas: consumo, potencia y extras revisados con claridad. Tú decides el siguiente paso." />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Wattio — Tu luz, sin puntos ciegos</title>
   </head>
@@ -46,14 +46,40 @@ const steps = [
     <main id="top" tabindex="-1">
       <section class="hero container" aria-labelledby="hero-heading">
         <div class="hero-copy">
-          <p class="hero-intro"><span></span> Otra forma de mirar tu factura.</p>
-          <h1 id="hero-heading">Tu luz,<br />sin puntos<br />ciegos.</h1>
-          <p class="hero-description">¿Pagas de más? La respuesta está en tu factura. Te ayudamos a entenderla, sin perderte entre tarifas y letra pequeña.</p>
-          <a class="button primary" href="#revisar">Revisar mi factura<Icon name="arrow" size={21} /></a>
-          <p class="hero-caption"><Icon name="document" size={16} /> Una foto o un PDF. Ese es el principio.</p>
+          <h1 id="hero-heading">Sube tu factura de luz.<br /><em>El siguiente paso lo decides tú.</em></h1>
+          <p class="hero-description">Te ayudamos a entender lo que pagas y a valorar tus opciones.<br class="desktop-break" /> Empieza con una foto o un PDF. Sin comprometerte a cambiar.</p>
         </div>
-        <div class="hero-object"><InvoiceExplorer /></div>
-        <div class="hero-foot"><span>Menos dudas. Más control sobre tu energía.</span><a href="#como-funciona">Conoce Wattio<Icon name="arrow" size={16} /></a></div>
+        <div class="hero-layout">
+          <div class="hero-note" aria-hidden="true"><span>Tal cual la recibes.</span><p>No necesitas descifrarla.<br />De eso nos encargamos.</p><svg viewBox="0 0 140 65" fill="none"><path d="M5 10c28 54 66 31 120 23m-13-8 15 8-12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+          <div class="hero-upload" id="revisar">
+            <form class="upload-card" id="invoice-form" aria-label="Enviar facturas para revisión">
+              <div class="upload-card-top"><span class="file-heading"><Icon name="document" size={18} />Tu factura, en buenas manos</span><span class="upload-formats">PDF / JPG / PNG</span></div>
+              <div class="dropzone" id="invoice-dropzone">
+                <div class="file-art" aria-hidden="true"><div class="file-back"></div><div class="file-front"><Icon name="bolt" size={24} /><i></i><i></i></div><span class="file-add"><Icon name="plus" size={15} /></span></div>
+                <label class="file-label" for="invoice"><span class="file-prompt">Arrastra aquí tus facturas</span><span>o <span class="browse-copy">elige los archivos</span> de tu dispositivo</span><input id="invoice" name="invoice" type="file" multiple accept="application/pdf,image/jpeg,image/png" aria-describedby="file-help file-status" /></label>
+                <p id="file-help">Hasta 10 archivos. Máximo 4&nbsp;MB en total.</p>
+              </div>
+              <div class="selected-files" id="selected-files" hidden aria-live="polite"></div>
+              <p id="file-status" class="file-status" role="status" aria-live="polite"></p>
+              <label class="email-field" for="sender-email">Tu email de contacto<input id="sender-email" name="email" type="email" autocomplete="email" spellcheck="false" placeholder="Por ejemplo, tu@email.com" required /></label>
+              <button class="send-invoice" id="send-invoice" type="submit"><span>Enviar factura a Wattio</span><Icon name="arrow" size={19} /></button>
+              <p id="submit-status" class="file-status" role="status" aria-live="polite"></p>
+              <div class="local-notice"><Icon name="shield" size={16} /><p>Solo se envían los archivos cuando pulsas «Enviar».</p></div>
+              <noscript><p class="file-status">Activa JavaScript para enviar la factura o utiliza WhatsApp. No se enviará ningún archivo automáticamente.</p></noscript>
+              <div class="submission-success" id="submission-success" tabindex="-1" hidden><span class="success-mark"><Icon name="check" size={28} /></span><h3>Factura recibida.</h3><p>Hemos enviado tus archivos para revisión. Gracias por confiar en Wattio.</p><a href="#entender">Descubre qué revisamos<Icon name="arrow" size={17} /></a></div>
+            </form>
+            <div class="whatsapp-option">
+              <span>¿Prefieres hacerlo por chat?</span>
+              <a class="whatsapp-cta" href={whatsappUrl} target="_blank" rel="noopener noreferrer" aria-describedby="whatsapp-help"><Icon name="whatsapp" size={19} />Enviar por WhatsApp</a>
+              <p id="whatsapp-help" class="whatsapp-note">Adjunta la foto o el PDF dentro del chat. El archivo seleccionado aquí no se transfiere a WhatsApp.</p>
+            </div>
+          </div>
+          <aside class="hero-journey" aria-label="De tu factura a una decisión clara">
+            <div class="journey-art" aria-hidden="true"><div class="journey-sheet"><Icon name="bolt" size={22} /><span></span><span></span><span></span></div><div class="journey-result"><Icon name="check" size={25} /><span>Todo, más claro.</span><i></i><i></i></div></div>
+            <ol class="journey-list"><li><span>1</span><div><strong>Envía tu factura</strong><p>Una foto o un PDF.</p></div></li><li><span>2</span><div><strong>Entiende tus opciones</strong><p>Sin perderte en la letra pequeña.</p></div></li><li><span>3</span><div><strong>Decide con calma</strong><p>La última palabra es tuya.</p></div></li></ol>
+          </aside>
+        </div>
+        <a class="hero-scroll" href="#entender">¿Qué miramos en tu factura?<span><Icon name="arrow" size={17} /></span></a>
       </section>
 
       <section class="how-section" id="como-funciona" aria-labelledby="how-heading">
@@ -68,33 +94,15 @@ const steps = [
         </div>
       </section>
 
-      <section class="upload-section container" id="revisar" aria-labelledby="upload-heading">
-        <div class="upload-copy">
-          <span class="section-index">Tu factura es el punto de partida</span>
-          <h2 id="upload-heading">Vamos a verla<br />con otros ojos.</h2>
-          <p>No más capturas que no entiendes.<br />No más conceptos que pasas por alto.</p>
-          <div class="upload-seal" aria-hidden="true"><svg viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="55" stroke="currentColor" /><circle cx="60" cy="60" r="47" stroke="currentColor" stroke-dasharray="1 8" stroke-width="3" /><path d="m67 27-30 38h23l-7 28 32-40H62l5-26Z" fill="currentColor" /></svg></div>
+      <section class="explain-section container" id="entender" aria-labelledby="explain-heading">
+        <div class="explain-copy">
+          <span class="section-index">Más allá del importe final</span>
+          <h2 id="explain-heading">Tu factura habla.<br />Vamos a traducirla.</h2>
+          <p>Consumo, potencia, servicios extra… Cada concepto cuenta una parte de lo que pagas.</p>
+          <p>Explora este ejemplo para entender qué miramos. No necesitas saberlo todo antes de enviar la tuya.</p>
+          <a class="button primary" href="#revisar">Revisar mi factura<Icon name="arrow" size={20} /></a>
         </div>
-        <form class="upload-card" id="invoice-form">
-          <div class="upload-card-top"><span class="file-heading"><Icon name="document" size={20} />Tu factura de luz</span><span class="demo-label">Envío seguro</span></div>
-          <label class="email-field">¿Dónde te respondemos?<input id="sender-email" name="email" type="email" autocomplete="email" placeholder="tu@email.com" required /></label>
-          <div class="dropzone" id="invoice-dropzone">
-            <div class="file-art" aria-hidden="true"><div class="file-back"></div><div class="file-front"><Icon name="bolt" size={26} /><i></i><i></i></div><span class="file-add"><Icon name="plus" size={17} /></span></div>
-            <label class="file-label" for="invoice"><span class="file-prompt">Elige tus facturas</span><span>o arrástralas hasta aquí</span><input id="invoice" name="invoice" type="file" multiple accept="application/pdf,image/jpeg,image/png" aria-describedby="file-help file-status" /></label>
-            <p id="file-help">PDF, JPG o PNG · hasta 10 archivos · 4&nbsp;MB en total.</p>
-          </div>
-          <div class="selected-files" id="selected-files" hidden aria-live="polite"></div>
-          <p id="file-status" class="file-status" role="status" aria-live="polite">Puedes probar con un archivo de ejemplo.</p>
-          <div class="local-notice"><Icon name="shield" size={19} /><p><strong>Se envía solo cuando tú lo confirmas.</strong> La factura se manda a Wattio por una conexión segura.</p></div>
-          <noscript><p class="file-status">Activa JavaScript para enviar la factura. No se enviará ningún archivo automáticamente.</p></noscript>
-          <button class="send-invoice" id="send-invoice" type="submit">Enviar factura a Wattio<Icon name="arrow" size={19} /></button>
-          <p id="submit-status" class="file-status" role="status" aria-live="polite"></p>
-          <div class="whatsapp-option">
-            <a class="whatsapp-cta" href={whatsappUrl} target="_blank" rel="noopener noreferrer" aria-describedby="whatsapp-help"><Icon name="whatsapp" size={22} />Enviar por WhatsApp</a>
-            <p id="whatsapp-help" class="whatsapp-note">Adjunta la foto o el PDF dentro del chat. El archivo seleccionado aquí no se transfiere a WhatsApp.</p>
-          </div>
-          <div class="submission-success" id="submission-success" tabindex="-1" hidden><span class="success-mark"><Icon name="check" size={28} /></span><h3>Factura recibida.</h3><p>La hemos enviado para revisión. Gracias por confiar en Wattio.</p><a href="#top">Volver al inicio<Icon name="arrow" size={17} /></a></div>
-        </form>
+        <div class="explain-object"><InvoiceExplorer /></div>
       </section>
 
       <section class="faq container" id="faq" aria-labelledby="faq-heading">
@@ -106,7 +114,7 @@ const steps = [
     <footer class="footer container">
       <div class="footer-top"><p>La energía, sin tanto misterio.</p><a href="#top">Volver al inicio<Icon name="arrow" size={18} /></a></div>
       <div class="footer-signature" aria-hidden="true"><Icon name="bolt" size={180} /><span translate="no">wattio</span></div>
-      <div class="footer-bottom"><span>© {new Date().getFullYear()} Wattio</span><a class="footer-whatsapp" href={whatsappUrl} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={17} />WhatsApp: +34 646 58 30 77</a><a href="#revisar">Sobre esta demo</a></div>
+      <div class="footer-bottom"><span>© {new Date().getFullYear()} Wattio</span><a class="footer-whatsapp" href={whatsappUrl} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={17} />WhatsApp: +34 646 58 30 77</a><a href="#revisar">Enviar mi factura</a></div>
     </footer>
   </body>
 </html>
@@ -196,15 +204,16 @@ const steps = [
     if (!selectedFiles.length) {
       status.dataset.error = 'true';
       status.textContent = 'Selecciona al menos una factura antes de enviarla.';
-      dropzone.focus();
+      input.focus({ preventScroll: true });
       return;
     }
     if (!senderEmail.checkValidity()) {
       senderEmail.reportValidity();
       return;
     }
+    const sendLabel = sendButton.querySelector('span')!;
     sendButton.disabled = true;
-    sendButton.textContent = 'Enviando…';
+    sendLabel.textContent = 'Enviando…';
     submitStatus.textContent = '';
     submitStatus.dataset.error = 'false';
     try {
@@ -216,7 +225,7 @@ const steps = [
       success.focus();
     } catch (error) {
       sendButton.disabled = false;
-      sendButton.textContent = 'Enviar factura a Wattio';
+      sendLabel.textContent = 'Enviar factura a Wattio';
       submitStatus.dataset.error = 'true';
       submitStatus.textContent = error instanceof Error ? error.message : 'No se pudo enviar la factura. Inténtalo de nuevo.';
     }

@@ -34,7 +34,7 @@ El violeta debe dominar, pero no convertir cada elemento en un gradiente. El ver
 
 ## Typography
 
-Usar una sans display redondeada y con personalidad para titulares, combinada con una sans neutra y muy legible para textos funcionales. Evitar Inter, Roboto y sistemas tipográficos genéricos como decisión automática.
+El titular del hero usa una serif editorial (Georgia) para un aire más cercano a la referencia del cliente; el resto de la interfaz usa Manrope Variable, alojada localmente. Evitar Inter, Roboto y sistemas tipográficos genéricos como decisión automática.
 
 Reglas:
 
@@ -54,15 +54,12 @@ Reglas:
 
 ## Page structure
 
-1. Header mínimo: logo, enlace de cómo funciona y CTA.
-2. Hero: problema, promesa, subida de factura y alternativa WhatsApp.
-3. Señal de confianza: gratuito o condiciones reales, privacidad y ausencia de llamadas si se puede garantizar.
-4. Cómo funciona: tres pasos visuales, sin iconos genéricos sin contexto.
-5. Escena de producto: factura entrando y resultado explicado de manera comprensible.
-6. Beneficios: claridad, ahorro potencial y cero complicaciones.
-7. FAQ: datos, tiempos, qué ocurre después y límites del análisis.
-8. CTA final: repetir la acción principal con menos ruido.
-9. Footer legal y privacidad.
+1. Header cápsula sticky: logo con rayo, Cómo funciona, FAQ y CTA «Revisar mi factura».
+2. Hero: titular editorial centrado y formulario de envío como protagonista (dropzone + email + enviar). WhatsApp queda fuera de la tarjeta como alternativa; apuntes laterales decorativos solo en desktop.
+3. Cómo funciona sobre fondo claro: tres pasos unidos por una línea gráfica.
+4. Entender: factura interactiva (consumo, potencia, extras) como contenido de apoyo, nunca como competencia del envío.
+5. FAQ: qué se revisa, límites reales del análisis y qué ocurre al enviar.
+6. Footer con firma de marca grande, WhatsApp y retorno al formulario.
 
 ## Motion
 
@@ -79,14 +76,14 @@ Reglas:
 - No llenar la pantalla de gradientes y glow.
 - No usar tres CTAs con la misma importancia.
 - No ocultar privacidad o condiciones en letra diminuta.
-- No centrar absolutamente todo.
+- No centrar absolutamente todo: el hero sí se centra para dar protagonismo al envío, pero las demás secciones mantienen composición asimétrica.
 - No convertir cada sección en una card.
 - No utilizar iconos emoji como sistema visual final.
 
 ## Responsive rules
 
-- En móvil, primero debe verse el problema, la promesa y el CTA.
+- En móvil, la primera pantalla muestra titular, dropzone, email y botón de envío.
 - La subida de factura debe quedar accesible sin hacer scroll excesivo.
-- El mockup o teléfono no debe reducir el titular ni empujar el CTA fuera de la primera pantalla.
+- Los apuntes laterales del hero desaparecen en tablet y móvil; el formulario no los necesita.
 - Los bloques asimétricos de desktop deben convertirse en una secuencia vertical clara.
 - Los botones principales deben tener tamaño táctil cómodo.

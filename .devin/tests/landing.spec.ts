@@ -22,6 +22,25 @@ for (const width of [320, 390, 768, 1024, 1440]) {
   });
 }
 
+for (const viewport of [{ width: 1440, height: 900 }, { width: 1366, height: 768 }, { width: 390, height: 844 }, { width: 320, height: 740 }]) {
+  test(`upload leads the first screen at ${viewport.width}px`, async ({ page }, testInfo) => {
+    await page.setViewportSize(viewport);
+    await page.goto('/');
+    await page.evaluate(() => document.fonts.ready);
+    await expect(page.locator('.hero #invoice-form')).toHaveCount(1);
+    await expect(page.locator('#invoice-form')).toHaveCount(1);
+    const header = await page.locator('header.nav-wrap').boundingBox();
+    const dropzone = await page.locator('#invoice-dropzone').boundingBox();
+    const submit = await page.locator('#send-invoice').boundingBox();
+    expect(dropzone!.y).toBeGreaterThan(header!.y + header!.height);
+    expect(dropzone!.y + dropzone!.height).toBeLessThan(viewport.height);
+    expect(submit!.y + submit!.height).toBeLessThan(viewport.height);
+    await expect(page.locator('.hero .invoice-explorer')).toHaveCount(0);
+    await expect(page.locator('#entender .invoice-explorer')).toHaveCount(1);
+    await page.screenshot({ path: testInfo.outputPath('hero.png') });
+  });
+}
+
 test('invoice explainer responds to keyboard without making savings claims', async ({ page }) => {
   await page.goto('/');
   const power = page.getByRole('button', { name: 'Potencia', exact: true });

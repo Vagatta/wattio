@@ -4,9 +4,17 @@ import Icon from '../components/Icon.astro';
 import InvoiceExplorer from '../components/InvoiceExplorer.astro';
 import '../styles/wattio.css';
 
+export const prerender = true;
+
 const whatsappNumber = '34646583077';
 const whatsappMessage = 'Hola, Wattio. Quiero revisar mi factura de luz.';
 const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+
+const siteUrl = Astro.site ?? new URL('https://wattio.es');
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl);
+const ogImageUrl = new URL('/og-image.png', siteUrl);
+const pageTitle = 'Wattio — Revisa tu factura de luz y paga solo lo justo';
+const pageDescription = 'Envía tu factura de luz a Wattio y entiende qué pagas: consumo, potencia y extras revisados con claridad. Tú decides el siguiente paso.';
 
 const faqs = [
   { question: '¿Qué parte de la factura se revisa?', answer: 'El precio de la energía, la potencia contratada y los servicios adicionales. El objetivo es entender qué pagas y qué opciones encajan con tu consumo.' },
@@ -20,6 +28,61 @@ const steps = [
   { number: '2', icon: 'bolt' as const, title: 'Le damos una vuelta.', text: 'Consumo, potencia y extras. Una revisión que mire más allá del importe final.' },
   { number: '3', icon: 'check' as const, title: 'Tú tienes la última palabra.', text: 'Entiende tus opciones antes de decidir. Sin dar por hecho que debas cambiar.' },
 ];
+
+const organizationId = `${siteUrl.origin}/#organization`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': organizationId,
+      name: 'Wattio',
+      url: `${siteUrl.origin}/`,
+      logo: { '@type': 'ImageObject', url: new URL('/icon-512.png', siteUrl).href },
+      contactPoint: {
+        '@type': 'ContactPoint',
+        contactType: 'customer service',
+        telephone: '+34 646 58 30 77',
+        availableLanguage: 'es',
+      },
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${siteUrl.origin}/#website`,
+      url: `${siteUrl.origin}/`,
+      name: 'Wattio',
+      inLanguage: 'es',
+      publisher: { '@id': organizationId },
+    },
+    {
+      '@type': 'WebPage',
+      '@id': `${canonicalUrl.href}#webpage`,
+      url: canonicalUrl.href,
+      name: pageTitle,
+      description: pageDescription,
+      inLanguage: 'es',
+      isPartOf: { '@id': `${siteUrl.origin}/#website` },
+      about: { '@id': organizationId },
+    },
+    {
+      '@type': 'Service',
+      name: 'Revisión de factura eléctrica',
+      serviceType: 'Revisión de factura de luz',
+      description: 'Revisión de la factura de luz para entender el consumo, la potencia contratada y los servicios adicionales antes de decidir.',
+      provider: { '@id': organizationId },
+      areaServed: { '@type': 'Country', name: 'España' },
+      availableChannel: { '@type': 'ServiceChannel', serviceUrl: whatsappUrl },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faqs.map(faq => ({
+        '@type': 'Question',
+        name: faq.question,
+        acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+      })),
+    },
+  ],
+};
 ---
 
 <html lang="es">
@@ -27,9 +90,32 @@ const steps = [
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#180e2c" />
-    <meta name="description" content="Envía tu factura de luz a Wattio y entiende qué pagas: consumo, potencia y extras revisados con claridad. Tú decides el siguiente paso." />
+    <meta name="description" content={pageDescription} />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="es" href={canonicalUrl} />
+    <link rel="alternate" hreflang="x-default" href={canonicalUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:site_name" content="Wattio" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Wattio — revisión de tu factura de luz" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={ogImageUrl} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Wattio — Tu luz, sin puntos ciegos</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <title>{pageTitle}</title>
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
     <a href="#top" class="skip-link">Saltar al contenido</a>
@@ -65,6 +151,7 @@ const steps = [
               <button class="send-invoice" id="send-invoice" type="submit"><span>Enviar factura a Wattio</span><Icon name="arrow" size={19} /></button>
               <p id="submit-status" class="file-status" role="status" aria-live="polite"></p>
               <div class="local-notice"><Icon name="shield" size={16} /><p>Solo se envían los archivos cuando pulsas «Enviar».</p></div>
+              <p class="privacy-note">Al enviar aceptas la <a href="/privacidad">política de privacidad</a>. Usamos tus datos solo para revisar tu factura.</p>
               <noscript><p class="file-status">Activa JavaScript para enviar la factura o utiliza WhatsApp. No se enviará ningún archivo automáticamente.</p></noscript>
               <div class="submission-success" id="submission-success" tabindex="-1" hidden><span class="success-mark"><Icon name="check" size={28} /></span><h3>Factura recibida.</h3><p>Hemos enviado tus archivos para revisión. Gracias por confiar en Wattio.</p><a href="#entender">Descubre qué revisamos<Icon name="arrow" size={17} /></a></div>
             </form>
@@ -114,7 +201,7 @@ const steps = [
     <footer class="footer container">
       <div class="footer-top"><p>La energía, sin tanto misterio.</p><a href="#top">Volver al inicio<Icon name="arrow" size={18} /></a></div>
       <div class="footer-signature" aria-hidden="true"><Icon name="bolt" size={180} /><span translate="no">wattio</span></div>
-      <div class="footer-bottom"><span>© {new Date().getFullYear()} Wattio</span><a class="footer-whatsapp" href={whatsappUrl} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={17} />WhatsApp: +34 646 58 30 77</a><a href="#revisar">Enviar mi factura</a></div>
+      <div class="footer-bottom"><span>© {new Date().getFullYear()} Wattio</span><a class="footer-whatsapp" href={whatsappUrl} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={17} />WhatsApp: +34 646 58 30 77</a><a href="#revisar">Enviar mi factura</a><a href="/privacidad">Privacidad</a><a href="/aviso-legal">Aviso legal</a></div>
     </footer>
   </body>
 </html>

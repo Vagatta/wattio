@@ -1,0 +1,16 @@
+{
+  "name": "Wattio — Revisa tu factura de luz",
+  "short_name": "Wattio",
+  "description": "Envía tu factura de luz a Wattio y entiende qué pagas: consumo, potencia y extras revisados con claridad.",
+  "lang": "es",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#180e2c",
+  "theme_color": "#180e2c",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

@@ -28,7 +28,10 @@ RESEND_API_KEY=re_...
 RESEND_FROM_EMAIL=Wattio <hola@tu-dominio-verificado.com>
 WATTIO_COPY_EMAIL=jorge.maeso.2012@gmail.com
 WATTIO_COPY_EMAIL_2=otro-destinatario@tu-dominio.com
+PUBLIC_SITE_URL=https://tu-dominio.com
 ```
+
+`PUBLIC_SITE_URL` fija el dominio canónico: alimenta `<link rel="canonical">`, Open Graph, `sitemap.xml` y `robots.txt`.
 
 `RESEND_FROM_EMAIL` debe usar un dominio verificado en Resend. No guardes la API key en Git ni en el navegador.
 

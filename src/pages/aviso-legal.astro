@@ -1,0 +1,35 @@
+---
+import Legal from '../layouts/Legal.astro';
+
+export const prerender = true;
+---
+<Legal
+  title="Aviso legal — Wattio"
+  description="Aviso legal y condiciones de uso de la web de Wattio."
+>
+  <article class="legal-content">
+    <p class="legal-kicker">Legal</p>
+    <h1>Aviso legal</h1>
+    <p class="legal-updated">Última actualización: septiembre de 2026.</p>
+
+    <h2>1. Titular de la web</h2>
+    <p>Este sitio web es operado por Wattio. Contacto: WhatsApp +34&nbsp;646&nbsp;58&nbsp;30&nbsp;77.</p>
+    <!-- TODO: completar con la identidad fiscal del titular (nombre o razón social, NIF y domicilio) antes del lanzamiento. -->
+    <p class="legal-pending">Pendiente: identidad fiscal del titular (nombre o razón social, NIF y domicilio).</p>
+
+    <h2>2. Objeto</h2>
+    <p>Esta web permite enviar una factura eléctrica para que Wattio la revise y te oriente sobre lo que pagas. La revisión es orientativa: no constituye asesoramiento regulado ni garantiza un ahorro concreto.</p>
+
+    <h2>3. Condiciones de uso</h2>
+    <p>Al usar esta web aceptas estas condiciones. Te comprometes a enviar únicamente facturas propias o que estés autorizado a compartir, y a no usar el servicio con fines fraudulentos.</p>
+
+    <h2>4. Propiedad intelectual</h2>
+    <p>Los contenidos, la marca Wattio y el diseño de esta web son titularidad de Wattio. No se permite su reproducción sin autorización.</p>
+
+    <h2>5. Responsabilidad</h2>
+    <p>Wattio no responde de decisiones tomadas a partir de la revisión de la factura, que tiene carácter informativo. Las condiciones de cualquier cambio de tarifa o compañía deben verificarse siempre con el comercializador correspondiente.</p>
+
+    <h2>6. Legislación aplicable</h2>
+    <p>Este aviso legal se rige por la legislación española. Para cualquier controversia serán competentes los juzgados que correspondan conforme a la normativa vigente.</p>
+  </article>
+</Legal>

@@ -13,6 +13,7 @@
     "test:ui": "npm run build && playwright test --config .devin/playwright.config.ts"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
     "@astrojs/vercel": "11.0.10",
     "@fontsource-variable/manrope": "5.2.8",
     "astro": "^7.3.2",

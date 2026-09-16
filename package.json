@@ -14,10 +14,8 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
-    "@astrojs/vercel": "11.0.10",
     "@fontsource-variable/manrope": "5.2.8",
-    "astro": "^7.3.2",
-    "resend": "6.26.0"
+    "astro": "^7.3.2"
   },
   "allowScripts": {
     "esbuild": true

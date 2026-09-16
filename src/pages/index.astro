@@ -1,10 +1,9 @@
 ---
 import '@fontsource-variable/manrope';
+import Analytics from '../components/Analytics.astro';
 import Icon from '../components/Icon.astro';
 import InvoiceExplorer from '../components/InvoiceExplorer.astro';
 import '../styles/wattio.css';
-
-export const prerender = true;
 
 const whatsappNumber = '34646583077';
 const whatsappMessage = 'Hola, Wattio. Quiero revisar mi factura de luz.';
@@ -116,6 +115,7 @@ const jsonLd = {
     <link rel="manifest" href="/manifest.webmanifest" />
     <title>{pageTitle}</title>
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <Analytics />
   </head>
   <body>
     <a href="#top" class="skip-link">Saltar al contenido</a>
@@ -142,12 +142,13 @@ const jsonLd = {
               <div class="upload-card-top"><span class="file-heading"><Icon name="document" size={18} />Tu factura, en buenas manos</span><span class="upload-formats">PDF / JPG / PNG</span></div>
               <div class="dropzone" id="invoice-dropzone">
                 <div class="file-art" aria-hidden="true"><div class="file-back"></div><div class="file-front"><Icon name="bolt" size={24} /><i></i><i></i></div><span class="file-add"><Icon name="plus" size={15} /></span></div>
-                <label class="file-label" for="invoice"><span class="file-prompt">Arrastra aquí tus facturas</span><span>o <span class="browse-copy">elige los archivos</span> de tu dispositivo</span><input id="invoice" name="invoice" type="file" multiple accept="application/pdf,image/jpeg,image/png" aria-describedby="file-help file-status" /></label>
+                <label class="file-label" for="invoice"><span class="file-prompt">Arrastra aquí tus facturas</span><span>o <span class="browse-copy">elige los archivos</span> de tu dispositivo</span><input id="invoice" name="invoice[]" type="file" multiple accept="application/pdf,image/jpeg,image/png" aria-describedby="file-help file-status" /></label>
                 <p id="file-help">Hasta 10 archivos. Máximo 4&nbsp;MB en total.</p>
               </div>
               <div class="selected-files" id="selected-files" hidden aria-live="polite"></div>
               <p id="file-status" class="file-status" role="status" aria-live="polite"></p>
               <label class="email-field" for="sender-email">Tu email de contacto<input id="sender-email" name="email" type="email" autocomplete="email" spellcheck="false" placeholder="Por ejemplo, tu@email.com" required /></label>
+              <label class="hp-field" aria-hidden="true">Empresa<input name="company" type="text" tabindex="-1" autocomplete="off" /></label>
               <button class="send-invoice" id="send-invoice" type="submit"><span>Enviar factura a Wattio</span><Icon name="arrow" size={19} /></button>
               <p id="submit-status" class="file-status" role="status" aria-live="polite"></p>
               <div class="local-notice"><Icon name="shield" size={16} /><p>Solo se envían los archivos cuando pulsas «Enviar».</p></div>

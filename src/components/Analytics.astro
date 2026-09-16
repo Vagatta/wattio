@@ -1,0 +1,8 @@
+---
+// Analítica sin cookies, opt-in en build.
+// PUBLIC_ANALYTICS_DOMAIN activa el script (p. ej. Plausible: tudominio.com).
+// PUBLIC_ANALYTICS_SCRIPT permite apuntar a una instancia propia u otro proveedor compatible.
+const domain = import.meta.env.PUBLIC_ANALYTICS_DOMAIN;
+const scriptSrc = import.meta.env.PUBLIC_ANALYTICS_SCRIPT ?? 'https://plausible.io/js/script.js';
+---
+{domain ? <script defer data-domain={domain} src={scriptSrc} /> : null}

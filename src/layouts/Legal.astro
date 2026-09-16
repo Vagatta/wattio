@@ -1,5 +1,6 @@
 ---
 import '@fontsource-variable/manrope';
+import Analytics from '../components/Analytics.astro';
 import Icon from '../components/Icon.astro';
 import '../styles/wattio.css';
 
@@ -26,6 +27,7 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl);
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <title>{title}</title>
+    <Analytics />
   </head>
   <body>
     <a href="#top" class="skip-link">Saltar al contenido</a>

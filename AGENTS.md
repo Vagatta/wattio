@@ -4,7 +4,7 @@
 
 Landing Astro estática en español desplegada en Hostinger compartido; el único backend es `public/api/submit-invoice.php` (Resend vía REST). Mantener el nombre Wattio y el rayo reconocible. La referencia del menú es estética, no una fuente de números de teléfono, enlaces ni promesas comerciales.
 
-La selección de archivos permite hasta 10 PDF/JPG/PNG con un máximo conjunto de 4 MB (límite prudente para adjuntos de email). No presentar documentos como enviados antes de confirmar el formulario, ni ejemplos como análisis reales. Las copias de email se configuran mediante WATTIO_COPY_EMAILS como BCC (lista separada por comas). No inventar ahorros, gratuidad, testimonios o tiempos de respuesta. WhatsApp autorizado por el usuario: +34646583077. Usar enlaces wa.me con mensaje fijo; la factura seleccionada localmente no se adjunta automáticamente. No cambiar el número sin confirmación.
+La selección de archivos permite hasta 10 PDF/JPG/PNG con un máximo conjunto de 4 MB (límite prudente para adjuntos de email). No presentar documentos como enviados antes de confirmar el formulario, ni ejemplos como análisis reales. El formulario exige aceptar la política de privacidad: checkbox `privacy` obligatorio en cliente y verificación `$_POST['privacy']` en el PHP. Las copias de email se configuran mediante WATTIO_COPY_EMAILS como BCC (lista separada por comas). No inventar ahorros, gratuidad, testimonios o tiempos de respuesta. WhatsApp autorizado por el usuario: +34646583077. Usar enlaces wa.me con mensaje fijo; la factura seleccionada localmente no se adjunta automáticamente. No cambiar el número sin confirmación.
 
 ## Skills
 

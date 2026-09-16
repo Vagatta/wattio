@@ -149,10 +149,13 @@ const jsonLd = {
               <p id="file-status" class="file-status" role="status" aria-live="polite"></p>
               <label class="email-field" for="sender-email">Tu email de contacto<input id="sender-email" name="email" type="email" autocomplete="email" spellcheck="false" placeholder="Por ejemplo, tu@email.com" required /></label>
               <label class="hp-field" aria-hidden="true">Empresa<input name="company" type="text" tabindex="-1" autocomplete="off" /></label>
+              <div class="privacy-consent">
+                <label for="privacy"><input id="privacy" name="privacy" type="checkbox" required /><span class="privacy-text">He leído y acepto la política de privacidad de Wattio.</span></label>
+                <a href="/privacidad">Leer política</a>
+              </div>
               <button class="send-invoice" id="send-invoice" type="submit"><span>Enviar factura a Wattio</span><Icon name="arrow" size={19} /></button>
               <p id="submit-status" class="file-status" role="status" aria-live="polite"></p>
               <div class="local-notice"><Icon name="shield" size={16} /><p>Solo se envían los archivos cuando pulsas «Enviar».</p></div>
-              <p class="privacy-note">Al enviar aceptas la <a href="/privacidad">política de privacidad</a>. Usamos tus datos solo para revisar tu factura.</p>
               <noscript><p class="file-status">Activa JavaScript para enviar la factura o utiliza WhatsApp. No se enviará ningún archivo automáticamente.</p></noscript>
               <div class="submission-success" id="submission-success" tabindex="-1" hidden><span class="success-mark"><Icon name="check" size={28} /></span><h3>Factura recibida.</h3><p>Hemos enviado tus archivos para revisión. Gracias por confiar en Wattio.</p><a href="#entender">Descubre qué revisamos<Icon name="arrow" size={17} /></a></div>
             </form>

@@ -56,6 +56,10 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     respond(['error' => 'Introduce un email válido para poder contactarte.'], 422);
 }
 
+if (($_POST['privacy'] ?? '') !== 'on') {
+    respond(['error' => 'Debes aceptar la política de privacidad para enviar tu factura.'], 422);
+}
+
 $files = $_FILES['invoice'] ?? null;
 $names = is_array($files['name'] ?? null) ? $files['name'] : [];
 if (!$names) {

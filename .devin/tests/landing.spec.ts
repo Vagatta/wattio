@@ -107,6 +107,11 @@ test('successful submission shows a confirmation without sending a real email', 
   await page.locator('#sender-email').fill('persona@example.com');
   await page.locator('#invoice').setInputFiles({ name: 'factura.pdf', mimeType: 'application/pdf', buffer: Buffer.from('%PDF-1.4 synthetic') });
   await page.getByRole('button', { name: 'Enviar factura a Wattio' }).click();
+  expect(requestSeen).toBe(false);
+  await expect(page.locator('#privacy')).toHaveAttribute('required', '');
+  await expect(page.locator('#submission-success')).toBeHidden();
+  await page.locator('#privacy').check();
+  await page.getByRole('button', { name: 'Enviar factura a Wattio' }).click();
   await expect(page.locator('#submission-success')).toBeVisible();
   await expect(page.locator('#submission-success')).toContainText('Factura recibida');
   expect(requestSeen).toBe(true);

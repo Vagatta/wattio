@@ -57,7 +57,7 @@ h1 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(40px, 4.2v
 h1 em { font-style: normal; color: #dac4ee; }
 .hero-description { max-width: 620px; margin: 17px auto 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
 .hero-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 560px) minmax(0, 1fr); gap: 30px; align-items: center; margin-top: 27px; }
-.hero-upload { min-width: 0; scroll-margin-top: 50px; }
+.hero-upload { min-width: 0; }
 .hero-note { max-width: 170px; justify-self: end; margin-top: -85px; color: #bca0d0; }
 .hero-note > span { font-family: Georgia, serif; font-style: italic; font-size: 23px; color: #d3b8e8; }
 .hero-note p { font-size: 11px; line-height: 1.9; margin-top: 10px; }

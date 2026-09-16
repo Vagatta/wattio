@@ -97,10 +97,29 @@ test('multiple file selection validates total size and does not send before subm
   expect(posts).toEqual([]);
 });
 
+test('supply selector updates the dropzone and the comment field is optional', async ({ page }) => {
+  await page.goto('/');
+  const prompt = page.locator('.file-prompt');
+  await expect(prompt).toHaveText('Arrastra aquí tus facturas de luz');
+  await expect(page.locator('#invoice-form')).toHaveAttribute('data-supply', 'luz');
+  await page.locator('input[name="supply"][value="gas"]').check();
+  await expect(prompt).toHaveText('Arrastra aquí tus facturas de gas');
+  await expect(page.locator('#invoice-form')).toHaveAttribute('data-supply', 'gas');
+  await page.locator('input[name="supply"][value="ambas"]').check();
+  await expect(prompt).toHaveText('Arrastra aquí tus facturas de luz y gas');
+  await expect(page.locator('#comment')).toBeHidden();
+  await expect(page.locator('#comment')).not.toHaveAttribute('required', '');
+  await page.getByRole('button', { name: /Añadir un comentario/ }).click();
+  await expect(page.locator('#comment')).toBeVisible();
+  await expect(page.locator('#comment')).toBeFocused();
+});
+
 test('successful submission shows a confirmation without sending a real email', async ({ page }) => {
   let requestSeen = false;
+  let payload = '';
   await page.route('**/api/submit-invoice', async route => {
     requestSeen = true;
+    payload = route.request().postData() ?? '';
     await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true }) });
   });
   await page.goto('/');
@@ -110,18 +129,26 @@ test('successful submission shows a confirmation without sending a real email', 
   expect(requestSeen).toBe(false);
   await expect(page.locator('#privacy')).toHaveAttribute('required', '');
   await expect(page.locator('#submission-success')).toBeHidden();
+  await page.locator('input[name="supply"][value="gas"]').check();
+  await page.getByRole('button', { name: /Añadir un comentario/ }).click();
+  await page.locator('#comment').fill('Revisad sobre todo la potencia.');
   await page.locator('#privacy').check();
   await page.getByRole('button', { name: 'Enviar factura a Wattio' }).click();
   await expect(page.locator('#submission-success')).toBeVisible();
   await expect(page.locator('#submission-success')).toContainText('Factura recibida');
   expect(requestSeen).toBe(true);
+  expect(payload).toContain('name="supply"');
+  expect(payload).toContain('gas');
+  expect(payload).toContain('name="comment"');
+  expect(payload).toContain('Revisad sobre todo la potencia.');
+  expect(payload).toContain('name="privacy"');
 });
 
 test('WhatsApp links use the approved number and a fixed message without attaching files', async ({ page }) => {
   await page.goto('/');
   const links = page.locator('a[href^="https://wa.me/"]');
   await expect(links).toHaveCount(2);
-  const expected = 'https://wa.me/34646583077?text=' + encodeURIComponent('Hola, Wattio. Quiero revisar mi factura de luz.');
+  const expected = 'https://wa.me/34646583077?text=' + encodeURIComponent('Hola, Wattio. Quiero revisar mi factura de luz o gas.');
   for (const link of await links.all()) {
     await expect(link).toHaveAttribute('href', expected);
     await expect(link).toHaveAttribute('target', '_blank');

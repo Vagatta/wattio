@@ -6,17 +6,17 @@ import InvoiceExplorer from '../components/InvoiceExplorer.astro';
 import '../styles/wattio.css';
 
 const whatsappNumber = '34646583077';
-const whatsappMessage = 'Hola, Wattio. Quiero revisar mi factura de luz.';
+const whatsappMessage = 'Hola, Wattio. Quiero revisar mi factura de luz o gas.';
 const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
 const siteUrl = Astro.site ?? new URL('https://wattio.es');
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl);
 const ogImageUrl = new URL('/og-image.png', siteUrl);
-const pageTitle = 'Wattio — Revisa tu factura de luz y paga solo lo justo';
-const pageDescription = 'Envía tu factura de luz a Wattio y entiende qué pagas: consumo, potencia y extras revisados con claridad. Tú decides el siguiente paso.';
+const pageTitle = 'Wattio — Revisa tus facturas de luz y gas y paga solo lo justo';
+const pageDescription = 'Envía tu factura de luz o gas a Wattio y entiende qué pagas: consumo, potencia y extras revisados con claridad. Tú decides el siguiente paso.';
 
 const faqs = [
-  { question: '¿Qué parte de la factura se revisa?', answer: 'El precio de la energía, la potencia contratada y los servicios adicionales. El objetivo es entender qué pagas y qué opciones encajan con tu consumo.' },
+  { question: '¿Qué parte de la factura se revisa?', answer: 'El precio de la energía, la potencia contratada y los servicios adicionales, tanto en la factura de luz como en la de gas. El objetivo es entender qué pagas y qué opciones encajan con tu consumo.' },
   { question: '¿Me garantiza Wattio que voy a ahorrar?', answer: 'No. El ahorro depende de tu tarifa, de tu consumo y de las alternativas disponibles. Si tu situación ya es buena, una revisión también puede ayudarte a confirmarlo.' },
   { question: '¿Tengo que cambiar de compañía?', answer: 'No. Conocer otras opciones no implica contratar nada. Cualquier cambio debe ser una decisión tuya, después de conocer sus condiciones.' },
   { question: '¿Qué ocurre cuando selecciono una factura?', answer: 'Nada hasta que tú confirmes. Los archivos se quedan en tu dispositivo y solo se envían a Wattio por email cuando pulsas «Enviar factura a Wattio».' },
@@ -65,9 +65,9 @@ const jsonLd = {
     },
     {
       '@type': 'Service',
-      name: 'Revisión de factura eléctrica',
-      serviceType: 'Revisión de factura de luz',
-      description: 'Revisión de la factura de luz para entender el consumo, la potencia contratada y los servicios adicionales antes de decidir.',
+      name: 'Revisión de facturas de luz y gas',
+      serviceType: 'Revisión de factura de luz o gas',
+      description: 'Revisión de la factura de luz o gas para entender el consumo, la potencia contratada y los servicios adicionales antes de decidir.',
       provider: { '@id': organizationId },
       areaServed: { '@type': 'Country', name: 'España' },
       availableChannel: { '@type': 'ServiceChannel', serviceUrl: whatsappUrl },
@@ -104,7 +104,7 @@ const jsonLd = {
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Wattio — revisión de tu factura de luz" />
+    <meta property="og:image:alt" content="Wattio — revisión de tus facturas de luz y gas" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={pageDescription} />
@@ -132,22 +132,35 @@ const jsonLd = {
     <main id="top" tabindex="-1">
       <section class="hero container" id="revisar" aria-labelledby="hero-heading">
         <div class="hero-copy">
-          <h1 id="hero-heading">Sube tu factura de luz.<br /><em>El siguiente paso lo decides tú.</em></h1>
+          <h1 id="hero-heading">Sube tu factura de luz o gas.<br /><em>El siguiente paso lo decides tú.</em></h1>
           <p class="hero-description">Te ayudamos a entender lo que pagas y a valorar tus opciones.<br class="desktop-break" /> Empieza con una foto o un PDF. Sin comprometerte a cambiar.</p>
         </div>
         <div class="hero-layout">
           <div class="hero-note" aria-hidden="true"><span>Tal cual la recibes.</span><p>No necesitas descifrarla.<br />De eso nos encargamos.</p><svg viewBox="0 0 140 65" fill="none"><path d="M5 10c28 54 66 31 120 23m-13-8 15 8-12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
           <div class="hero-upload">
-            <form class="upload-card" id="invoice-form" aria-label="Enviar facturas para revisión">
-              <div class="upload-card-top"><span class="file-heading"><Icon name="document" size={18} />Tu factura, en buenas manos</span><span class="upload-formats">PDF / JPG / PNG</span></div>
+            <form class="upload-card" id="invoice-form" aria-label="Enviar facturas para revisión" data-supply="luz">
+              <div class="upload-card-top">
+                <div class="supply-choice" role="radiogroup" aria-label="Tipo de factura que envías">
+                  <span class="file-heading">Tu factura es de</span>
+                  <div class="supply-options">
+                    <label><input type="radio" name="supply" value="luz" checked /><span><Icon name="bolt" size={12} />Luz</span></label>
+                    <label><input type="radio" name="supply" value="gas" /><span><Icon name="flame" size={12} />Gas</span></label>
+                    <label><input type="radio" name="supply" value="ambas" /><span>Luz y gas</span></label>
+                  </div>
+                </div>
+              </div>
               <div class="dropzone" id="invoice-dropzone">
                 <div class="file-art" aria-hidden="true"><div class="file-back"></div><div class="file-front"><Icon name="bolt" size={24} /><i></i><i></i></div><span class="file-add"><Icon name="plus" size={15} /></span></div>
-                <label class="file-label" for="invoice"><span class="file-prompt">Arrastra aquí tus facturas</span><span>o <span class="browse-copy">elige los archivos</span> de tu dispositivo</span><input id="invoice" name="invoice[]" type="file" multiple accept="application/pdf,image/jpeg,image/png" aria-describedby="file-help file-status" /></label>
-                <p id="file-help">Hasta 10 archivos. Máximo 4&nbsp;MB en total.</p>
+                <label class="file-label" for="invoice"><span class="file-prompt">Arrastra aquí tus facturas de luz</span><span>o <span class="browse-copy">elige los archivos</span> de tu dispositivo</span><input id="invoice" name="invoice[]" type="file" multiple accept="application/pdf,image/jpeg,image/png" aria-describedby="file-help file-status" /></label>
+                <p id="file-help">PDF, JPG o PNG. Hasta 10 archivos, máximo 4&nbsp;MB en total.</p>
               </div>
               <div class="selected-files" id="selected-files" hidden aria-live="polite"></div>
               <p id="file-status" class="file-status" role="status" aria-live="polite"></p>
               <label class="email-field" for="sender-email">Tu email de contacto<input id="sender-email" name="email" type="email" autocomplete="email" spellcheck="false" placeholder="Por ejemplo, tu@email.com" required /></label>
+              <div class="comment-field">
+                <button class="comment-toggle" id="comment-toggle" type="button" aria-expanded="false" aria-controls="comment-wrap"><Icon name="plus" size={14} />Añadir un comentario <span>opcional</span></button>
+                <div class="comment-wrap" id="comment-wrap" hidden><label for="comment">Tu comentario para Wattio</label><textarea id="comment" name="comment" rows="3" maxlength="500" placeholder="Por ejemplo: me interesa revisar la potencia contratada."></textarea></div>
+              </div>
               <label class="hp-field" aria-hidden="true">Empresa<input name="company" type="text" tabindex="-1" autocomplete="off" /></label>
               <div class="privacy-consent">
                 <label for="privacy"><input id="privacy" name="privacy" type="checkbox" required /><span class="privacy-text">He leído y acepto la política de privacidad de Wattio.</span></label>
@@ -190,7 +203,7 @@ const jsonLd = {
           <span class="section-index">Más allá del importe final</span>
           <h2 id="explain-heading">Tu factura habla.<br />Vamos a traducirla.</h2>
           <p>Consumo en kWh, potencia contratada en kW, servicios adicionales… Cada concepto cuenta una parte de lo que pagas.</p>
-          <p>Explora este ejemplo para entender qué miramos. No necesitas saberlo todo antes de enviar la tuya.</p>
+          <p>Explora este ejemplo de luz para entender qué miramos. Con la factura de gas seguimos el mismo criterio.</p>
           <p class="guide-link">¿Quieres el detalle? <a href="/guias/como-leer-tu-factura-de-luz">Cómo leer tu factura de luz</a></p>
           <a class="button primary" href="#revisar">Revisar mi factura<Icon name="arrow" size={20} /></a>
         </div>
@@ -243,6 +256,21 @@ const jsonLd = {
   const sendButton = document.querySelector<HTMLButtonElement>('#send-invoice')!;
   const submitStatus = document.querySelector<HTMLElement>('#submit-status')!;
   const success = document.querySelector<HTMLElement>('#submission-success')!;
+  const filePrompt = document.querySelector<HTMLElement>('.file-prompt')!;
+  const supplyPrompts: Record<string, string> = { luz: 'Arrastra aquí tus facturas de luz', gas: 'Arrastra aquí tus facturas de gas', ambas: 'Arrastra aquí tus facturas de luz y gas' };
+  form.querySelectorAll<HTMLInputElement>('input[name="supply"]').forEach(radio => radio.addEventListener('change', () => {
+    form.dataset.supply = radio.value;
+    filePrompt.textContent = supplyPrompts[radio.value] ?? supplyPrompts.luz;
+  }));
+  const commentToggle = document.querySelector<HTMLButtonElement>('#comment-toggle')!;
+  const commentWrap = document.querySelector<HTMLElement>('#comment-wrap')!;
+  const commentArea = document.querySelector<HTMLTextAreaElement>('#comment')!;
+  commentToggle.addEventListener('click', () => {
+    const opening = commentWrap.hidden;
+    commentWrap.hidden = !opening;
+    commentToggle.setAttribute('aria-expanded', String(opening));
+    if (opening) commentArea.focus();
+  });
   let selectedFiles: File[] = [];
   const allowed: Record<string, RegExp> = { 'application/pdf': /\.pdf$/i, 'image/jpeg': /\.jpe?g$/i, 'image/png': /\.png$/i };
   const formatSize = (bytes: number) => new Intl.NumberFormat('es', { maximumFractionDigits: 1 }).format(bytes / 1024) + ' KB';

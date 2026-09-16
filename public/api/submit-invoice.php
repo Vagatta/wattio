@@ -60,6 +60,14 @@ if (($_POST['privacy'] ?? '') !== 'on') {
     respond(['error' => 'Debes aceptar la política de privacidad para enviar tu factura.'], 422);
 }
 
+$supplyLabels = ['luz' => 'luz', 'gas' => 'gas', 'ambas' => 'luz y gas'];
+$supply = $supplyLabels[(string) ($_POST['supply'] ?? '')] ?? 'luz';
+
+$comment = trim((string) ($_POST['comment'] ?? ''));
+if (strlen($comment) > 4000) {
+    $comment = substr($comment, 0, 4000);
+}
+
 $files = $_FILES['invoice'] ?? null;
 $names = is_array($files['name'] ?? null) ? $files['name'] : [];
 if (!$names) {
@@ -98,13 +106,16 @@ foreach ($names as $i => $name) {
 }
 
 $count = count($attachments);
+$plural = $count === 1 ? '' : 's';
+$commentText = $comment !== '' ? "\n\nComentario del usuario:\n{$comment}" : '';
+$commentHtml = $comment !== '' ? '<p><strong>Comentario del usuario:</strong><br>' . nl2br(htmlspecialchars($comment, ENT_QUOTES)) . '</p>' : '';
 $payload = [
     'from' => $from,
     'to' => [$ownerEmail],
     'reply_to' => [$email],
-    'subject' => 'Nueva factura Wattio — ' . $email,
-    'text' => "El usuario {$email} ha enviado {$count} factura" . ($count === 1 ? '' : 's') . ' para revisión. Se adjuntan a este email.',
-    'html' => '<p>El usuario <strong>' . htmlspecialchars($email, ENT_QUOTES) . '</strong> ha enviado ' . $count . ' factura' . ($count === 1 ? '' : 's') . ' para revisión.</p><p>Se adjuntan todos los archivos a este email.</p>',
+    'subject' => "Factura de {$supply} Wattio — {$email}",
+    'text' => "El usuario {$email} ha enviado {$count} factura{$plural} de {$supply} para revisión. Se adjuntan a este email.{$commentText}",
+    'html' => '<p>El usuario <strong>' . htmlspecialchars($email, ENT_QUOTES) . '</strong> ha enviado ' . $count . ' factura' . $plural . ' de ' . $supply . ' para revisión.</p><p>Se adjuntan todos los archivos a este email.</p>' . $commentHtml,
     'attachments' => $attachments,
 ];
 if ($copyList) {

@@ -1,6 +1,6 @@
 ---
 interface Props {
-  name: 'bolt' | 'arrow' | 'upload' | 'document' | 'shield' | 'close' | 'menu' | 'check' | 'sun' | 'plug' | 'plus' | 'whatsapp';
+  name: 'bolt' | 'arrow' | 'upload' | 'document' | 'shield' | 'close' | 'menu' | 'check' | 'sun' | 'plug' | 'plus' | 'whatsapp' | 'flame';
   size?: number;
 }
 const { name, size = 24 } = Astro.props;
@@ -17,6 +17,7 @@ const paths = {
   plug: 'M8 3v5m8-5v5M6 8h12v3a6 6 0 0 1-6 6v5m-6-11V8m12 3V8',
   plus: 'M12 5v14M5 12h14',
   whatsapp: 'M20.5 11.8a8.5 8.5 0 0 1-12.6 7.5L3 21l1.6-4.8A8.5 8.5 0 1 1 20.5 11.8ZM8.8 7.5l1.4 2.3-1 1.1a8 8 0 0 0 3.9 3.6l1-1.2 2.4 1.2c-.2 1.4-1.2 2.1-2.6 1.7-3.5-1-6.2-3.8-6.8-6.7-.2-1 .4-1.8 1.7-2Z',
+  flame: 'M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.3 1-3a2.5 2.5 0 0 0 2.5 2.5Z',
 };
 ---
 <svg width={size} height={size} viewBox="0 0 24 24" fill={name === 'bolt' ? 'currentColor' : 'none'} stroke={name === 'bolt' ? 'none' : 'currentColor'} stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d={paths[name]} /></svg>

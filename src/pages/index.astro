@@ -130,7 +130,7 @@ const jsonLd = {
     </header>
 
     <main id="top" tabindex="-1">
-      <section class="hero container" id="revisar" aria-labelledby="hero-heading">
+      <section class="hero container" id="revisar" aria-labelledby="hero-heading" data-supply="luz">
         <div class="hero-copy">
           <h1 id="hero-heading">Sube tu factura de luz o gas.<br /><em>El siguiente paso lo decides tú.</em></h1>
           <p class="hero-description">Te ayudamos a entender lo que pagas y a valorar tus opciones.<br class="desktop-break" /> Empieza con una foto o un PDF. Sin comprometerte a cambiar.</p>
@@ -138,7 +138,7 @@ const jsonLd = {
         <div class="hero-layout">
           <div class="hero-note" aria-hidden="true"><span>Tal cual la recibes.</span><p>No necesitas descifrarla.<br />De eso nos encargamos.</p><svg viewBox="0 0 140 65" fill="none"><path d="M5 10c28 54 66 31 120 23m-13-8 15 8-12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
           <div class="hero-upload">
-            <form class="upload-card" id="invoice-form" aria-label="Enviar facturas para revisión" data-supply="luz">
+            <form class="upload-card" id="invoice-form" aria-label="Enviar facturas para revisión">
               <div class="upload-card-top">
                 <div class="supply-choice" role="radiogroup" aria-label="Tipo de factura que envías">
                   <span class="file-heading">Tu factura es de</span>
@@ -179,7 +179,7 @@ const jsonLd = {
             </div>
           </div>
           <aside class="hero-journey" aria-label="De tu factura a una decisión clara">
-            <div class="journey-art" aria-hidden="true"><div class="journey-sheet"><Icon name="bolt" size={22} /><span></span><span></span><span></span></div><div class="journey-result"><Icon name="check" size={25} /><span>Todo, más claro.</span><i></i><i></i></div></div>
+            <div class="journey-art" aria-hidden="true"><div class="journey-sheet-back"><span class="art-icon art-back-gas"><Icon name="flame" size={14} /></span></div><div class="journey-sheet"><span class="art-icon art-luz"><Icon name="bolt" size={22} /></span><span class="art-icon art-gas"><Icon name="flame" size={22} /></span><i></i><i></i><i></i></div><div class="journey-result"><Icon name="check" size={25} /><span>Todo, más claro.</span><i></i><i></i></div></div>
             <ol class="journey-list"><li><span>1</span><div><strong>Envía tu factura</strong><p>Una foto o un PDF.</p></div></li><li><span>2</span><div><strong>Entiende tus opciones</strong><p>Sin perderte en la letra pequeña.</p></div></li><li><span>3</span><div><strong>Decide con calma</strong><p>La última palabra es tuya.</p></div></li></ol>
           </aside>
         </div>
@@ -269,8 +269,9 @@ const jsonLd = {
   const success = document.querySelector<HTMLElement>('#submission-success')!;
   const filePrompt = document.querySelector<HTMLElement>('.file-prompt')!;
   const supplyPrompts: Record<string, string> = { luz: 'Arrastra aquí tus facturas de luz', gas: 'Arrastra aquí tus facturas de gas', ambas: 'Arrastra aquí tus facturas de luz y gas' };
+  const hero = document.querySelector<HTMLElement>('.hero')!;
   form.querySelectorAll<HTMLInputElement>('input[name="supply"]').forEach(radio => radio.addEventListener('change', () => {
-    form.dataset.supply = radio.value;
+    hero.dataset.supply = radio.value;
     filePrompt.textContent = supplyPrompts[radio.value] ?? supplyPrompts.luz;
   }));
   document.querySelectorAll<HTMLElement>('[data-select-supply]').forEach(link => link.addEventListener('click', () => {

@@ -65,8 +65,15 @@ h1 em { font-style: normal; color: #dac4ee; }
 .hero-journey { align-self: center; padding-left: 2px; margin-top: -42px; }
 .journey-art { position: relative; width: 165px; height: 146px; margin: 0 0 22px 8px; }
 .journey-sheet { position: absolute; width: 96px; height: 124px; top: 4px; left: 10px; padding: 17px 13px; border-radius: 5px 17px 5px 5px; background: #ecdef5; color: #7e41ac; transform: rotate(-9deg); box-shadow: 0 8px 24px #10051d3d; }
-.journey-sheet > span { display: block; height: 3px; margin-top: 10px; background: #bca2d0; border-radius: 2px; }
-.journey-sheet > span:last-child { width: 60%; }
+.journey-sheet-back { position: absolute; display: flex; align-items: start; width: 88px; height: 112px; padding: 10px 0 0 9px; top: 0; left: 2px; border-radius: 5px 15px 5px 5px; background: #9b72b5; transform: rotate(-16deg); }
+[data-supply='gas'] .journey-sheet { background: #f8ecda; color: #b0631f; }
+[data-supply='gas'] .journey-sheet > i { background: #ddb88e; }
+[data-supply='gas'] .journey-sheet-back { background: #b58a5c; }
+[data-supply='gas'] .journey-result { border-color: #f0c48b7a; background: linear-gradient(115deg, #c26e2ae8, #6b3413f5); }
+[data-supply='gas'] .journey-result > i { background: #ffcf99; }
+[data-supply='ambas'] .journey-sheet-back { background: #f8ecda; color: #b0631f; }
+.journey-sheet > i { display: block; height: 3px; margin-top: 10px; background: #bca2d0; border-radius: 2px; }
+.journey-sheet > i:last-child { width: 60%; }
 .journey-result { position: absolute; top: 58px; right: 0; width: 111px; padding: 13px 12px; border: 1px solid #d5b5eb; border-radius: 10px; background: #4c276b; transform: rotate(7deg); box-shadow: 0 10px 25px #15072450; color: #eed8ff; }
 .journey-result > span { display: block; margin: 7px 0 11px; font-size: 9px; font-weight: 650; }
 .journey-result > i { display: block; height: 2px; width: 77%; background: #aa7dca; margin-top: 6px; }
@@ -196,18 +203,18 @@ h3 { font-size: 21px; font-weight: 650; letter-spacing: -.6px; }
 .comment-wrap textarea:focus-visible { outline: 2px solid #d2a5f5; outline-offset: 3px; }
 .art-icon { display: inline-flex; }
 .art-gas { display: none; }
-.upload-card[data-supply='gas'] .art-luz { display: none; }
-.upload-card[data-supply='gas'] .art-gas { display: inline-flex; }
-.upload-card[data-supply='gas'] .file-front { color: #b0631f; background: #f8ecda; }
-.upload-card[data-supply='gas'] .file-front i { background: #ddb88e; }
-.upload-card[data-supply='gas'] .file-back { background: #b58a5c; }
-.upload-card[data-supply='gas'] .file-add { background: #f3c48b; }
-.upload-card[data-supply='gas'] .browse-copy { color: #f3c48b; }
-.upload-card[data-supply='gas'] .dropzone { border-color: #d09a5e73; }
-.upload-card[data-supply='gas'] .dropzone:hover, .upload-card[data-supply='gas'] .dropzone:focus-within, .upload-card[data-supply='gas'] .dropzone.is-dragging { border-color: #f3c48b; background: #40281a; }
+[data-supply='gas'] .art-luz { display: none; }
+[data-supply='gas'] .art-gas { display: inline-flex; }
+[data-supply='gas'] .file-front { color: #b0631f; background: #f8ecda; }
+[data-supply='gas'] .file-front i { background: #ddb88e; }
+[data-supply='gas'] .file-back { background: #b58a5c; }
+[data-supply='gas'] .file-add { background: #f3c48b; }
+[data-supply='gas'] .browse-copy { color: #f3c48b; }
+[data-supply='gas'] .dropzone { border-color: #d09a5e73; }
+[data-supply='gas'] .dropzone:hover, [data-supply='gas'] .dropzone:focus-within, [data-supply='gas'] .dropzone.is-dragging { border-color: #f3c48b; background: #40281a; }
 
-.upload-card[data-supply='ambas'] .file-back { background: #f8ecda; color: #b0631f; }
-.upload-card[data-supply='ambas'] .art-back-gas { display: inline-flex; }
+[data-supply='ambas'] .file-back { background: #f8ecda; color: #b0631f; }
+[data-supply='ambas'] .art-back-gas { display: inline-flex; }
 .send-invoice { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 48px; margin-top: 12px; padding: 0 17px 0 20px; border: 1px solid #d3a7fa38; border-radius: 11px; color: #fff; background: linear-gradient(110deg, #7734c6, #873bc9); font-size: 13px; font-weight: 700; box-shadow: 0 5px 18px #1f053b50; }
 .send-invoice:hover { background: #974bdc; border-color: #d3a7fa88; }
 .send-invoice:disabled { cursor: wait; opacity: .65; }

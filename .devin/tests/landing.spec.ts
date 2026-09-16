@@ -65,14 +65,17 @@ test('gas section explains its own concepts and preselects gas in the form', asy
   await expect(page.locator('#concept-explanation-gas')).toContainText('Peaje');
   await page.getByRole('link', { name: 'Revisar mi factura de gas' }).click();
   await expect(page.locator('input[name="supply"][value="gas"]')).toBeChecked();
-  await expect(page.locator('#invoice-form')).toHaveAttribute('data-supply', 'gas');
+  await expect(page.locator('#revisar')).toHaveAttribute('data-supply', 'gas');
   await expect(page.locator('.file-prompt')).toHaveText('Arrastra aquí tus facturas de gas');
   await page.locator('#invoice-form').screenshot({ path: testInfo.outputPath('card-gas.png') });
   await gasExplorer.screenshot({ path: testInfo.outputPath('gas-explorer.png') });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.locator('.hero-journey').screenshot({ path: testInfo.outputPath('journey-gas.png') });
   await page.locator('input[name="supply"][value="ambas"]').check();
-  await expect(page.locator('#invoice-form')).toHaveAttribute('data-supply', 'ambas');
+  await expect(page.locator('#revisar')).toHaveAttribute('data-supply', 'ambas');
   await expect(page.locator('.file-prompt')).toHaveText('Arrastra aquí tus facturas de luz y gas');
   await page.locator('#invoice-form').screenshot({ path: testInfo.outputPath('card-ambas.png') });
+  await page.locator('.hero-journey').screenshot({ path: testInfo.outputPath('journey-ambas.png') });
 });
 
 test('mobile menu supports navigation and Escape', async ({ page }) => {
@@ -122,10 +125,10 @@ test('supply selector updates the dropzone and the comment field is optional', a
   await page.goto('/');
   const prompt = page.locator('.file-prompt');
   await expect(prompt).toHaveText('Arrastra aquí tus facturas de luz');
-  await expect(page.locator('#invoice-form')).toHaveAttribute('data-supply', 'luz');
+  await expect(page.locator('#revisar')).toHaveAttribute('data-supply', 'luz');
   await page.locator('input[name="supply"][value="gas"]').check();
   await expect(prompt).toHaveText('Arrastra aquí tus facturas de gas');
-  await expect(page.locator('#invoice-form')).toHaveAttribute('data-supply', 'gas');
+  await expect(page.locator('#revisar')).toHaveAttribute('data-supply', 'gas');
   await page.locator('input[name="supply"][value="ambas"]').check();
   await expect(prompt).toHaveText('Arrastra aquí tus facturas de luz y gas');
   await expect(page.locator('#comment')).toBeHidden();

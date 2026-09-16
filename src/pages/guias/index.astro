@@ -1,0 +1,34 @@
+---
+import Page from '../../layouts/Page.astro';
+import Icon from '../../components/Icon.astro';
+
+const siteUrl = Astro.site ?? new URL('https://wattio.es');
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl);
+const pageTitle = 'Guías para entender tus facturas — Wattio';
+const pageDescription = 'Guías claras de Wattio para entender tu factura de luz y de gas: qué pagas, qué significa cada concepto y dónde mirar primero.';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Inicio', item: `${siteUrl.origin}/` },
+    { '@type': 'ListItem', position: 2, name: 'Guías', item: canonicalUrl.href },
+  ],
+};
+---
+<Page title={pageTitle} description={pageDescription}>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head-extra" />
+  <article class="legal-content">
+    <p class="legal-kicker">Guías</p>
+    <h1>Entiende lo que pagas</h1>
+    <p class="legal-updated">Dos guías cortas y directas: qué significa cada concepto de tu factura y dónde mirar primero. Sin jerga y sin promesas vacías.</p>
+
+    <h2><a href="/guias/como-leer-tu-factura-de-luz"><Icon name="bolt" size={20} /> Cómo leer tu factura de luz</a></h2>
+    <p>Potencia, consumo en kWh, tramos horarios, peajes e impuestos: la factura eléctrica ordenada para que sepas qué pagas.</p>
+
+    <h2><a href="/guias/como-leer-tu-factura-de-gas"><Icon name="flame" size={20} /> Cómo leer tu factura de gas</a></h2>
+    <p>Término fijo, peajes de acceso, el paso de m³ a kWh y los extras habituales: la factura del gas explicada con claridad.</p>
+
+    <p style="margin-top: 40px;"><a class="button primary" href="/#revisar">Revisar mi factura con Wattio<Icon name="arrow" size={20} /></a></p>
+  </article>
+</Page>

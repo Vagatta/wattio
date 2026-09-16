@@ -1,0 +1,77 @@
+---
+import Page from '../../layouts/Page.astro';
+import Icon from '../../components/Icon.astro';
+
+const siteUrl = Astro.site ?? new URL('https://wattio.es');
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl);
+const guideTitle = 'Cómo leer tu factura de gas — Guía Wattio';
+const guideDescription = 'Entiende cada parte de tu factura de gas: término fijo, consumo en kWh, peajes de acceso, servicios adicionales e impuestos. Guía clara de Wattio.';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: 'Cómo leer tu factura de gas',
+      description: guideDescription,
+      inLanguage: 'es',
+      mainEntityOfPage: canonicalUrl.href,
+      author: { '@id': `${siteUrl.origin}/#organization` },
+      publisher: { '@id': `${siteUrl.origin}/#organization` },
+      datePublished: '2026-09-16',
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Inicio', item: `${siteUrl.origin}/` },
+        { '@type': 'ListItem', position: 2, name: 'Guías', item: `${siteUrl.origin}/guias/` },
+        { '@type': 'ListItem', position: 3, name: 'Cómo leer tu factura de gas', item: canonicalUrl.href },
+      ],
+    },
+  ],
+};
+---
+<Page title={guideTitle} description={guideDescription}>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head-extra" />
+  <article class="legal-content">
+    <p class="legal-kicker">Guía</p>
+    <h1>Cómo leer tu factura de gas</h1>
+    <p class="legal-updated">La factura del gas mezcla un coste fijo, el consumo que haces y varios conceptos extra. Esta guía los ordena para que sepas qué pagas y dónde mirar primero.</p>
+
+    <h2>1. Los datos básicos</h2>
+    <p>Antes de los números, localiza tres cosas: el <strong>titular</strong> del contrato, el <strong>periodo de facturación</strong> (los días que cubre esa factura) y el <strong>CUPS</strong>, el código que identifica tu punto de suministro — el del gas es distinto al de la luz aunque estén en la misma vivienda.</p>
+    <p>Aparecerá también tu <strong>peaje de acceso</strong> (RL.1, RL.2 o RL.3 en hogares): no es algo que elijas cada mes, se asigna según tu consumo anual y determina cuánto pagas de fijo.</p>
+
+    <h2>2. Término fijo: lo que pagas aunque no consumas</h2>
+    <p>Es un importe por cada día del periodo de facturación, aunque no gastes ni un metro cúbico. A diferencia de la potencia eléctrica, aquí no «contratas» una cifra: <strong>el importe depende de tu peaje de acceso</strong>, y el peaje depende de cuánto consumiste el año anterior.</p>
+    <p>Si tu consumo real ha cambiado —por ejemplo, dejaste de usar la caldera— puede que tu peaje ya no encaje. Vale la pena comprobarlo.</p>
+
+    <h2>3. Término variable: lo que consumes</h2>
+    <p>Aquí se factura el gas que realmente utilizas. El contador mide en <strong>metros cúbicos (m³)</strong>, pero la factura cobra en <strong>kWh</strong>: en medio hay un <strong>factor de conversión</strong> que traduce el volumen a energía según el poder calorífico del gas.</p>
+    <p>Mira tres cosas: los m³ o kWh consumidos en el periodo, el <strong>factor de conversión</strong> aplicado y el <strong>precio del kWh</strong> que te cobra tu tarifa.</p>
+
+    <h2>4. Otros conceptos que se cuelan en el total</h2>
+    <ul>
+      <li><strong>Alquiler del contador</strong>: un importe pequeño y fijo si el equipo de medida no es tuyo.</li>
+      <li><strong>Servicios adicionales</strong>: mantenimiento de la caldera, protección de pagos u otros extras. Son frecuentes en el gas y conviene revisar qué incluyen y si los utilizas.</li>
+      <li><strong>Impuesto sobre hidrocarburos</strong>: el equivalente al impuesto eléctrico, aplicado al consumo de gas.</li>
+      <li><strong>IVA</strong>: el vigente en cada momento, aplicado sobre todo lo anterior.</li>
+    </ul>
+
+    <h2>5. TUR o mercado libre</h2>
+    <p>En el gas, el equivalente al PVPC eléctrico es la <strong>TUR</strong> (tarifa de último recurso): un precio regulado que se revisa trimestralmente. En el <strong>mercado libre</strong> cada comercializadora fija sus precios y condiciones. Ninguno es mejor por defecto: depende de tu consumo y de la estabilidad de precio que busques.</p>
+
+    <h2>6. Señales de que merece una revisión</h2>
+    <ul>
+      <li>Llevas más de un año sin mirar qué tarifa tienes.</li>
+      <li>Tu peaje de acceso no encaja con el consumo que haces ahora.</li>
+      <li>Pagas un servicio de mantenimiento que no recuerdas o no usas.</li>
+      <li>Tu factura sube en invierno y nunca has comparado el precio del kWh.</li>
+    </ul>
+    <p>Nada de esto garantiza que puedas pagar menos, pero sí que vale la pena comprobarlo.</p>
+
+    <p class="guide-link">¿También la eléctrica? <a href="/guias/como-leer-tu-factura-de-luz">Cómo leer tu factura de luz</a></p>
+
+    <p style="margin-top: 40px;"><a class="button primary" href="/#revisar">Revisar mi factura de gas con Wattio<Icon name="arrow" size={20} /></a></p>
+  </article>
+</Page>

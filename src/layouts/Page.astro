@@ -28,6 +28,7 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl);
     <link rel="manifest" href="/manifest.webmanifest" />
     <title>{title}</title>
     <Analytics />
+    <slot name="head-extra" />
   </head>
   <body>
     <a href="#top" class="skip-link">Saltar al contenido</a>

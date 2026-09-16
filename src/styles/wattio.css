@@ -150,6 +150,9 @@ h3 { font-size: 21px; font-weight: 650; letter-spacing: -.6px; }
 .explain-section { display: grid; grid-template-columns: 1fr 1fr; gap: 10%; align-items: center; padding-block: 90px; }
 .explain-copy h2 { font-size: clamp(38px, 4vw, 56px); margin-top: 23px; }
 .explain-copy > p { max-width: 390px; margin-top: 23px; color: var(--muted); font-size: 15px; line-height: 1.9; }
+.guide-link { font-size: 13px !important; }
+.guide-link a { color: #e0c9f5; text-decoration: underline; text-underline-offset: 3px; }
+.guide-link a:hover { color: #fff; }
 .explain-object { min-width: 0; }
 .upload-card { min-width: 0; padding: 20px; border: 1px solid #b77bd178; border-radius: 22px; background: linear-gradient(145deg, #342045, #261536 70%); box-shadow: 0 18px 60px #09021250, 0 0 0 6px #ad70d108, inset 0 1px #edcbff12; }
 .upload-card.is-submitted > *:not(.submission-success) { display: none; }

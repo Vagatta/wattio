@@ -1,0 +1,74 @@
+---
+import Page from '../../layouts/Page.astro';
+import Icon from '../../components/Icon.astro';
+
+const siteUrl = Astro.site ?? new URL('https://wattio.es');
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl);
+const guideTitle = 'Cómo leer tu factura de luz — Guía Wattio';
+const guideDescription = 'Entiende cada parte de tu factura de la luz: consumo, potencia contratada, peajes, servicios adicionales e impuestos. Guía clara de Wattio.';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: 'Cómo leer tu factura de luz',
+      description: guideDescription,
+      inLanguage: 'es',
+      mainEntityOfPage: canonicalUrl.href,
+      author: { '@id': `${siteUrl.origin}/#organization` },
+      publisher: { '@id': `${siteUrl.origin}/#organization` },
+      datePublished: '2026-09-16',
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Inicio', item: `${siteUrl.origin}/` },
+        { '@type': 'ListItem', position: 2, name: 'Guías', item: `${siteUrl.origin}/guias/` },
+        { '@type': 'ListItem', position: 3, name: 'Cómo leer tu factura de luz', item: canonicalUrl.href },
+      ],
+    },
+  ],
+};
+---
+<Page title={guideTitle} description={guideDescription}>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head-extra" />
+  <article class="legal-content">
+    <p class="legal-kicker">Guía</p>
+    <h1>Cómo leer tu factura de luz</h1>
+    <p class="legal-updated">La factura eléctrica mezcla conceptos fijos, variables e impuestos. Esta guía los ordena para que sepas qué pagas y dónde mirar primero.</p>
+
+    <h2>1. Los datos básicos</h2>
+    <p>Antes de los números, localiza tres cosas: el <strong>titular</strong> del contrato, el <strong>periodo de facturación</strong> (los días que cubre esa factura) y el <strong>CUPS</strong>, el código que identifica tu punto de suministro. Con eso sabes qué estás pagando y desde cuándo.</p>
+
+    <h2>2. Término de potencia: lo que pagas aunque no consumas</h2>
+    <p>La potencia contratada se mide en <strong>kW</strong> y es un coste fijo: pagas por tener capacidad disponible, uses o no uses la luz. En la mayoría de hogares hay <strong>dos periodos de potencia</strong> (P1 y P2) que pueden tener precios distintos.</p>
+    <p>Una potencia mayor de la que necesitas es una de las causas más habituales de pagar de más, porque se cobra todos los meses aunque tu consumo sea bajo.</p>
+
+    <h2>3. Término de energía: lo que consumes</h2>
+    <p>Aquí se factura lo que realmente utilizas, en <strong>kWh</strong>. Dependiendo de tu tarifa, el precio del kWh puede ser único o variar por tramos horarios: <strong>punta, llano y valle</strong>. En tarifas con discriminación horaria, consumir en horas valle suele salir más barato.</p>
+    <p>Mira dos cosas: cuántos kWh has consumido en el periodo y a qué precio se ha cobrado cada kWh en cada tramo.</p>
+
+    <h2>4. Otros conceptos que se cuelan en el total</h2>
+    <ul>
+      <li><strong>Alquiler del contador</strong>: un importe pequeño y fijo si el equipo no es tuyo.</li>
+      <li><strong>Servicios adicionales</strong>: mantenimiento, protección de pagos u otros extras que contrataste en su día — o que quizá no recuerdas haber contratado. Conviene revisar qué incluyen y si los utilizas.</li>
+      <li><strong>Impuesto especial sobre la electricidad</strong>: un porcentaje pequeño (en torno al 5 %) que grava la suma de energía y potencia.</li>
+      <li><strong>IVA</strong>: el vigente en cada momento, aplicado sobre todo lo anterior.</li>
+    </ul>
+
+    <h2>5. PVPC o mercado libre</h2>
+    <p>En España coexisten dos modelos. Con <strong>PVPC</strong> (precio voluntario para el pequeño consumidor) el precio del kWh lo marca el mercado mayorista y cambia cada hora. En el <strong>mercado libre</strong> cada comercializadora fija sus precios y condiciones. Ninguno es mejor por defecto: depende de tu consumo y de cuándo lo haces.</p>
+
+    <h2>6. Señales de que merece una revisión</h2>
+    <ul>
+      <li>Llevas más de un año sin mirar qué tarifa tienes.</li>
+      <li>Tu potencia se contrató hace años y nunca se ha revisado.</li>
+      <li>Aparecen servicios adicionales que no recuerdas o no usas.</li>
+      <li>Tu consumo real no encaja con el tipo de tarifa que tienes.</li>
+    </ul>
+    <p>Nada de esto garantiza que puedas pagar menos, pero sí que vale la pena comprobarlo.</p>
+
+    <p style="margin-top: 40px;"><a class="button primary" href="/#revisar">Revisar mi factura con Wattio<Icon name="arrow" size={20} /></a></p>
+  </article>
+</Page>

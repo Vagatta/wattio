@@ -104,7 +104,7 @@ h1 em { font-style: normal; color: #dac4ee; }
 .paper-row > span { display: inline-flex; align-items: center; gap: 7px; }
 .paper-row i { width: 5px; height: 5px; border-radius: 50%; background: #baa4c9; }
 .paper-row b { font-weight: 600; }
-[data-concept='consumo'] [data-line='consumo'], [data-concept='potencia'] [data-line='potencia'], [data-concept='extras'] [data-line='extras'] { background: #e8d4ff; color: #592091; border-radius: 4px; }
+[data-concept='consumo'] [data-line='consumo'], [data-concept='potencia'] [data-line='potencia'], [data-concept='fijo'] [data-line='fijo'], [data-concept='extras'] [data-line='extras'] { background: #e8d4ff; color: #592091; border-radius: 4px; }
 .paper-bottom { display: flex; align-items: end; justify-content: space-between; font-size: 9px; line-height: 1.5; padding-top: 18px; color: #796185; }
 .paper-bottom > svg { color: #7f42c6; }
 .reading-lens { position: absolute; top: 205px; right: 0; width: 215px; min-height: 164px; padding: 21px 24px; transform: rotate(5deg); color: #f9f5ff; border: 1px solid #e6c6ff7a; border-radius: 19px; background: linear-gradient(115deg, #8746c9e8, #462775f5); backdrop-filter: blur(12px); box-shadow: 0 16px 40px #11081f59, inset 0 1px 1px #fff3; }
@@ -112,10 +112,25 @@ h1 em { font-style: normal; color: #dac4ee; }
 .reading-lens > strong { display: block; margin-top: 17px; font-size: 27px; font-weight: 550; letter-spacing: -.8px; }
 .reading-lens > span { display: block; margin-top: 5px; font-size: 10px; }
 .lens-rule { height: 3px; background: #ca9cff; width: 58%; border-radius: 3px; margin-top: 17px; transform-origin: left; }
-[data-concept='potencia'] .reading-lens { transform: translateY(14px) rotate(2deg); }
+[data-concept='potencia'] .reading-lens, [data-concept='fijo'] .reading-lens { transform: translateY(14px) rotate(2deg); }
 [data-concept='extras'] .reading-lens { transform: translateY(28px) rotate(-1deg); }
-[data-concept='potencia'] .lens-rule { transform: scaleX(.7); }
+[data-concept='potencia'] .lens-rule, [data-concept='fijo'] .lens-rule { transform: scaleX(.7); }
 [data-concept='extras'] .lens-rule { transform: scaleX(1.35); }
+.invoice-explorer[data-variant='gas'] .invoice-paper { background: #faf0e2; color: #4a3320; }
+.invoice-explorer[data-variant='gas'] .invoice-paper::after { background: #ecd8bd; }
+.invoice-explorer[data-variant='gas'] .paper-brand, .invoice-explorer[data-variant='gas'] .paper-bottom > svg { color: #b0631f; }
+.invoice-explorer[data-variant='gas'] .paper-header, .invoice-explorer[data-variant='gas'] .paper-row { border-color: #4a332022; }
+.invoice-explorer[data-variant='gas'] .paper-heading > span, .invoice-explorer[data-variant='gas'] .paper-bottom { color: #8a7157; }
+.invoice-explorer[data-variant='gas'] .paper-wave i { background: #e3b98c; }
+.invoice-explorer[data-variant='gas'] .paper-wave i:nth-child(3n) { background: #cf9040; }
+.invoice-explorer[data-variant='gas'] .paper-row i { background: #d9b184; }
+.invoice-explorer[data-variant='gas'][data-concept='consumo'] [data-line='consumo'], .invoice-explorer[data-variant='gas'][data-concept='fijo'] [data-line='fijo'], .invoice-explorer[data-variant='gas'][data-concept='extras'] [data-line='extras'] { background: #f6e2c8; color: #7c3f10; }
+.invoice-explorer[data-variant='gas'] .reading-lens { border-color: #f0c48b7a; background: linear-gradient(115deg, #c26e2ae8, #6b3413f5); }
+.invoice-explorer[data-variant='gas'] .lens-top { color: #ffe3c4; }
+.invoice-explorer[data-variant='gas'] .lens-rule { background: #ffcf99; }
+.invoice-explorer[data-variant='gas'] .light-aperture { background: linear-gradient(135deg, #e59b5c4d, #9e5e330a 55%, #ffc98f5c); box-shadow: inset 0 0 0 1px #ffcb9530; }
+.invoice-explorer[data-variant='gas'] .contour { color: #e59b5c40; }
+.gas-section { border-top: 1px solid var(--line); }
 .explorer-console { position: relative; padding: 0 13px; }
 .concept-controls { display: flex; gap: 4px; padding: 5px; width: fit-content; max-width: 100%; border: 1px solid #b888de40; border-radius: 40px; background: #271639; }
 .concept-controls button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; border: 0; border-radius: 30px; min-height: 42px; padding: 0 14px; background: transparent; color: #d5c6e0; font-size: 12px; font-weight: 600; }
@@ -179,9 +194,17 @@ h3 { font-size: 21px; font-weight: 650; letter-spacing: -.6px; }
 .comment-wrap textarea { width: 100%; min-height: 64px; max-height: 140px; padding: 10px 13px; border: 1px solid #bd8fdd45; border-radius: 9px; color: #f8f2ff; background: #190f2580; font-size: 13px; line-height: 1.6; resize: vertical; }
 .comment-wrap textarea::placeholder { color: #ab97b9; }
 .comment-wrap textarea:focus-visible { outline: 2px solid #d2a5f5; outline-offset: 3px; }
-.upload-card[data-supply='gas'] .file-front { color: #b0631f; }
+.art-icon { display: inline-flex; }
+.art-gas { display: none; }
+.upload-card[data-supply='gas'] .art-luz { display: none; }
+.upload-card[data-supply='gas'] .art-gas { display: inline-flex; }
+.upload-card[data-supply='gas'] .file-front { color: #b0631f; background: #f8ecda; }
+.upload-card[data-supply='gas'] .file-front i { background: #ddb88e; }
+.upload-card[data-supply='gas'] .file-back { background: #b58a5c; }
 .upload-card[data-supply='gas'] .file-add { background: #f3c48b; }
 .upload-card[data-supply='gas'] .browse-copy { color: #f3c48b; }
+.upload-card[data-supply='gas'] .dropzone { border-color: #d09a5e73; }
+.upload-card[data-supply='gas'] .dropzone:hover, .upload-card[data-supply='gas'] .dropzone:focus-within, .upload-card[data-supply='gas'] .dropzone.is-dragging { border-color: #f3c48b; background: #40281a; }
 .send-invoice { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 48px; margin-top: 12px; padding: 0 17px 0 20px; border: 1px solid #d3a7fa38; border-radius: 11px; color: #fff; background: linear-gradient(110deg, #7734c6, #873bc9); font-size: 13px; font-weight: 700; box-shadow: 0 5px 18px #1f053b50; }
 .send-invoice:hover { background: #974bdc; border-color: #d3a7fa88; }
 .send-invoice:disabled { cursor: wait; opacity: .65; }

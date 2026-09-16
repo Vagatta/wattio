@@ -150,7 +150,7 @@ const jsonLd = {
                 </div>
               </div>
               <div class="dropzone" id="invoice-dropzone">
-                <div class="file-art" aria-hidden="true"><div class="file-back"></div><div class="file-front"><Icon name="bolt" size={24} /><i></i><i></i></div><span class="file-add"><Icon name="plus" size={15} /></span></div>
+                <div class="file-art" aria-hidden="true"><div class="file-back"></div><div class="file-front"><span class="art-icon art-luz"><Icon name="bolt" size={24} /></span><span class="art-icon art-gas"><Icon name="flame" size={24} /></span><i></i><i></i></div><span class="file-add"><Icon name="plus" size={15} /></span></div>
                 <label class="file-label" for="invoice"><span class="file-prompt">Arrastra aquí tus facturas de luz</span><span>o <span class="browse-copy">elige los archivos</span> de tu dispositivo</span><input id="invoice" name="invoice[]" type="file" multiple accept="application/pdf,image/jpeg,image/png" aria-describedby="file-help file-status" /></label>
                 <p id="file-help">PDF, JPG o PNG. Hasta 10 archivos, máximo 4&nbsp;MB en total.</p>
               </div>
@@ -207,7 +207,18 @@ const jsonLd = {
           <p class="guide-link">¿Quieres el detalle? <a href="/guias/como-leer-tu-factura-de-luz">Cómo leer tu factura de luz</a></p>
           <a class="button primary" href="#revisar">Revisar mi factura<Icon name="arrow" size={20} /></a>
         </div>
-        <div class="explain-object"><InvoiceExplorer /></div>
+        <div class="explain-object"><InvoiceExplorer variant="luz" /></div>
+      </section>
+
+      <section class="explain-section gas-section container" id="gas" aria-labelledby="gas-heading">
+        <div class="explain-object"><InvoiceExplorer variant="gas" /></div>
+        <div class="explain-copy">
+          <span class="section-index">La otra factura de casa</span>
+          <h2 id="gas-heading">El gas habla distinto.<br />También lo traducimos.</h2>
+          <p>Término fijo, consumo en kWh, peajes… La factura de gas tiene conceptos propios y también merece una lectura clara.</p>
+          <p>Si nos envías las dos —luz y gas— las revisamos juntas para que veas el conjunto de lo que pagas en energía.</p>
+          <a class="button primary" href="#revisar" data-select-supply="gas">Revisar mi factura de gas<Icon name="arrow" size={20} /></a>
+        </div>
       </section>
 
       <section class="faq container" id="faq" aria-labelledby="faq-heading">
@@ -261,6 +272,13 @@ const jsonLd = {
   form.querySelectorAll<HTMLInputElement>('input[name="supply"]').forEach(radio => radio.addEventListener('change', () => {
     form.dataset.supply = radio.value;
     filePrompt.textContent = supplyPrompts[radio.value] ?? supplyPrompts.luz;
+  }));
+  document.querySelectorAll<HTMLElement>('[data-select-supply]').forEach(link => link.addEventListener('click', () => {
+    const radio = form.querySelector<HTMLInputElement>(`input[name="supply"][value="${link.dataset.selectSupply}"]`);
+    if (radio) {
+      radio.checked = true;
+      radio.dispatchEvent(new Event('change', { bubbles: true }));
+    }
   }));
   const commentToggle = document.querySelector<HTMLButtonElement>('#comment-toggle')!;
   const commentWrap = document.querySelector<HTMLElement>('#comment-wrap')!;

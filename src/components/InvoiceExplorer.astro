@@ -1,49 +1,72 @@
 ---
 import Icon from './Icon.astro';
-const concepts = [
-  { name: 'Consumo', key: 'consumo', icon: 'sun' as const, title: 'La energía que sí utilizas.', text: 'Los kWh que consumes y su precio. Tus hábitos y los horarios de uso ayudan a entender esta parte de la factura.' },
-  { name: 'Potencia', key: 'potencia', icon: 'plug' as const, title: 'Lo que pagas por tenerla disponible.', text: 'La capacidad para usar varios aparatos a la vez. Es un coste fijo, incluso cuando no estás consumiendo energía.' },
-  { name: 'Extras', key: 'extras', icon: 'plus' as const, title: 'Lo que conviene mirar dos veces.', text: 'Servicios de mantenimiento y otros conceptos. Revisar qué incluyen es tan importante como conocer su precio.' },
-];
+interface Props {
+  variant?: 'luz' | 'gas';
+}
+const { variant = 'luz' } = Astro.props;
+const isGas = variant === 'gas';
+const supplyIcon = isGas ? 'flame' : 'bolt';
+const concepts = isGas
+  ? [
+    { name: 'Consumo', key: 'consumo', icon: 'flame' as const, subtitle: 'Lo que quemas', title: 'El gas que sí usas.', text: 'Los kWh de gas que consumes y su precio. El contador mide en m³ y la factura lo convierte a kWh con el factor de conversión.' },
+    { name: 'Término fijo', key: 'fijo', icon: 'plug' as const, subtitle: 'Todos los días', title: 'Lo que pagas aunque no gastes.', text: 'Un coste diario por mantener el suministro activo. No depende de tu consumo y se cobra todos los días del periodo.' },
+    { name: 'Peajes y extras', key: 'extras', icon: 'plus' as const, subtitle: 'Lo que viene añadido', title: 'Lo que conviene mirar dos veces.', text: 'Peaje de acceso, impuestos, alquiler del contador y servicios añadidos. Aquí suelen esconderse los conceptos menos claros.' },
+  ]
+  : [
+    { name: 'Consumo', key: 'consumo', icon: 'sun' as const, subtitle: 'Lo que utilizas', title: 'La energía que sí utilizas.', text: 'Los kWh que consumes y su precio. Tus hábitos y los horarios de uso ayudan a entender esta parte de la factura.' },
+    { name: 'Potencia', key: 'potencia', icon: 'plug' as const, subtitle: 'Lo que tienes disponible', title: 'Lo que pagas por tenerla disponible.', text: 'La capacidad para usar varios aparatos a la vez. Es un coste fijo, incluso cuando no estás consumiendo energía.' },
+    { name: 'Extras', key: 'extras', icon: 'plus' as const, subtitle: 'Lo que viene añadido', title: 'Lo que conviene mirar dos veces.', text: 'Servicios de mantenimiento y otros conceptos. Revisar qué incluyen es tan importante como conocer su precio.' },
+  ];
+const explanationId = `concept-explanation-${variant}`;
 ---
-<div class="invoice-explorer" data-concept="consumo">
+<div class="invoice-explorer" data-concept="consumo" data-variant={variant}>
   <div class="invoice-stage">
     <div class="light-aperture" aria-hidden="true"><div></div></div>
     <svg class="contour" viewBox="0 0 560 520" fill="none" aria-hidden="true">
       <path d="M20 380C35 210 480 90 530 270S135 580 55 385 425-35 510 170" stroke="currentColor" />
     </svg>
     <div class="invoice-paper">
-      <div class="paper-header"><span class="paper-brand"><Icon name="bolt" size={17} />wattio</span><span>Ejemplo de factura</span></div>
-      <div class="paper-heading"><span>Tu suministro</span><strong>Electricidad</strong><span>Una lectura más clara.</span></div>
+      <div class="paper-header"><span class="paper-brand"><Icon name={supplyIcon} size={17} />wattio</span><span>Ejemplo de factura</span></div>
+      <div class="paper-heading"><span>Tu suministro</span><strong>{isGas ? 'Gas natural' : 'Electricidad'}</strong><span>Una lectura más clara.</span></div>
       <div class="paper-wave" aria-hidden="true">
         {Array.from({ length: 32 }, (_, i) => <i style={`--bar: ${22 + Math.round(Math.sin(i * .37) * 16 + Math.cos(i * .79) * 6)}px`}></i>)}
       </div>
-      <div class="paper-row" data-line="consumo"><span><i></i>Consumo de energía</span><b>kWh</b></div>
-      <div class="paper-row" data-line="potencia"><span><i></i>Potencia contratada</span><b>kW</b></div>
-      <div class="paper-row" data-line="extras"><span><i></i>Servicios adicionales</span><b>€</b></div>
-      <div class="paper-bottom"><span>No solo el total.<br />También lo que hay detrás.</span><Icon name="bolt" size={29} /></div>
+      {isGas
+        ? <Fragment>
+            <div class="paper-row" data-line="consumo"><span><i></i>Consumo de gas</span><b>kWh</b></div>
+            <div class="paper-row" data-line="fijo"><span><i></i>Término fijo</span><b>€/día</b></div>
+            <div class="paper-row" data-line="extras"><span><i></i>Peajes y servicios</span><b>€</b></div>
+          </Fragment>
+        : <Fragment>
+            <div class="paper-row" data-line="consumo"><span><i></i>Consumo de energía</span><b>kWh</b></div>
+            <div class="paper-row" data-line="potencia"><span><i></i>Potencia contratada</span><b>kW</b></div>
+            <div class="paper-row" data-line="extras"><span><i></i>Servicios adicionales</span><b>€</b></div>
+          </Fragment>}
+      <div class="paper-bottom"><span>No solo el total.<br />También lo que hay detrás.</span><Icon name={supplyIcon} size={29} /></div>
     </div>
-    <div class="reading-lens" aria-hidden="true"><div class="lens-top"><Icon name="bolt" size={18} /><span>En claro</span></div><strong id="lens-term">Consumo</strong><span id="lens-unit">Lo que utilizas</span><div class="lens-rule"></div></div>
+    <div class="reading-lens" aria-hidden="true"><div class="lens-top"><Icon name={supplyIcon} size={18} /><span>En claro</span></div><strong data-lens-term>{concepts[0].name}</strong><span data-lens-unit>{concepts[0].subtitle}</span><div class="lens-rule"></div></div>
   </div>
   <div class="explorer-console">
-    <div class="concept-controls" role="group" aria-label="Explorar conceptos de una factura">
-      {concepts.map((concept, index) => <button type="button" data-concept-button={concept.key} data-title={concept.title} data-explanation={concept.text} aria-pressed={index === 0 ? 'true' : 'false'} aria-controls="concept-explanation"><Icon name={concept.icon} size={17} />{concept.name}</button>)}
+    <div class="concept-controls" role="group" aria-label={isGas ? 'Explorar conceptos de una factura de gas' : 'Explorar conceptos de una factura de luz'}>
+      {concepts.map((concept, index) => <button type="button" data-concept-button={concept.key} data-name={concept.name} data-subtitle={concept.subtitle} data-title={concept.title} data-explanation={concept.text} aria-pressed={index === 0 ? 'true' : 'false'} aria-controls={explanationId}><Icon name={concept.icon} size={17} />{concept.name}</button>)}
     </div>
-    <div id="concept-explanation" class="concept-explanation" aria-live="polite" aria-atomic="true"><strong>{concepts[0].title}</strong><p>{concepts[0].text}</p></div>
+    <div id={explanationId} class="concept-explanation" data-explainer aria-live="polite" aria-atomic="true"><strong>{concepts[0].title}</strong><p>{concepts[0].text}</p></div>
     <p class="example-note">Ejemplo ilustrativo. No es un análisis de tu factura.</p>
   </div>
 </div>
 <script>
-  const explorer = document.querySelector<HTMLElement>('.invoice-explorer');
-  const conceptButtons = document.querySelectorAll<HTMLButtonElement>('[data-concept-button]');
-  const subtitles: Record<string, string> = { consumo: 'Lo que utilizas', potencia: 'Lo que tienes disponible', extras: 'Lo que viene añadido' };
-  conceptButtons.forEach(button => button.addEventListener('click', () => {
-    const key = button.dataset.conceptButton!;
-    if (explorer) explorer.dataset.concept = key;
-    conceptButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
-    document.querySelector('#lens-term')!.textContent = button.textContent;
-    document.querySelector('#lens-unit')!.textContent = subtitles[key];
-    document.querySelector('#concept-explanation strong')!.textContent = button.dataset.title!;
-    document.querySelector('#concept-explanation p')!.textContent = button.dataset.explanation!;
-  }));
+  document.querySelectorAll<HTMLElement>('.invoice-explorer').forEach(explorer => {
+    const buttons = explorer.querySelectorAll<HTMLButtonElement>('[data-concept-button]');
+    const lensTerm = explorer.querySelector<HTMLElement>('[data-lens-term]')!;
+    const lensUnit = explorer.querySelector<HTMLElement>('[data-lens-unit]')!;
+    const explainer = explorer.querySelector<HTMLElement>('[data-explainer]')!;
+    buttons.forEach(button => button.addEventListener('click', () => {
+      explorer.dataset.concept = button.dataset.conceptButton!;
+      buttons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+      lensTerm.textContent = button.dataset.name!;
+      lensUnit.textContent = button.dataset.subtitle!;
+      explainer.querySelector('strong')!.textContent = button.dataset.title!;
+      explainer.querySelector('p')!.textContent = button.dataset.explanation!;
+    }));
+  });
 </script>

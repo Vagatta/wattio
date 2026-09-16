@@ -55,11 +55,12 @@ Reglas:
 ## Page structure
 
 1. Header cápsula sticky: logo con rayo, Cómo funciona, FAQ y CTA «Revisar mi factura».
-2. Hero: titular editorial centrado y formulario de envío como protagonista (dropzone + email + enviar). WhatsApp queda fuera de la tarjeta como alternativa; apuntes laterales decorativos solo en desktop.
+2. Hero: titular editorial centrado y formulario de envío como protagonista (selector luz/gas + dropzone + email + enviar). WhatsApp queda fuera de la tarjeta como alternativa; apuntes laterales decorativos solo en desktop.
 3. Cómo funciona sobre fondo claro: tres pasos unidos por una línea gráfica.
-4. Entender: factura interactiva (consumo, potencia, extras) como contenido de apoyo, nunca como competencia del envío.
-5. FAQ: qué se revisa, límites reales del análisis y qué ocurre al enviar.
-6. Footer con firma de marca grande, WhatsApp y retorno al formulario.
+4. Entender: factura interactiva de luz (consumo, potencia, extras) como contenido de apoyo, nunca como competencia del envío.
+5. Gas: misma mecánica con identidad cálida propia — llama, papeles en tono crema y conceptos de gas (consumo, término fijo, peajes y extras). El selector de suministro tiñe el dropzone del formulario con la misma paleta.
+6. FAQ: qué se revisa, límites reales del análisis y qué ocurre al enviar.
+7. Footer con firma de marca grande, WhatsApp y retorno al formulario.
 
 ## Motion
 

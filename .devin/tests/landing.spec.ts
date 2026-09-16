@@ -47,11 +47,28 @@ test('invoice explainer responds to keyboard without making savings claims', asy
   await power.focus();
   await page.keyboard.press('Enter');
   await expect(power).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.locator('#concept-explanation')).toContainText('aparatos');
-  await page.getByRole('button', { name: 'Extras', exact: true }).click();
-  await expect(page.locator('#concept-explanation')).toContainText('mantenimiento');
-  await expect(page.getByText('Ejemplo ilustrativo. No es un análisis de tu factura.')).toBeVisible();
+  await expect(page.locator('#concept-explanation-luz')).toContainText('aparatos');
+  await page.getByRole('button', { name: 'Extras', exact: true }).first().click();
+  await expect(page.locator('#concept-explanation-luz')).toContainText('mantenimiento');
+  await expect(page.locator('.invoice-explorer')).toHaveCount(2);
+  await expect(page.getByText('Ejemplo ilustrativo. No es un análisis de tu factura.')).toHaveCount(2);
   await expect(page.getByText('margen detectado')).toHaveCount(0);
+});
+
+test('gas section explains its own concepts and preselects gas in the form', async ({ page }, testInfo) => {
+  await page.goto('/');
+  const gasExplorer = page.locator('.invoice-explorer[data-variant="gas"]');
+  await expect(gasExplorer).toHaveCount(1);
+  await gasExplorer.getByRole('button', { name: 'Término fijo', exact: true }).click();
+  await expect(page.locator('#concept-explanation-gas')).toContainText('consumo');
+  await gasExplorer.getByRole('button', { name: 'Peajes y extras', exact: true }).click();
+  await expect(page.locator('#concept-explanation-gas')).toContainText('Peaje');
+  await page.getByRole('link', { name: 'Revisar mi factura de gas' }).click();
+  await expect(page.locator('input[name="supply"][value="gas"]')).toBeChecked();
+  await expect(page.locator('#invoice-form')).toHaveAttribute('data-supply', 'gas');
+  await expect(page.locator('.file-prompt')).toHaveText('Arrastra aquí tus facturas de gas');
+  await page.locator('#invoice-form').screenshot({ path: testInfo.outputPath('card-gas.png') });
+  await gasExplorer.screenshot({ path: testInfo.outputPath('gas-explorer.png') });
 });
 
 test('mobile menu supports navigation and Escape', async ({ page }) => {

@@ -205,6 +205,9 @@ h3 { font-size: 21px; font-weight: 650; letter-spacing: -.6px; }
 .upload-card[data-supply='gas'] .browse-copy { color: #f3c48b; }
 .upload-card[data-supply='gas'] .dropzone { border-color: #d09a5e73; }
 .upload-card[data-supply='gas'] .dropzone:hover, .upload-card[data-supply='gas'] .dropzone:focus-within, .upload-card[data-supply='gas'] .dropzone.is-dragging { border-color: #f3c48b; background: #40281a; }
+
+.upload-card[data-supply='ambas'] .file-back { background: #f8ecda; color: #b0631f; }
+.upload-card[data-supply='ambas'] .art-back-gas { display: inline-flex; }
 .send-invoice { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 48px; margin-top: 12px; padding: 0 17px 0 20px; border: 1px solid #d3a7fa38; border-radius: 11px; color: #fff; background: linear-gradient(110deg, #7734c6, #873bc9); font-size: 13px; font-weight: 700; box-shadow: 0 5px 18px #1f053b50; }
 .send-invoice:hover { background: #974bdc; border-color: #d3a7fa88; }
 .send-invoice:disabled { cursor: wait; opacity: .65; }
@@ -219,7 +222,8 @@ h3 { font-size: 21px; font-weight: 650; letter-spacing: -.6px; }
 .dropzone:hover, .dropzone:focus-within, .dropzone.is-dragging { border-color: #edd0ff; background: #402355; }
 .dropzone:focus-within { outline: 2px solid #c69ceb; outline-offset: 4px; }
 .file-art { position: relative; width: 68px; height: 53px; margin: 0 auto 10px; pointer-events: none; }
-.file-back { position: absolute; width: 38px; height: 46px; left: 9px; top: 0; border-radius: 4px; background: #9b72b5; transform: rotate(-15deg); }
+.file-back { position: absolute; display: flex; align-items: start; width: 38px; height: 46px; padding: 4px 0 0 5px; left: 9px; top: 0; border-radius: 4px; background: #9b72b5; transform: rotate(-15deg); }
+.art-back-gas { display: none; }
 .file-front { position: absolute; display: flex; align-items: start; flex-direction: column; gap: 5px; width: 40px; height: 49px; padding: 7px; top: 5px; left: 23px; border-radius: 4px; background: #f0e5f8; color: #7939b5; transform: rotate(8deg); box-shadow: 0 6px 15px #11041b45; }
 .file-front i { height: 2px; background: #c0a7d1; width: 24px; }
 .file-front i:last-child { width: 15px; }

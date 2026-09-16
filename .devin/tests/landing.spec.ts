@@ -69,6 +69,10 @@ test('gas section explains its own concepts and preselects gas in the form', asy
   await expect(page.locator('.file-prompt')).toHaveText('Arrastra aquí tus facturas de gas');
   await page.locator('#invoice-form').screenshot({ path: testInfo.outputPath('card-gas.png') });
   await gasExplorer.screenshot({ path: testInfo.outputPath('gas-explorer.png') });
+  await page.locator('input[name="supply"][value="ambas"]').check();
+  await expect(page.locator('#invoice-form')).toHaveAttribute('data-supply', 'ambas');
+  await expect(page.locator('.file-prompt')).toHaveText('Arrastra aquí tus facturas de luz y gas');
+  await page.locator('#invoice-form').screenshot({ path: testInfo.outputPath('card-ambas.png') });
 });
 
 test('mobile menu supports navigation and Escape', async ({ page }) => {

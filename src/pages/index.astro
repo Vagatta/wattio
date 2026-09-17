@@ -13,7 +13,7 @@ const siteUrl = Astro.site ?? new URL('https://wattio.es');
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl);
 const ogImageUrl = new URL('/og-image.png', siteUrl);
 const pageTitle = 'Wattio — Revisa tus facturas de luz y gas y paga solo lo justo';
-const pageDescription = 'Envía tu factura de luz o gas a Wattio y entiende qué pagas: consumo, potencia y extras revisados con claridad. Tú decides el siguiente paso.';
+const pageDescription = 'Sube tu factura de luz o gas a Wattio y comprueba si estás pagando de más. Recibe una comparativa clara, sin llamadas comerciales.';
 
 const faqs = [
   { question: '¿Qué parte de la factura se revisa?', answer: 'El precio de la energía, la potencia contratada y los servicios adicionales, tanto en la factura de luz como en la de gas. El objetivo es entender qué pagas y qué opciones encajan con tu consumo.' },
@@ -132,8 +132,8 @@ const jsonLd = {
     <main id="top" tabindex="-1">
       <section class="hero container" id="revisar" aria-labelledby="hero-heading" data-supply="luz">
         <div class="hero-copy">
-          <h1 id="hero-heading">Sube tu factura de luz o gas.<br /><em>El siguiente paso lo decides tú.</em></h1>
-          <p class="hero-description">Te ayudamos a entender lo que pagas y a valorar tus opciones.<br class="desktop-break" /> Empieza con una foto o un PDF. Sin comprometerte a cambiar.</p>
+          <h1 id="hero-heading">Sube tu factura de luz o gas<br /><em>y comprueba si estás pagando de más.</em></h1>
+          <p class="hero-description">Te enviamos una comparativa clara.<br class="desktop-break" /> Cero llamadas comerciales: solo nos ponemos en contacto si tú nos lo pides.</p>
         </div>
         <div class="hero-layout">
           <div class="hero-note" aria-hidden="true"><span>Tal cual la recibes.</span><p>No necesitas descifrarla.<br />De eso nos encargamos.</p><svg viewBox="0 0 140 65" fill="none"><path d="M5 10c28 54 66 31 120 23m-13-8 15 8-12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>

@@ -18,7 +18,7 @@ for (const width of [320, 390, 768, 1024, 1440]) {
     expect(errors).toEqual([]);
     await page.goto('/');
     await page.evaluate(() => document.fonts.ready);
-    await page.screenshot({ path: testInfo.outputPath(`wattio-${width}.png`), fullPage: true });
+    await page.screenshot({ path: testInfo.outputPath(`wattios-${width}.png`), fullPage: true });
   });
 }
 
@@ -155,7 +155,7 @@ test('successful submission shows a confirmation without sending a real email', 
   await page.locator('#contact-switch').click();
   await page.locator('#sender-contact').fill('600 123 456');
   await page.locator('#invoice').setInputFiles({ name: 'factura.pdf', mimeType: 'application/pdf', buffer: Buffer.from('%PDF-1.4 synthetic') });
-  await page.getByRole('button', { name: 'Enviar factura a Wattio' }).click();
+  await page.getByRole('button', { name: 'Enviar factura a Wattios' }).click();
   expect(requestSeen).toBe(false);
   await expect(page.locator('#privacy-error')).toBeVisible();
   await expect(page.locator('#privacy-error')).toContainText('Marca esta casilla');
@@ -165,7 +165,7 @@ test('successful submission shows a confirmation without sending a real email', 
   await page.getByRole('button', { name: /Añadir un comentario/ }).click();
   await page.locator('#comment').fill('Revisad sobre todo la potencia.');
   await page.locator('#privacy').check();
-  await page.getByRole('button', { name: 'Enviar factura a Wattio' }).click();
+  await page.getByRole('button', { name: 'Enviar factura a Wattios' }).click();
   await expect(page.locator('#submission-success')).toBeVisible();
   await expect(page.locator('#submission-success')).toContainText('Factura recibida');
   expect(requestSeen).toBe(true);
@@ -180,7 +180,7 @@ test('WhatsApp links use the approved number and a fixed message without attachi
   await page.goto('/');
   const links = page.locator('a[href^="https://wa.me/"]');
   await expect(links).toHaveCount(4);
-  const expected = 'https://wa.me/34688608806?text=' + encodeURIComponent('Hola, Wattio. Quiero revisar mi factura de luz o gas.');
+  const expected = 'https://wa.me/34688608806?text=' + encodeURIComponent('Hola, Wattios. Quiero revisar mi factura de luz o gas.');
   for (const link of await links.all()) {
     await expect(link).toHaveAttribute('href', expected);
     await expect(link).toHaveAttribute('target', '_blank');

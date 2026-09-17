@@ -1,13 +1,13 @@
 ---
 name: browser-quality
-description: Verificar la interfaz Wattio en navegador real con capturas, navegación sticky, teclado y estados de archivos; skill local
+description: Verificar la interfaz Wattios en navegador real con capturas, navegación sticky, teclado y estados de archivos; skill local
 ---
 
 # Calidad de interfaz en navegador
 
-Skill original de Wattio. Referencia de revisión externa: https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md
+Skill original de Wattios. Referencia de revisión externa: https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md
 
-Lee los archivos afectados y consulta la referencia cuando esté disponible. Usa la terminología y el idioma español de Wattio aunque una guía externa recomiende convenciones inglesas.
+Lee los archivos afectados y consulta la referencia cuando esté disponible. Usa la terminología y el idioma español de Wattios aunque una guía externa recomiende convenciones inglesas.
 
 1. Ejecuta build y las pruebas de navegador disponibles. Una compilación correcta no prueba el diseño ni la interacción.
 2. Comprueba escritorio, tablet y móvil de 320 px en adelante. Compara scrollWidth con clientWidth y busca contenido recortado.

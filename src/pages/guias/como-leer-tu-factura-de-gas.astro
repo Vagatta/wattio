@@ -2,10 +2,10 @@
 import Page from '../../layouts/Page.astro';
 import Icon from '../../components/Icon.astro';
 
-const siteUrl = Astro.site ?? new URL('https://wattio.es');
+const siteUrl = Astro.site ?? new URL('https://wattios.es');
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl);
-const guideTitle = 'Cómo leer tu factura de gas — Guía Wattio';
-const guideDescription = 'Entiende cada parte de tu factura de gas: término fijo, consumo en kWh, peajes de acceso, servicios adicionales e impuestos. Guía clara de Wattio.';
+const guideTitle = 'Cómo leer tu factura de gas — Guía Wattios';
+const guideDescription = 'Entiende cada parte de tu factura de gas: término fijo, consumo en kWh, peajes de acceso, servicios adicionales e impuestos. Guía clara de Wattios.';
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -72,6 +72,6 @@ const jsonLd = {
 
     <p class="guide-link">¿También la eléctrica? <a href="/guias/como-leer-tu-factura-de-luz">Cómo leer tu factura de luz</a></p>
 
-    <p style="margin-top: 40px;"><a class="button primary" href="/#revisar">Revisar mi factura de gas con Wattio<Icon name="arrow" size={20} /></a></p>
+    <p style="margin-top: 40px;"><a class="button primary" href="/#revisar">Revisar mi factura de gas con Wattios<Icon name="arrow" size={20} /></a></p>
   </article>
 </Page>

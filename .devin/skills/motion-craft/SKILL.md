@@ -1,9 +1,9 @@
 ---
 name: motion-craft
-description: Diseñar microinteracciones Wattio con propósito, teclado y movimiento reducido; skill local, no paquete externo
+description: Diseñar microinteracciones Wattios con propósito, teclado y movimiento reducido; skill local, no paquete externo
 ---
 
-# Motion craft para Wattio
+# Motion craft para Wattios
 
 Skill original del proyecto. No es una distribución de Impeccable ni de otra librería.
 

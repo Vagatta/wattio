@@ -3,25 +3,25 @@ import '@fontsource-variable/manrope';
 import Analytics from '../components/Analytics.astro';
 import Icon from '../components/Icon.astro';
 import InvoiceExplorer from '../components/InvoiceExplorer.astro';
-import '../styles/wattio.css';
+import '../styles/wattios.css';
 
 const whatsappNumber = '34688608806';
-const whatsappMessage = 'Hola, Wattio. Quiero revisar mi factura de luz o gas.';
+const whatsappMessage = 'Hola, Wattios. Quiero revisar mi factura de luz o gas.';
 const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
-const siteUrl = Astro.site ?? new URL('https://wattio.es');
+const siteUrl = Astro.site ?? new URL('https://wattios.es');
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl);
 const ogImageUrl = new URL('/og-image.png', siteUrl);
-const pageTitle = 'Wattio — Revisa tus facturas de luz y gas y paga solo lo justo';
-const pageDescription = 'Sube tu factura de luz o gas a Wattio y comprueba si estás pagando de más. Recibe una comparativa clara, sin llamadas comerciales.';
+const pageTitle = 'Wattios — Revisa tus facturas de luz y gas y paga solo lo justo';
+const pageDescription = 'Sube tu factura de luz o gas a Wattios y comprueba si estás pagando de más. Recibe una comparativa clara, sin llamadas comerciales.';
 
 const faqs = [
   { question: '¿Qué parte de la factura se revisa?', answer: 'El precio de la energía, la potencia contratada y los servicios adicionales, tanto en la factura de luz como en la de gas. El objetivo es entender qué pagas y qué opciones encajan con tu consumo.' },
   { question: '¿También revisáis la factura de gas?', answer: 'Sí. La factura de gas tiene sus propios conceptos —término fijo, consumo y peajes— y la revisamos con el mismo criterio que la de luz. Si nos envías las dos, las miramos juntas para darte una comparativa del conjunto.' },
-  { question: '¿Me garantiza Wattio que voy a ahorrar?', answer: 'No. El ahorro depende de tu tarifa, de tu consumo y de las alternativas disponibles. Si tu situación ya es buena, una revisión también puede ayudarte a confirmarlo.' },
+  { question: '¿Me garantiza Wattios que voy a ahorrar?', answer: 'No. El ahorro depende de tu tarifa, de tu consumo y de las alternativas disponibles. Si tu situación ya es buena, una revisión también puede ayudarte a confirmarlo.' },
   { question: '¿Tengo que cambiar de compañía?', answer: 'No. Conocer otras opciones no implica contratar nada. Cualquier cambio debe ser una decisión tuya, después de conocer sus condiciones.' },
-  { question: '¿Qué ocurre cuando selecciono una factura?', answer: 'Nada hasta que tú confirmes. Los archivos se quedan en tu dispositivo y solo se envían a Wattio por email cuando pulsas «Enviar factura a Wattio».' },
-  { question: '¿Puedo enviarla por WhatsApp?', answer: 'Sí. Pulsa «Enviar por WhatsApp» para abrir el chat con Wattio en el +34 688 60 88 06. Adjunta la foto o el PDF y envía el mensaje desde WhatsApp. El archivo que selecciones en esta web no se transfiere al chat automáticamente.' },
+  { question: '¿Qué ocurre cuando selecciono una factura?', answer: 'Nada hasta que tú confirmes. Los archivos se quedan en tu dispositivo y solo se envían a Wattios por email cuando pulsas «Enviar factura a Wattios».' },
+  { question: '¿Puedo enviarla por WhatsApp?', answer: 'Sí. Pulsa «Enviar por WhatsApp» para abrir el chat con Wattios en el +34 688 60 88 06. Adjunta la foto o el PDF y envía el mensaje desde WhatsApp. El archivo que selecciones en esta web no se transfiere al chat automáticamente.' },
 ];
 const steps = [
   { number: '1', icon: 'document' as const, title: 'Tu factura, tal cual.', text: 'Una foto legible o un PDF. No necesitas copiar números ni entender cada concepto.' },
@@ -36,7 +36,7 @@ const jsonLd = {
     {
       '@type': 'Organization',
       '@id': organizationId,
-      name: 'Wattio',
+      name: 'Wattios',
       url: `${siteUrl.origin}/`,
       logo: { '@type': 'ImageObject', url: new URL('/icon-512.png', siteUrl).href },
       contactPoint: {
@@ -50,7 +50,7 @@ const jsonLd = {
       '@type': 'WebSite',
       '@id': `${siteUrl.origin}/#website`,
       url: `${siteUrl.origin}/`,
-      name: 'Wattio',
+      name: 'Wattios',
       inLanguage: 'es',
       publisher: { '@id': organizationId },
     },
@@ -97,7 +97,7 @@ const jsonLd = {
     <link rel="alternate" hreflang="x-default" href={canonicalUrl} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_ES" />
-    <meta property="og:site_name" content="Wattio" />
+    <meta property="og:site_name" content="Wattios" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
     <meta property="og:url" content={canonicalUrl} />
@@ -105,7 +105,7 @@ const jsonLd = {
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Wattio — revisión de tus facturas de luz y gas" />
+    <meta property="og:image:alt" content="Wattios — revisión de tus facturas de luz y gas" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={pageDescription} />
@@ -121,7 +121,7 @@ const jsonLd = {
   <body>
     <a href="#top" class="skip-link">Saltar al contenido</a>
     <header class="nav-wrap">
-      <a class="brand" href="#top" aria-label="Wattio, inicio"><span class="brand-mark"><Icon name="bolt" size={23} /></span><span translate="no">wattio</span></a>
+      <a class="brand" href="#top" aria-label="Wattios, inicio"><span class="brand-mark"><Icon name="bolt" size={23} /></span><span translate="no">wattios</span></a>
       <nav class="desktop-nav" aria-label="Navegación principal"><a href="#como-funciona">Cómo funciona</a><a href="#faq">Preguntas frecuentes</a></nav>
       <div class="nav-actions">
         <a class="nav-whatsapp" href={whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label="Enviar por WhatsApp"><Icon name="whatsapp" size={19} /></a>
@@ -169,19 +169,19 @@ const jsonLd = {
               </div>
               <div class="comment-field">
                 <button class="comment-toggle" id="comment-toggle" type="button" aria-expanded="false" aria-controls="comment-wrap"><Icon name="plus" size={14} />Añadir un comentario <span>opcional</span></button>
-                <div class="comment-wrap" id="comment-wrap" hidden><label for="comment">Tu comentario para Wattio</label><textarea id="comment" name="comment" rows="3" maxlength="500" placeholder="Por ejemplo: me interesa revisar la potencia contratada."></textarea></div>
+                <div class="comment-wrap" id="comment-wrap" hidden><label for="comment">Tu comentario para Wattios</label><textarea id="comment" name="comment" rows="3" maxlength="500" placeholder="Por ejemplo: me interesa revisar la potencia contratada."></textarea></div>
               </div>
               <label class="hp-field" aria-hidden="true">Empresa<input name="company" type="text" tabindex="-1" autocomplete="off" /></label>
               <div class="privacy-consent">
-                <label for="privacy"><input id="privacy" name="privacy" type="checkbox" aria-describedby="privacy-error" required /><span class="privacy-text">He leído y acepto la política de privacidad de Wattio.</span></label>
+                <label for="privacy"><input id="privacy" name="privacy" type="checkbox" aria-describedby="privacy-error" required /><span class="privacy-text">He leído y acepto la política de privacidad de Wattios.</span></label>
                 <a href="/privacidad">Leer política</a>
                 <p class="field-error" id="privacy-error" hidden><Icon name="alert" size={13} /><span></span></p>
               </div>
-              <button class="send-invoice" id="send-invoice" type="submit"><span>Enviar factura a Wattio</span><Icon name="arrow" size={19} /></button>
+              <button class="send-invoice" id="send-invoice" type="submit"><span>Enviar factura a Wattios</span><Icon name="arrow" size={19} /></button>
               <p id="submit-status" class="file-status" role="status" aria-live="polite"></p>
               <div class="local-notice"><Icon name="shield" size={16} /><p>Solo se envían los archivos cuando pulsas «Enviar».</p></div>
               <noscript><p class="file-status">Activa JavaScript para enviar la factura o utiliza WhatsApp. No se enviará ningún archivo automáticamente.</p></noscript>
-              <div class="submission-success" id="submission-success" tabindex="-1" hidden><span class="success-mark"><Icon name="check" size={28} /></span><h3>Factura recibida.</h3><p>Hemos enviado tus archivos para revisión. Gracias por confiar en Wattio.</p><a href="#entender">Descubre qué revisamos<Icon name="arrow" size={17} /></a></div>
+              <div class="submission-success" id="submission-success" tabindex="-1" hidden><span class="success-mark"><Icon name="check" size={28} /></span><h3>Factura recibida.</h3><p>Hemos enviado tus archivos para revisión. Gracias por confiar en Wattios.</p><a href="#entender">Descubre qué revisamos<Icon name="arrow" size={17} /></a></div>
             </form>
             <div class="whatsapp-option">
               <span>¿Prefieres hacerlo por chat?</span>
@@ -234,15 +234,15 @@ const jsonLd = {
       </section>
 
       <section class="faq container" id="faq" aria-labelledby="faq-heading">
-        <div class="faq-intro"><span class="section-index">Antes de empezar</span><h2 id="faq-heading">Todo claro.<br />Desde el principio.</h2><p>También lo que Wattio puede<br />y no puede hacer.</p></div>
+        <div class="faq-intro"><span class="section-index">Antes de empezar</span><h2 id="faq-heading">Todo claro.<br />Desde el principio.</h2><p>También lo que Wattios puede<br />y no puede hacer.</p></div>
         <div class="faq-list">{faqs.map((faq, index) => <details name="questions"><summary><span class="faq-number">{String(index + 1).padStart(2, '0')}</span><span>{faq.question}</span><span class="faq-plus"><Icon name="plus" size={20} /></span></summary><p>{faq.answer}</p></details>)}</div>
       </section>
     </main>
 
     <footer class="footer container">
       <div class="footer-top"><p>La energía, sin tanto misterio.</p><a href="#top">Volver al inicio<Icon name="arrow" size={18} /></a></div>
-      <div class="footer-signature" aria-hidden="true"><Icon name="bolt" size={180} /><span translate="no">wattio</span></div>
-      <div class="footer-bottom"><span>© {new Date().getFullYear()} Wattio</span><a class="footer-whatsapp" href={whatsappUrl} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={17} />WhatsApp: +34 688 60 88 06</a><a href="#revisar">Enviar mi factura</a><a href="/guias/">Guías</a><a href="/privacidad">Privacidad</a><a href="/aviso-legal">Aviso legal</a></div>
+      <div class="footer-signature" aria-hidden="true"><Icon name="bolt" size={180} /><span translate="no">wattios</span></div>
+      <div class="footer-bottom"><span>© {new Date().getFullYear()} Wattios</span><a class="footer-whatsapp" href={whatsappUrl} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={17} />WhatsApp: +34 688 60 88 06</a><a href="#revisar">Enviar mi factura</a><a href="/guias/">Guías</a><a href="/privacidad">Privacidad</a><a href="/aviso-legal">Aviso legal</a></div>
     </footer>
   </body>
 </html>
@@ -434,7 +434,7 @@ const jsonLd = {
       success.focus();
     } catch (error) {
       sendButton.disabled = false;
-      sendLabel.textContent = 'Enviar factura a Wattio';
+      sendLabel.textContent = 'Enviar factura a Wattios';
       submitStatus.dataset.error = 'true';
       submitStatus.textContent = error instanceof Error ? error.message : 'No se pudo enviar la factura. Inténtalo de nuevo.';
     }

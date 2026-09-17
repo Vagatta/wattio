@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// Wattio — recepción de facturas en hosting compartido (PHP).
+// Wattios — recepción de facturas en hosting compartido (PHP).
 // Recibe multipart/form-data y lo reenvía por email a través de la API REST de Resend.
 // Los secretos viven en wattio-secrets.php FUERA del webroot o en variables de entorno.
 
@@ -124,7 +124,7 @@ $commentHtml = $comment !== '' ? '<p><strong>Comentario del usuario:</strong><br
 $payload = [
     'from' => $from,
     'to' => [$ownerEmail],
-    'subject' => "Factura de {$supply} Wattio — {$contact}",
+    'subject' => "Factura de {$supply} Wattios — {$contact}",
     'text' => "Un usuario ha enviado {$count} factura{$plural} de {$supply} para revisión. Contacto ({$contactLabel}): {$contact}. Se adjuntan a este email.{$commentText}",
     'html' => '<p>Un usuario ha enviado ' . $count . ' factura' . $plural . ' de ' . $supply . ' para revisión.</p><p>Contacto (' . $contactLabel . '): <strong>' . htmlspecialchars($contact, ENT_QUOTES) . '</strong></p><p>Se adjuntan todos los archivos a este email.</p>' . $commentHtml,
     'attachments' => $attachments,
@@ -154,7 +154,7 @@ curl_close($ch);
 
 if ($result === false || $status >= 400) {
     $requestId = bin2hex(random_bytes(8));
-    error_log('Wattio Resend failure ' . $requestId . ': HTTP ' . $status . ' ' . $curlError . ' ' . (string) $result);
+    error_log('Wattios Resend failure ' . $requestId . ': HTTP ' . $status . ' ' . $curlError . ' ' . (string) $result);
     respond(['error' => 'No se pudo enviar la factura. Inténtalo de nuevo o escríbenos por WhatsApp.', 'requestId' => $requestId], 502);
 }
 

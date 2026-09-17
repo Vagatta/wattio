@@ -1,8 +1,8 @@
-# Wattio
+# Wattios
 
 ## Product
 
-Wattio ayuda a las personas a detectar si están pagando de más por su factura de electricidad. El usuario envía una foto o PDF de su factura y Wattio analiza la información para orientarle hacia una opción potencialmente más económica.
+Wattios ayuda a las personas a detectar si están pagando de más por su factura de electricidad. El usuario envía una foto o PDF de su factura y Wattios analiza la información para orientarle hacia una opción potencialmente más económica.
 
 La primera experiencia debe poder comenzar desde una landing y llevar al usuario a una acción sencilla: subir la factura o iniciar una conversación por WhatsApp.
 
@@ -43,7 +43,7 @@ La promesa debe presentarse como una estimación o revisión, no como un ahorro 
 - Hero orientado a subir una factura.
 - Explicación visual del proceso.
 - Formulario con email de contacto y factura adjunta.
-- Endpoint server-side que envía la factura a Wattio mediante Resend.
+- Endpoint server-side que envía la factura a Wattios mediante Resend.
 - Confirmación inmediata en pantalla después de un envío correcto.
 - CTA de WhatsApp con número verificado y mensaje preparado.
 - Bloque de confianza, privacidad y preguntas frecuentes.

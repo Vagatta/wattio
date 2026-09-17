@@ -26,7 +26,7 @@ const explanationId = `concept-explanation-${variant}`;
       <path d="M20 380C35 210 480 90 530 270S135 580 55 385 425-35 510 170" stroke="currentColor" />
     </svg>
     <div class="invoice-paper">
-      <div class="paper-header"><span class="paper-brand"><Icon name={supplyIcon} size={17} />wattio</span><span>Ejemplo de factura</span></div>
+      <div class="paper-header"><span class="paper-brand"><Icon name={supplyIcon} size={17} />wattios</span><span>Ejemplo de factura</span></div>
       <div class="paper-heading"><span>Tu suministro</span><strong>{isGas ? 'Gas natural' : 'Electricidad'}</strong><span>Una lectura más clara.</span></div>
       <div class="paper-wave" aria-hidden="true">
         {Array.from({ length: 32 }, (_, i) => <i style={`--bar: ${22 + Math.round(Math.sin(i * .37) * 16 + Math.cos(i * .79) * 6)}px`}></i>)}

@@ -1,14 +1,14 @@
-# Wattio — Design Direction
+# Wattios — Design Direction
 
 ## Creative direction
 
-Wattio debe sentirse como un detector de sobrecostes convertido en una marca digital rápida, clara y ligeramente desafiante. La interfaz puede ser experimental, pero la acción debe ser obvia: enviar la factura.
+Wattios debe sentirse como un detector de sobrecostes convertido en una marca digital rápida, clara y ligeramente desafiante. La interfaz puede ser experimental, pero la acción debe ser obvia: enviar la factura.
 
 La referencia compartida aporta la base correcta: universo oscuro, violeta eléctrico, rayo como símbolo, marca redondeada y comunicación directa. La nueva web no debe ser una copia del flyer; debe convertir esa energía en una experiencia de producto más limpia, confiable y usable.
 
 ## Visual thesis
 
-**Tu factura puede estar ocultando dinero. Wattio la pone bajo una luz violeta.**
+**Tu factura puede estar ocultando dinero. Wattios la pone bajo una luz violeta.**
 
 El hero debe mostrar el problema y la acción en la misma pantalla. No empezar con una explicación corporativa ni con un dashboard ficticio.
 

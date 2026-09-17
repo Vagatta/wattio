@@ -1,6 +1,6 @@
-# Wattio
+# Wattios
 
-Landing de Wattio para revisar facturas eléctricas. Astro estático + endpoint PHP (Resend) en Hostinger.
+Landing de Wattios para revisar facturas eléctricas. Astro estático + endpoint PHP (Resend) en Hostinger.
 
 ## Desarrollo
 
@@ -19,7 +19,7 @@ El formulario pide el email de la persona y permite adjuntar hasta 10 archivos P
 2. Resend envía la factura adjunta al email configurado en `WATTIO_OWNER_EMAIL`.
 3. La interfaz muestra una confirmación al usuario.
 
-La factura no se envía al seleccionar el archivo; solo al pulsar **Enviar factura a Wattio**. `WATTIO_COPY_EMAILS` añade copias ocultas (BCC), separadas por comas.
+La factura no se envía al seleccionar el archivo; solo al pulsar **Enviar factura a Wattios**. `WATTIO_COPY_EMAILS` añade copias ocultas (BCC), separadas por comas.
 
 ## Despliegue en Hostinger (hosting compartido)
 
@@ -34,7 +34,7 @@ npm run build
 
 ```php
 $RESEND_API_KEY = 're_...';
-$RESEND_FROM_EMAIL = 'Wattio <hola@tu-dominio-verificado.com>';
+$RESEND_FROM_EMAIL = 'Wattios <hola@tu-dominio-verificado.com>';
 $WATTIO_OWNER_EMAIL = 'destino@tudominio.com';
 $WATTIO_COPY_EMAILS = 'opcional1@x.com,opcional2@x.com';
 ```

@@ -1,7 +1,7 @@
 {
-  "name": "Wattio — Revisa tu factura de luz",
-  "short_name": "Wattio",
-  "description": "Envía tu factura de luz a Wattio y entiende qué pagas: consumo, potencia y extras revisados con claridad.",
+  "name": "Wattios — Revisa tus facturas de luz y gas",
+  "short_name": "Wattios",
+  "description": "Envía tu factura de luz o gas a Wattios y comprueba si estás pagando de más: comparativa clara, sin llamadas comerciales.",
   "lang": "es",
   "start_url": "/",
   "scope": "/",

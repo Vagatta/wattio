@@ -179,7 +179,7 @@ test('successful submission shows a confirmation without sending a real email', 
 test('WhatsApp links use the approved number and a fixed message without attaching files', async ({ page }) => {
   await page.goto('/');
   const links = page.locator('a[href^="https://wa.me/"]');
-  await expect(links).toHaveCount(2);
+  await expect(links).toHaveCount(4);
   const expected = 'https://wa.me/34646583077?text=' + encodeURIComponent('Hola, Wattio. Quiero revisar mi factura de luz o gas.');
   for (const link of await links.all()) {
     await expect(link).toHaveAttribute('href', expected);

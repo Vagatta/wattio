@@ -147,7 +147,13 @@ test('successful submission shows a confirmation without sending a real email', 
     await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true }) });
   });
   await page.goto('/');
-  await page.locator('#sender-email').fill('persona@example.com');
+  await expect(page.locator('#contact-label')).toHaveText(/teléfono/);
+  await page.locator('#contact-switch').click();
+  await expect(page.locator('#sender-contact')).toHaveAttribute('type', 'email');
+  await expect(page.locator('#contact-label')).toHaveText(/email/);
+  await expect(page.locator('#contact-type')).toHaveValue('email');
+  await page.locator('#contact-switch').click();
+  await page.locator('#sender-contact').fill('600 123 456');
   await page.locator('#invoice').setInputFiles({ name: 'factura.pdf', mimeType: 'application/pdf', buffer: Buffer.from('%PDF-1.4 synthetic') });
   await page.getByRole('button', { name: 'Enviar factura a Wattio' }).click();
   expect(requestSeen).toBe(false);

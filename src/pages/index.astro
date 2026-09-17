@@ -156,7 +156,14 @@ const jsonLd = {
               </div>
               <div class="selected-files" id="selected-files" hidden aria-live="polite"></div>
               <p id="file-status" class="file-status" role="status" aria-live="polite"></p>
-              <label class="email-field" for="sender-email">Tu email de contacto<input id="sender-email" name="email" type="email" autocomplete="email" spellcheck="false" placeholder="Por ejemplo, tu@email.com" required /></label>
+              <div class="contact-field">
+                <div class="contact-head">
+                  <label class="contact-label" id="contact-label" for="sender-contact">Déjanos un teléfono</label>
+                  <button class="contact-switch" id="contact-switch" type="button">o usa tu email</button>
+                </div>
+                <input id="sender-contact" name="contact" type="tel" inputmode="tel" autocomplete="tel" spellcheck="false" placeholder="Por ejemplo, 600 123 456" pattern="\+?[0-9][0-9 \-]{7,14}" required />
+                <input id="contact-type" name="contact_type" type="hidden" value="phone" />
+              </div>
               <div class="comment-field">
                 <button class="comment-toggle" id="comment-toggle" type="button" aria-expanded="false" aria-controls="comment-wrap"><Icon name="plus" size={14} />Añadir un comentario <span>opcional</span></button>
                 <div class="comment-wrap" id="comment-wrap" hidden><label for="comment">Tu comentario para Wattio</label><textarea id="comment" name="comment" rows="3" maxlength="500" placeholder="Por ejemplo: me interesa revisar la potencia contratada."></textarea></div>
@@ -264,7 +271,14 @@ const jsonLd = {
   const selected = document.querySelector<HTMLElement>('#selected-files')!;
   const status = document.querySelector<HTMLElement>('#file-status')!;
   const form = document.querySelector<HTMLFormElement>('#invoice-form')!;
-  const senderEmail = document.querySelector<HTMLInputElement>('#sender-email')!;
+  const contactInput = document.querySelector<HTMLInputElement>('#sender-contact')!;
+  const contactLabel = document.querySelector<HTMLElement>('#contact-label')!;
+  const contactSwitch = document.querySelector<HTMLButtonElement>('#contact-switch')!;
+  const contactType = document.querySelector<HTMLInputElement>('#contact-type')!;
+  const contactModes: Record<string, { label: string; switchText: string; type: string; autocomplete: string; inputmode: string; placeholder: string; pattern: string | null }> = {
+    phone: { label: 'Déjanos un teléfono', switchText: 'o usa tu email', type: 'tel', autocomplete: 'tel', inputmode: 'tel', placeholder: 'Por ejemplo, 600 123 456', pattern: '\\+?[0-9][0-9 \\-]{7,14}' },
+    email: { label: 'Déjanos tu email', switchText: 'o usa tu teléfono', type: 'email', autocomplete: 'email', inputmode: 'email', placeholder: 'Por ejemplo, tu@email.com', pattern: null },
+  };
   const sendButton = document.querySelector<HTMLButtonElement>('#send-invoice')!;
   const submitStatus = document.querySelector<HTMLElement>('#submit-status')!;
   const success = document.querySelector<HTMLElement>('#submission-success')!;
@@ -282,6 +296,17 @@ const jsonLd = {
       radio.dispatchEvent(new Event('change', { bubbles: true }));
     }
   }));
+  contactSwitch.addEventListener('click', () => {
+    const mode = contactModes[contactType.value === 'phone' ? 'email' : 'phone'];
+    contactType.value = contactType.value === 'phone' ? 'email' : 'phone';
+    contactLabel.textContent = mode.label;
+    contactSwitch.textContent = mode.switchText;
+    contactInput.type = mode.type;
+    contactInput.setAttribute('autocomplete', mode.autocomplete);
+    contactInput.setAttribute('inputmode', mode.inputmode);
+    contactInput.placeholder = mode.placeholder;
+    if (mode.pattern) contactInput.setAttribute('pattern', mode.pattern); else contactInput.removeAttribute('pattern');
+  });
   const commentToggle = document.querySelector<HTMLButtonElement>('#comment-toggle')!;
   const commentWrap = document.querySelector<HTMLElement>('#comment-wrap')!;
   const commentArea = document.querySelector<HTMLTextAreaElement>('#comment')!;
@@ -347,8 +372,8 @@ const jsonLd = {
       input.focus({ preventScroll: true });
       return;
     }
-    if (!senderEmail.checkValidity()) {
-      senderEmail.reportValidity();
+    if (!contactInput.checkValidity()) {
+      contactInput.reportValidity();
       return;
     }
     const sendLabel = sendButton.querySelector('span')!;

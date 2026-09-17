@@ -51,10 +51,22 @@ if (count($attempts) >= 8) {
 $attempts[] = time();
 @file_put_contents($rateFile, implode("\n", $attempts) . "\n", LOCK_EX);
 
-$email = strtolower(trim((string) ($_POST['email'] ?? '')));
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    respond(['error' => 'Introduce un email válido para poder contactarte.'], 422);
+$contactType = (string) ($_POST['contact_type'] ?? '');
+$contact = trim((string) ($_POST['contact'] ?? ($_POST['email'] ?? '')));
+if ($contactType !== 'phone' && $contactType !== 'email') {
+    $contactType = str_contains($contact, '@') ? 'email' : 'phone';
 }
+$replyTo = null;
+if ($contactType === 'email') {
+    $contact = strtolower($contact);
+    if (!filter_var($contact, FILTER_VALIDATE_EMAIL)) {
+        respond(['error' => 'Introduce un email válido para poder contactarte.'], 422);
+    }
+    $replyTo = [$contact];
+} elseif (!preg_match('/^\+?[0-9][0-9 \-]{7,14}$/', $contact)) {
+    respond(['error' => 'Introduce un teléfono válido para poder contactarte.'], 422);
+}
+$contactLabel = $contactType === 'email' ? 'email' : 'teléfono';
 
 if (($_POST['privacy'] ?? '') !== 'on') {
     respond(['error' => 'Debes aceptar la política de privacidad para enviar tu factura.'], 422);
@@ -112,12 +124,14 @@ $commentHtml = $comment !== '' ? '<p><strong>Comentario del usuario:</strong><br
 $payload = [
     'from' => $from,
     'to' => [$ownerEmail],
-    'reply_to' => [$email],
-    'subject' => "Factura de {$supply} Wattio — {$email}",
-    'text' => "El usuario {$email} ha enviado {$count} factura{$plural} de {$supply} para revisión. Se adjuntan a este email.{$commentText}",
-    'html' => '<p>El usuario <strong>' . htmlspecialchars($email, ENT_QUOTES) . '</strong> ha enviado ' . $count . ' factura' . $plural . ' de ' . $supply . ' para revisión.</p><p>Se adjuntan todos los archivos a este email.</p>' . $commentHtml,
+    'subject' => "Factura de {$supply} Wattio — {$contact}",
+    'text' => "Un usuario ha enviado {$count} factura{$plural} de {$supply} para revisión. Contacto ({$contactLabel}): {$contact}. Se adjuntan a este email.{$commentText}",
+    'html' => '<p>Un usuario ha enviado ' . $count . ' factura' . $plural . ' de ' . $supply . ' para revisión.</p><p>Contacto (' . $contactLabel . '): <strong>' . htmlspecialchars($contact, ENT_QUOTES) . '</strong></p><p>Se adjuntan todos los archivos a este email.</p>' . $commentHtml,
     'attachments' => $attachments,
 ];
+if ($replyTo) {
+    $payload['reply_to'] = $replyTo;
+}
 if ($copyList) {
     $payload['bcc'] = $copyList;
 }

@@ -188,10 +188,15 @@ h3 { font-size: 21px; font-weight: 650; letter-spacing: -.6px; }
 .supply-options label:hover > span { color: #fff; }
 .supply-options input:checked + span { background: #f0e1ff; color: #43205d; }
 .supply-options input:focus-visible + span { outline: 2px solid #d2a5f5; outline-offset: 2px; }
-.email-field { display: grid; gap: 6px; margin-top: 12px; color: #ddccea; font-size: 11px; font-weight: 600; }
-.email-field input { width: 100%; min-height: 44px; padding: 0 13px; border: 1px solid #bd8fdd45; border-radius: 9px; color: #f8f2ff; background: #190f2580; font-size: 14px; }
-.email-field input::placeholder { color: #ab97b9; }
-.email-field input:focus-visible { outline: 2px solid #d2a5f5; outline-offset: 3px; }
+.contact-field { display: grid; gap: 6px; margin-top: 12px; }
+.contact-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.contact-label { color: #ddccea; font-size: 11px; font-weight: 600; }
+.contact-switch { padding: 0; border: 0; background: none; color: #b794d4; font-size: 10px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.contact-switch:hover { color: #fff; }
+.contact-switch:focus-visible { outline: 2px solid #d2a5f5; outline-offset: 3px; }
+.contact-field > input { width: 100%; min-height: 44px; padding: 0 13px; border: 1px solid #bd8fdd45; border-radius: 9px; color: #f8f2ff; background: #190f2580; font-size: 14px; }
+.contact-field > input::placeholder { color: #ab97b9; }
+.contact-field > input:focus-visible { outline: 2px solid #d2a5f5; outline-offset: 3px; }
 .comment-toggle { display: inline-flex; align-items: center; gap: 7px; margin-top: 8px; padding: 4px 0; border: 0; background: none; color: #c9aee0; font-size: 11px; }
 .comment-toggle:hover { color: #fff; }
 .comment-toggle > span { color: #9d8aab; font-size: 10px; }
@@ -368,7 +373,7 @@ h3 { font-size: 21px; font-weight: 650; letter-spacing: -.6px; }
   .file-art { margin-bottom: 8px; transform: scale(.88); }
   #file-help { margin-top: 8px; }
   .file-status { margin-top: 8px; }
-  .email-field { margin-top: 10px; }
+  .contact-field { margin-top: 10px; }
   .comment-toggle { margin-top: 6px; }
   .privacy-consent { margin-top: 10px; }
   .send-invoice { margin-top: 10px; min-height: 46px; }

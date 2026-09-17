@@ -138,7 +138,7 @@ const jsonLd = {
         <div class="hero-layout">
           <div class="hero-note" aria-hidden="true"><span>Tal cual la recibes.</span><p>No necesitas descifrarla.<br />De eso nos encargamos.</p><svg viewBox="0 0 140 65" fill="none"><path d="M5 10c28 54 66 31 120 23m-13-8 15 8-12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
           <div class="hero-upload">
-            <form class="upload-card" id="invoice-form" aria-label="Enviar facturas para revisión">
+            <form class="upload-card" id="invoice-form" aria-label="Enviar facturas para revisión" novalidate>
               <div class="upload-card-top">
                 <div class="supply-choice" role="radiogroup" aria-label="Tipo de factura que envías">
                   <span class="file-heading">Tu factura es de</span>
@@ -161,8 +161,9 @@ const jsonLd = {
                   <label class="contact-label" id="contact-label" for="sender-contact">Déjanos un teléfono</label>
                   <button class="contact-switch" id="contact-switch" type="button">o usa tu email</button>
                 </div>
-                <input id="sender-contact" name="contact" type="tel" inputmode="tel" autocomplete="tel" spellcheck="false" placeholder="Por ejemplo, 600 123 456" pattern="\+?[0-9][0-9 \-]{7,14}" required />
+                <input id="sender-contact" name="contact" type="tel" inputmode="tel" autocomplete="tel" spellcheck="false" placeholder="Por ejemplo, 600 123 456" aria-describedby="contact-error" required />
                 <input id="contact-type" name="contact_type" type="hidden" value="phone" />
+                <p class="field-error" id="contact-error" hidden></p>
               </div>
               <div class="comment-field">
                 <button class="comment-toggle" id="comment-toggle" type="button" aria-expanded="false" aria-controls="comment-wrap"><Icon name="plus" size={14} />Añadir un comentario <span>opcional</span></button>
@@ -170,9 +171,10 @@ const jsonLd = {
               </div>
               <label class="hp-field" aria-hidden="true">Empresa<input name="company" type="text" tabindex="-1" autocomplete="off" /></label>
               <div class="privacy-consent">
-                <label for="privacy"><input id="privacy" name="privacy" type="checkbox" required /><span class="privacy-text">He leído y acepto la política de privacidad de Wattio.</span></label>
+                <label for="privacy"><input id="privacy" name="privacy" type="checkbox" aria-describedby="privacy-error" required /><span class="privacy-text">He leído y acepto la política de privacidad de Wattio.</span></label>
                 <a href="/privacidad">Leer política</a>
               </div>
+              <p class="field-error" id="privacy-error" hidden></p>
               <button class="send-invoice" id="send-invoice" type="submit"><span>Enviar factura a Wattio</span><Icon name="arrow" size={19} /></button>
               <p id="submit-status" class="file-status" role="status" aria-live="polite"></p>
               <div class="local-notice"><Icon name="shield" size={16} /><p>Solo se envían los archivos cuando pulsas «Enviar».</p></div>
@@ -306,19 +308,35 @@ const jsonLd = {
     contactInput.setAttribute('inputmode', mode.inputmode);
     contactInput.placeholder = mode.placeholder;
     if (mode.pattern) contactInput.setAttribute('pattern', mode.pattern); else contactInput.removeAttribute('pattern');
-    contactInput.setCustomValidity('');
+    setFieldError(contactError, contactInput, '');
   });
-  contactInput.addEventListener('invalid', () => {
-    const isPhone = contactType.value !== 'email';
-    contactInput.setCustomValidity(contactInput.value.trim() === ''
-      ? (isPhone ? 'Déjanos un teléfono para poder contactarte.' : 'Déjanos un email para poder contactarte.')
-      : (isPhone ? 'Ese teléfono no parece válido. Usa solo números, espacios y un + inicial.' : 'Ese email no parece válido. Revisa que tenga @ y dominio.'));
-  });
-  contactInput.addEventListener('input', () => contactInput.setCustomValidity(''));
+  const contactError = document.querySelector<HTMLElement>('#contact-error')!;
   const privacyBox = document.querySelector<HTMLInputElement>('#privacy')!;
-  const privacyMessage = 'Marca esta casilla para aceptar la política de privacidad y poder enviar tu factura.';
-  privacyBox.addEventListener('invalid', () => privacyBox.setCustomValidity(privacyMessage));
-  privacyBox.addEventListener('change', () => privacyBox.setCustomValidity(privacyBox.checked ? '' : privacyMessage));
+  const privacyError = document.querySelector<HTMLElement>('#privacy-error')!;
+  function setFieldError(errorEl: HTMLElement, field: HTMLElement, message: string) {
+    errorEl.textContent = message;
+    errorEl.hidden = !message;
+    if (message) field.setAttribute('aria-invalid', 'true'); else field.removeAttribute('aria-invalid');
+  }
+  const contactPatterns = { phone: /^\+?[0-9][0-9 \-]{7,14}$/, email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ };
+  function validateContact() {
+    const isPhone = contactType.value !== 'email';
+    const value = contactInput.value.trim();
+    const message = value === ''
+      ? (isPhone ? 'Déjanos un teléfono para poder contactarte.' : 'Déjanos un email para poder contactarte.')
+      : (!(isPhone ? contactPatterns.phone : contactPatterns.email).test(value)
+        ? (isPhone ? 'Ese teléfono no parece válido. Usa solo números, espacios y un + inicial.' : 'Ese email no parece válido. Revisa que tenga @ y dominio.')
+        : '');
+    setFieldError(contactError, contactInput, message);
+    return !message;
+  }
+  function validatePrivacy() {
+    const message = privacyBox.checked ? '' : 'Marca esta casilla para aceptar la política de privacidad y poder enviar tu factura.';
+    setFieldError(privacyError, privacyBox, message);
+    return !message;
+  }
+  contactInput.addEventListener('input', () => setFieldError(contactError, contactInput, ''));
+  privacyBox.addEventListener('change', () => { if (privacyBox.checked) setFieldError(privacyError, privacyBox, ''); });
   const commentToggle = document.querySelector<HTMLButtonElement>('#comment-toggle')!;
   const commentWrap = document.querySelector<HTMLElement>('#comment-wrap')!;
   const commentArea = document.querySelector<HTMLTextAreaElement>('#comment')!;
@@ -384,8 +402,14 @@ const jsonLd = {
       input.focus({ preventScroll: true });
       return;
     }
-    if (!contactInput.checkValidity()) {
-      contactInput.reportValidity();
+    const contactOk = validateContact();
+    const privacyOk = validatePrivacy();
+    if (!contactOk) {
+      contactInput.focus();
+      return;
+    }
+    if (!privacyOk) {
+      privacyBox.focus();
       return;
     }
     const sendLabel = sendButton.querySelector('span')!;

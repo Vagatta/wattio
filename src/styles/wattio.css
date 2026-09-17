@@ -197,6 +197,9 @@ h3 { font-size: 21px; font-weight: 650; letter-spacing: -.6px; }
 .contact-field > input { width: 100%; min-height: 44px; padding: 0 13px; border: 1px solid #bd8fdd45; border-radius: 9px; color: #f8f2ff; background: #190f2580; font-size: 14px; }
 .contact-field > input::placeholder { color: #ab97b9; }
 .contact-field > input:focus-visible { outline: 2px solid #d2a5f5; outline-offset: 3px; }
+.field-error { margin-top: 5px; font-size: 11px; line-height: 1.6; color: #ffb6c5; }
+.contact-field > input[aria-invalid='true'] { border-color: #ff8ba0; }
+.privacy-consent input[aria-invalid='true'] { border-color: #ff8ba0; }
 .comment-toggle { display: inline-flex; align-items: center; gap: 7px; margin-top: 8px; padding: 4px 0; border: 0; background: none; color: #c9aee0; font-size: 11px; }
 .comment-toggle:hover { color: #fff; }
 .comment-toggle > span { color: #9d8aab; font-size: 10px; }

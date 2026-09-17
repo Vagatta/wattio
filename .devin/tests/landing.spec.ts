@@ -157,7 +157,8 @@ test('successful submission shows a confirmation without sending a real email', 
   await page.locator('#invoice').setInputFiles({ name: 'factura.pdf', mimeType: 'application/pdf', buffer: Buffer.from('%PDF-1.4 synthetic') });
   await page.getByRole('button', { name: 'Enviar factura a Wattio' }).click();
   expect(requestSeen).toBe(false);
-  await expect(page.locator('#privacy')).toHaveJSProperty('validationMessage', 'Marca esta casilla para aceptar la política de privacidad y poder enviar tu factura.');
+  await expect(page.locator('#privacy-error')).toBeVisible();
+  await expect(page.locator('#privacy-error')).toContainText('Marca esta casilla');
   await expect(page.locator('#privacy')).toHaveAttribute('required', '');
   await expect(page.locator('#submission-success')).toBeHidden();
   await page.locator('input[name="supply"][value="gas"]').check();

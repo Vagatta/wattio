@@ -197,8 +197,10 @@ h3 { font-size: 21px; font-weight: 650; letter-spacing: -.6px; }
 .contact-field > input { width: 100%; min-height: 44px; padding: 0 13px; border: 1px solid #bd8fdd45; border-radius: 9px; color: #f8f2ff; background: #190f2580; font-size: 14px; }
 .contact-field > input::placeholder { color: #ab97b9; }
 .contact-field > input:focus-visible { outline: 2px solid #d2a5f5; outline-offset: 3px; }
-.field-error { position: absolute; top: calc(100% + 9px); left: 0; z-index: 5; max-width: 100%; padding: 8px 12px; border: 1px solid #ff8ba0; border-radius: 10px; background: #3d1631; box-shadow: 0 10px 30px #09021280; color: #ffb6c5; font-size: 11px; line-height: 1.55; pointer-events: none; }
-.field-error::before { content: ''; position: absolute; top: -5px; left: 18px; width: 8px; height: 8px; background: inherit; border-top: 1px solid #ff8ba0; border-left: 1px solid #ff8ba0; transform: rotate(45deg); }
+.field-error { position: absolute; top: calc(100% + 9px); left: 0; z-index: 5; display: inline-flex; align-items: flex-start; gap: 8px; max-width: 100%; padding: 9px 13px; border: 1px solid #ff8ba0; border-radius: 12px; background: linear-gradient(145deg, #45203a, #2e1226 75%); box-shadow: 0 12px 34px #09021290, 0 0 22px #ff8ba01c, inset 0 1px #ffb6c51f; color: #ffc6d2; font-size: 11px; font-weight: 550; line-height: 1.55; pointer-events: none; }
+.field-error[hidden] { display: none; }
+.field-error svg { flex-shrink: 0; margin-top: 2px; color: #ff8ba0; }
+.field-error::before { content: ''; position: absolute; top: -5px; left: 18px; width: 8px; height: 8px; background: #45203a; border-top: 1px solid #ff8ba0; border-left: 1px solid #ff8ba0; transform: rotate(45deg); }
 .contact-field > input[aria-invalid='true'] { border-color: #ff8ba0; }
 .privacy-consent input[aria-invalid='true'] { border-color: #ff8ba0; }
 .comment-toggle { display: inline-flex; align-items: center; gap: 7px; margin-top: 8px; padding: 4px 0; border: 0; background: none; color: #c9aee0; font-size: 11px; }

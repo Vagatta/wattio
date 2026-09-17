@@ -163,7 +163,7 @@ const jsonLd = {
                 </div>
                 <input id="sender-contact" name="contact" type="tel" inputmode="tel" autocomplete="tel" spellcheck="false" placeholder="Por ejemplo, 600 123 456" aria-describedby="contact-error" required />
                 <input id="contact-type" name="contact_type" type="hidden" value="phone" />
-                <p class="field-error" id="contact-error" hidden></p>
+                <p class="field-error" id="contact-error" hidden><Icon name="alert" size={13} /><span></span></p>
               </div>
               <div class="comment-field">
                 <button class="comment-toggle" id="comment-toggle" type="button" aria-expanded="false" aria-controls="comment-wrap"><Icon name="plus" size={14} />Añadir un comentario <span>opcional</span></button>
@@ -173,7 +173,7 @@ const jsonLd = {
               <div class="privacy-consent">
                 <label for="privacy"><input id="privacy" name="privacy" type="checkbox" aria-describedby="privacy-error" required /><span class="privacy-text">He leído y acepto la política de privacidad de Wattio.</span></label>
                 <a href="/privacidad">Leer política</a>
-                <p class="field-error" id="privacy-error" hidden></p>
+                <p class="field-error" id="privacy-error" hidden><Icon name="alert" size={13} /><span></span></p>
               </div>
               <button class="send-invoice" id="send-invoice" type="submit"><span>Enviar factura a Wattio</span><Icon name="arrow" size={19} /></button>
               <p id="submit-status" class="file-status" role="status" aria-live="polite"></p>
@@ -313,10 +313,14 @@ const jsonLd = {
   const contactError = document.querySelector<HTMLElement>('#contact-error')!;
   const privacyBox = document.querySelector<HTMLInputElement>('#privacy')!;
   const privacyError = document.querySelector<HTMLElement>('#privacy-error')!;
+  const errorTimers = new Map<HTMLElement, number>();
   function setFieldError(errorEl: HTMLElement, field: HTMLElement, message: string) {
-    errorEl.textContent = message;
+    errorEl.querySelector('span')!.textContent = message;
     errorEl.hidden = !message;
     if (message) field.setAttribute('aria-invalid', 'true'); else field.removeAttribute('aria-invalid');
+    const timer = errorTimers.get(errorEl);
+    if (timer) clearTimeout(timer);
+    if (message) errorTimers.set(errorEl, window.setTimeout(() => { errorEl.hidden = true; }, 4500));
   }
   const contactPatterns = { phone: /^\+?[0-9][0-9 \-]{7,14}$/, email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ };
   function validateContact() {

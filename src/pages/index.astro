@@ -173,8 +173,8 @@ const jsonLd = {
               <div class="privacy-consent">
                 <label for="privacy"><input id="privacy" name="privacy" type="checkbox" aria-describedby="privacy-error" required /><span class="privacy-text">He leído y acepto la política de privacidad de Wattio.</span></label>
                 <a href="/privacidad">Leer política</a>
+                <p class="field-error" id="privacy-error" hidden></p>
               </div>
-              <p class="field-error" id="privacy-error" hidden></p>
               <button class="send-invoice" id="send-invoice" type="submit"><span>Enviar factura a Wattio</span><Icon name="arrow" size={19} /></button>
               <p id="submit-status" class="file-status" role="status" aria-live="polite"></p>
               <div class="local-notice"><Icon name="shield" size={16} /><p>Solo se envían los archivos cuando pulsas «Enviar».</p></div>

@@ -180,7 +180,7 @@ test('WhatsApp links use the approved number and a fixed message without attachi
   await page.goto('/');
   const links = page.locator('a[href^="https://wa.me/"]');
   await expect(links).toHaveCount(4);
-  const expected = 'https://wa.me/34646583077?text=' + encodeURIComponent('Hola, Wattio. Quiero revisar mi factura de luz o gas.');
+  const expected = 'https://wa.me/34688608806?text=' + encodeURIComponent('Hola, Wattio. Quiero revisar mi factura de luz o gas.');
   for (const link of await links.all()) {
     await expect(link).toHaveAttribute('href', expected);
     await expect(link).toHaveAttribute('target', '_blank');
@@ -190,7 +190,7 @@ test('WhatsApp links use the approved number and a fixed message without attachi
   await expect(links.first()).toHaveAttribute('href', expected);
   await expect(page.getByText('Adjunta la foto o el PDF dentro del chat. El archivo seleccionado aquí no se transfiere a WhatsApp.')).toBeVisible();
   await page.getByText('¿Puedo enviarla por WhatsApp?', { exact: true }).click();
-  await expect(page.locator('details[open]')).toContainText('+34 646 58 30 77');
+  await expect(page.locator('details[open]')).toContainText('+34 688 60 88 06');
 });
 
 test('reduced motion, local fonts and valid internal destinations', async ({ page }) => {

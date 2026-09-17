@@ -5,7 +5,7 @@ import Icon from '../components/Icon.astro';
 import InvoiceExplorer from '../components/InvoiceExplorer.astro';
 import '../styles/wattio.css';
 
-const whatsappNumber = '34646583077';
+const whatsappNumber = '34688608806';
 const whatsappMessage = 'Hola, Wattio. Quiero revisar mi factura de luz o gas.';
 const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
@@ -20,7 +20,7 @@ const faqs = [
   { question: '¿Me garantiza Wattio que voy a ahorrar?', answer: 'No. El ahorro depende de tu tarifa, de tu consumo y de las alternativas disponibles. Si tu situación ya es buena, una revisión también puede ayudarte a confirmarlo.' },
   { question: '¿Tengo que cambiar de compañía?', answer: 'No. Conocer otras opciones no implica contratar nada. Cualquier cambio debe ser una decisión tuya, después de conocer sus condiciones.' },
   { question: '¿Qué ocurre cuando selecciono una factura?', answer: 'Nada hasta que tú confirmes. Los archivos se quedan en tu dispositivo y solo se envían a Wattio por email cuando pulsas «Enviar factura a Wattio».' },
-  { question: '¿Puedo enviarla por WhatsApp?', answer: 'Sí. Pulsa «Enviar por WhatsApp» para abrir el chat con Wattio en el +34 646 58 30 77. Adjunta la foto o el PDF y envía el mensaje desde WhatsApp. El archivo que selecciones en esta web no se transfiere al chat automáticamente.' },
+  { question: '¿Puedo enviarla por WhatsApp?', answer: 'Sí. Pulsa «Enviar por WhatsApp» para abrir el chat con Wattio en el +34 688 60 88 06. Adjunta la foto o el PDF y envía el mensaje desde WhatsApp. El archivo que selecciones en esta web no se transfiere al chat automáticamente.' },
 ];
 const steps = [
   { number: '1', icon: 'document' as const, title: 'Tu factura, tal cual.', text: 'Una foto legible o un PDF. No necesitas copiar números ni entender cada concepto.' },
@@ -41,7 +41,7 @@ const jsonLd = {
       contactPoint: {
         '@type': 'ContactPoint',
         contactType: 'customer service',
-        telephone: '+34 646 58 30 77',
+        telephone: '+34 688 60 88 06',
         availableLanguage: 'es',
       },
     },
@@ -241,7 +241,7 @@ const jsonLd = {
     <footer class="footer container">
       <div class="footer-top"><p>La energía, sin tanto misterio.</p><a href="#top">Volver al inicio<Icon name="arrow" size={18} /></a></div>
       <div class="footer-signature" aria-hidden="true"><Icon name="bolt" size={180} /><span translate="no">wattio</span></div>
-      <div class="footer-bottom"><span>© {new Date().getFullYear()} Wattio</span><a class="footer-whatsapp" href={whatsappUrl} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={17} />WhatsApp: +34 646 58 30 77</a><a href="#revisar">Enviar mi factura</a><a href="/guias/">Guías</a><a href="/privacidad">Privacidad</a><a href="/aviso-legal">Aviso legal</a></div>
+      <div class="footer-bottom"><span>© {new Date().getFullYear()} Wattio</span><a class="footer-whatsapp" href={whatsappUrl} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={17} />WhatsApp: +34 688 60 88 06</a><a href="#revisar">Enviar mi factura</a><a href="/guias/">Guías</a><a href="/privacidad">Privacidad</a><a href="/aviso-legal">Aviso legal</a></div>
     </footer>
   </body>
 </html>

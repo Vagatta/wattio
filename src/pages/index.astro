@@ -406,13 +406,11 @@ const jsonLd = {
       input.focus({ preventScroll: true });
       return;
     }
-    const contactOk = validateContact();
-    const privacyOk = validatePrivacy();
-    if (!contactOk) {
+    if (!validateContact()) {
       contactInput.focus();
       return;
     }
-    if (!privacyOk) {
+    if (!validatePrivacy()) {
       privacyBox.focus();
       return;
     }

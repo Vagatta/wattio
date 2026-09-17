@@ -17,6 +17,7 @@ const pageDescription = 'Sube tu factura de luz o gas a Wattio y comprueba si es
 
 const faqs = [
   { question: '¿Qué parte de la factura se revisa?', answer: 'El precio de la energía, la potencia contratada y los servicios adicionales, tanto en la factura de luz como en la de gas. El objetivo es entender qué pagas y qué opciones encajan con tu consumo.' },
+  { question: '¿También revisáis la factura de gas?', answer: 'Sí. La factura de gas tiene sus propios conceptos —término fijo, consumo y peajes— y la revisamos con el mismo criterio que la de luz. Si nos envías las dos, las miramos juntas para darte una comparativa del conjunto.' },
   { question: '¿Me garantiza Wattio que voy a ahorrar?', answer: 'No. El ahorro depende de tu tarifa, de tu consumo y de las alternativas disponibles. Si tu situación ya es buena, una revisión también puede ayudarte a confirmarlo.' },
   { question: '¿Tengo que cambiar de compañía?', answer: 'No. Conocer otras opciones no implica contratar nada. Cualquier cambio debe ser una decisión tuya, después de conocer sus condiciones.' },
   { question: '¿Qué ocurre cuando selecciono una factura?', answer: 'Nada hasta que tú confirmes. Los archivos se quedan en tu dispositivo y solo se envían a Wattio por email cuando pulsas «Enviar factura a Wattio».' },
@@ -67,7 +68,7 @@ const jsonLd = {
       '@type': 'Service',
       name: 'Revisión de facturas de luz y gas',
       serviceType: 'Revisión de factura de luz o gas',
-      description: 'Revisión de la factura de luz o gas para entender el consumo, la potencia contratada y los servicios adicionales antes de decidir.',
+      description: 'Revisión de la factura de luz o gas con una comparativa clara del consumo, la potencia contratada y los servicios adicionales, para comprobar si estás pagando de más antes de decidir.',
       provider: { '@id': organizationId },
       areaServed: { '@type': 'Country', name: 'España' },
       availableChannel: { '@type': 'ServiceChannel', serviceUrl: whatsappUrl },
@@ -199,7 +200,7 @@ const jsonLd = {
       <section class="how-section" id="como-funciona" aria-labelledby="how-heading">
         <div class="container">
           <div class="section-intro"><span class="section-index">Cómo funciona</span><p>No necesitas ser experto.<br />Solo tener tu factura a mano.</p></div>
-          <h2 id="how-heading">La luz es complicada.<br />Revisarla no debería serlo.</h2>
+          <h2 id="how-heading">Tus facturas son complicadas.<br />Revisarlas no debería serlo.</h2>
           <div class="process">
             <svg class="process-line" viewBox="0 0 1120 120" preserveAspectRatio="none" aria-hidden="true"><path d="M20 55H290Q325 55 345 82T402 55H682Q715 55 736 28T793 55H1100" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
             {steps.map(step => <article class="process-step"><div class="step-visual"><span class="step-symbol"><Icon name={step.icon} size={29} /></span><span class="step-number">{step.number}</span></div><h3>{step.title}</h3><p>{step.text}</p></article>)}

@@ -306,7 +306,19 @@ const jsonLd = {
     contactInput.setAttribute('inputmode', mode.inputmode);
     contactInput.placeholder = mode.placeholder;
     if (mode.pattern) contactInput.setAttribute('pattern', mode.pattern); else contactInput.removeAttribute('pattern');
+    contactInput.setCustomValidity('');
   });
+  contactInput.addEventListener('invalid', () => {
+    const isPhone = contactType.value !== 'email';
+    contactInput.setCustomValidity(contactInput.value.trim() === ''
+      ? (isPhone ? 'Déjanos un teléfono para poder contactarte.' : 'Déjanos un email para poder contactarte.')
+      : (isPhone ? 'Ese teléfono no parece válido. Usa solo números, espacios y un + inicial.' : 'Ese email no parece válido. Revisa que tenga @ y dominio.'));
+  });
+  contactInput.addEventListener('input', () => contactInput.setCustomValidity(''));
+  const privacyBox = document.querySelector<HTMLInputElement>('#privacy')!;
+  const privacyMessage = 'Marca esta casilla para aceptar la política de privacidad y poder enviar tu factura.';
+  privacyBox.addEventListener('invalid', () => privacyBox.setCustomValidity(privacyMessage));
+  privacyBox.addEventListener('change', () => privacyBox.setCustomValidity(privacyBox.checked ? '' : privacyMessage));
   const commentToggle = document.querySelector<HTMLButtonElement>('#comment-toggle')!;
   const commentWrap = document.querySelector<HTMLElement>('#comment-wrap')!;
   const commentArea = document.querySelector<HTMLTextAreaElement>('#comment')!;

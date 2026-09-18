@@ -17,6 +17,10 @@ pnpm-debug.log*
 .env
 .env.production
 
+# secretos y almacenamiento local de envíos (solo existen en el servidor / pruebas)
+wattio-secrets.php
+wattio-submissions/
+
 # macOS-specific files
 .DS_Store
 

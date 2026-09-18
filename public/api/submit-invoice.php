@@ -92,6 +92,7 @@ if (count($names) > 10) {
 $allowedMime = ['application/pdf', 'image/jpeg', 'image/png'];
 $finfo = new finfo(FILEINFO_MIME_TYPE);
 $attachments = [];
+$stored = [];
 $totalSize = 0;
 
 foreach ($names as $i => $name) {
@@ -111,10 +112,52 @@ foreach ($names as $i => $name) {
         respond(['error' => 'El tamaño total de las facturas no puede superar los 4 MB.'], 422);
     }
     $safeName = substr(preg_replace('/[^a-zA-Z0-9._-]/', '_', (string) $name), -120);
+    $content = (string) file_get_contents($tmp);
     $attachments[] = [
         'filename' => $safeName,
-        'content' => base64_encode((string) file_get_contents($tmp)),
+        'content' => base64_encode($content),
     ];
+    $stored[] = [$safeName, $content];
+}
+
+// Copia local fuera del webroot: una carpeta por envío, identificada por fecha + contacto.
+$storageDir = dirname(__DIR__, 2) . '/wattio-submissions';
+$contactSlug = substr(preg_replace('/[^a-zA-Z0-9._-]/', '_', $contact), 0, 60);
+$submissionId = date('Ymd-His') . '_' . $contactSlug . '_' . bin2hex(random_bytes(3));
+$submissionDir = $storageDir . '/' . $submissionId;
+
+if (!is_dir($submissionDir) && !@mkdir($submissionDir, 0700, true)) {
+    respond(['error' => 'No se pudo guardar la factura. Inténtalo de nuevo o escríbenos por WhatsApp.'], 500);
+}
+@file_put_contents($storageDir . '/.htaccess', "Require all denied\nDeny from all\n");
+
+$fileIndex = 0;
+foreach ($stored as [$safeName, $content]) {
+    $fileIndex++;
+    if (@file_put_contents($submissionDir . '/' . sprintf('%02d', $fileIndex) . '_' . $safeName, $content) === false) {
+        respond(['error' => 'No se pudo guardar la factura. Inténtalo de nuevo o escríbenos por WhatsApp.'], 500);
+    }
+}
+
+$storedNames = implode(', ', array_column($stored, 0));
+@file_put_contents($submissionDir . '/datos.txt',
+    "Fecha: " . date('Y-m-d H:i:s') . "\n" .
+    "Contacto ({$contactLabel}): {$contact}\n" .
+    "Suministro: {$supply}\n" .
+    "Archivos: {$storedNames}\n" .
+    ($comment !== '' ? "Comentario: {$comment}\n" : '')
+);
+
+$registry = $storageDir . '/registro.csv';
+$isNewRegistry = !is_file($registry);
+$registryRow = [$submissionId, date('Y-m-d H:i:s'), $contactType, $contact, $supply, $comment, $storedNames];
+$registryHandle = @fopen($registry, 'ab');
+if ($registryHandle) {
+    if ($isNewRegistry) {
+        fputcsv($registryHandle, ['envio', 'fecha', 'tipo_contacto', 'contacto', 'suministro', 'comentario', 'archivos'], ';');
+    }
+    fputcsv($registryHandle, $registryRow, ';');
+    fclose($registryHandle);
 }
 
 $count = count($attachments);

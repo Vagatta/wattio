@@ -635,7 +635,7 @@ h1 em {
 }
 
 .paper-heading>span {
-  color: #786982;
+  color: #5d5268;
   font-size: 10px;
 }
 
@@ -708,7 +708,7 @@ h1 em {
   font-size: 9px;
   line-height: 1.5;
   padding-top: 18px;
-  color: #796185;
+  color: #5d5268;
 }
 
 .paper-bottom>svg {
@@ -791,7 +791,7 @@ h1 em {
 
 .invoice-explorer[data-variant='gas'] .paper-brand,
 .invoice-explorer[data-variant='gas'] .paper-bottom>svg {
-  color: #b0631f;
+  color: #8a4d14;
 }
 
 .invoice-explorer[data-variant='gas'] .paper-header,
@@ -801,7 +801,7 @@ h1 em {
 
 .invoice-explorer[data-variant='gas'] .paper-heading>span,
 .invoice-explorer[data-variant='gas'] .paper-bottom {
-  color: #8a7157;
+  color: #6b5741;
 }
 
 .invoice-explorer[data-variant='gas'] .paper-wave i {

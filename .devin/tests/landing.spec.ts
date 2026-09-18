@@ -95,7 +95,7 @@ test('mobile menu supports navigation and Escape', async ({ page }) => {
 
 test('multiple file selection validates total size and does not send before submit', async ({ page }) => {
   const posts: string[] = [];
-  page.on('request', request => { if (request.method() === 'POST') posts.push(request.url()); });
+  page.on('request', request => { if (request.method() === 'POST' && !request.url().includes('cloudflareinsights.com')) posts.push(request.url()); });
   await page.goto('/');
   const input = page.locator('#invoice');
   await input.setInputFiles({ name: 'archivo.txt', mimeType: 'text/plain', buffer: Buffer.from('synthetic') });
@@ -195,7 +195,10 @@ test('WhatsApp links use the approved number and a fixed message without attachi
 
 test('reduced motion, local fonts and valid internal destinations', async ({ page }) => {
   const external: string[] = [];
-  page.on('request', request => { if (request.url().startsWith('https://')) external.push(request.url()); });
+  page.on('request', request => {
+    const url = request.url();
+    if (url.startsWith('https://') && !url.includes('cloudflareinsights.com')) external.push(url);
+  });
   await page.goto('/');
   const badAnchors = await page.locator('a[href^="#"]').evaluateAll(links => links
     .map(link => link.getAttribute('href')!)

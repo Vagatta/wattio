@@ -5,9 +5,16 @@ RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+# Unificar dominio: www.wattios.es -> wattios.es (evita contenido duplicado)
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+
 # Endpoint PHP con URL limpia (/api/submit-invoice -> /api/submit-invoice.php)
 RewriteRule ^api/submit-invoice$ api/submit-invoice.php [L]
 </IfModule>
+
+# 404 personalizado para rutas inexistentes
+ErrorDocument 404 /404.html
 
 # Caché larga para assets (los de _astro llevan hash; el HTML no se cachea)
 <IfModule mod_headers.c>

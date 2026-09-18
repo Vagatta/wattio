@@ -1,5 +1,6 @@
 ---
 import '@fontsource-variable/manrope';
+import manropeLatin from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
 import Analytics from '../components/Analytics.astro';
 import Icon from '../components/Icon.astro';
 import '../styles/wattios.css';
@@ -45,6 +46,7 @@ const ogImageUrl = new URL('/og-image.png', siteUrl);
     <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="preload" href={manropeLatin} as="font" type="font/woff2" crossorigin />
     <title>{title}</title>
     <Analytics />
     <slot name="head-extra" />

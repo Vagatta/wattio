@@ -7,5 +7,13 @@ const cfToken = 'bcb7b61451f34b6f9e9e97c5d1cddaa2';
 const domain = import.meta.env.PUBLIC_ANALYTICS_DOMAIN;
 const scriptSrc = import.meta.env.PUBLIC_ANALYTICS_SCRIPT ?? 'https://plausible.io/js/script.js';
 ---
-{import.meta.env.PROD ? <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: cfToken })} /> : null}
+{import.meta.env.PROD ? <script define:vars={{ cfToken }}>
+  window.addEventListener('load', () => {
+    const s = document.createElement('script');
+    s.type = 'module';
+    s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    s.dataset.cfBeacon = JSON.stringify({ token: cfToken });
+    document.head.appendChild(s);
+  });
+</script> : null}
 {domain ? <script defer data-domain={domain} src={scriptSrc} /> : null}

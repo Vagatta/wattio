@@ -283,7 +283,7 @@ h1 em {
 
 .hero-description {
   max-width: 640px;
-  margin: 17px auto 0;
+  margin: 13px auto 0;
   color: var(--muted);
   font-size: 16px;
   line-height: 1.7;
@@ -294,7 +294,7 @@ h1 em {
   grid-template-columns: minmax(0, 1fr) minmax(0, 560px) minmax(0, 1fr);
   gap: 30px;
   align-items: center;
-  margin-top: 22px;
+  margin-top: 16px;
 }
 
 .hero-upload {
@@ -497,7 +497,7 @@ h1 em {
   gap: 12px;
   width: fit-content;
   min-height: 44px;
-  margin: 19px auto 0;
+  margin: 10px auto 0;
   color: #dcc7ef;
   font-size: 14px;
   font-weight: 600;
@@ -1829,8 +1829,8 @@ h3 {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 8px 12px;
-  margin-top: 17px;
+  gap: 6px 12px;
+  margin-top: 10px;
 }
 
 .whatsapp-option>span {
@@ -1868,7 +1868,7 @@ h3 {
   flex-basis: 100%;
   max-width: 460px;
   font-size: 12px;
-  line-height: 1.7;
+  line-height: 1.55;
   color: #ae9bbd;
   text-align: center;
 }

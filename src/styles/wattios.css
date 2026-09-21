@@ -932,8 +932,9 @@ h1 em {
 }
 
 .section-index {
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 650;
+  letter-spacing: 0.4px;
   color: #bea5cf;
 }
 

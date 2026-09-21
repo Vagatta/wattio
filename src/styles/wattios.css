@@ -282,10 +282,10 @@ h1 em {
 }
 
 .hero-description {
-  max-width: 620px;
+  max-width: 640px;
   margin: 17px auto 0;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.7;
 }
 
@@ -316,7 +316,7 @@ h1 em {
 }
 
 .hero-note p {
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.9;
   margin-top: 10px;
 }
@@ -478,14 +478,14 @@ h1 em {
 .journey-list strong {
   display: block;
   padding-top: 3px;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 650;
   color: #e5d5ef;
 }
 
 .journey-list p {
   margin-top: 4px;
-  font-size: 10px;
+  font-size: 12px;
   color: #b5a0c4;
   line-height: 1.65;
 }
@@ -499,7 +499,7 @@ h1 em {
   min-height: 44px;
   margin: 19px auto 0;
   color: #bfaccf;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .hero-scroll span {
@@ -534,7 +534,7 @@ h1 em {
 .primary {
   background: var(--orchid);
   color: #251238;
-  margin-top: 30px;
+  margin-top: 24px;
 }
 
 .primary:hover {
@@ -1171,7 +1171,7 @@ h3 {
   min-height: 30px;
   padding: 0 11px;
   border-radius: 24px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   color: #cbb8dc;
   white-space: nowrap;
@@ -1195,7 +1195,7 @@ h3 {
   position: relative;
   display: grid;
   gap: 6px;
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
 .contact-head {
@@ -1207,7 +1207,7 @@ h3 {
 
 .contact-label {
   color: #ddccea;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
 }
 
@@ -1216,7 +1216,7 @@ h3 {
   border: 0;
   background: none;
   color: #b794d4;
-  font-size: 10px;
+  font-size: 12px;
   text-decoration: underline;
   text-underline-offset: 3px;
   cursor: pointer;
@@ -1307,12 +1307,12 @@ h3 {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  margin-top: 8px;
+  margin-top: 6px;
   padding: 4px 0;
   border: 0;
   background: none;
   color: #c9aee0;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .comment-toggle:hover {
@@ -1321,7 +1321,7 @@ h3 {
 
 .comment-toggle>span {
   color: #9d8aab;
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .comment-toggle[aria-expanded='true'] svg {
@@ -1336,7 +1336,7 @@ h3 {
 
 .comment-wrap label {
   color: #ddccea;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
 }
 
@@ -1502,7 +1502,7 @@ h3 {
 
 .dropzone {
   position: relative;
-  padding: 16px 16px 14px;
+  padding: 14px 16px 12px;
   border-radius: 12px;
   border: 1px dashed #ba8fd073;
   background: #ba8dde08;
@@ -1610,7 +1610,7 @@ h3 {
 
 .file-label>span+span {
   color: #cbb4dc;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .browse-copy {
@@ -1630,8 +1630,8 @@ h3 {
 
 #file-help {
   color: #b7a0c9;
-  font-size: 10px;
-  margin-top: 10px;
+  font-size: 12px;
+  margin-top: 8px;
 }
 
 .selected-files {
@@ -1712,7 +1712,7 @@ h3 {
 
 .file-status {
   color: #cbb8d9;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.7;
   margin-top: 12px;
   overflow-wrap: anywhere;
@@ -1731,12 +1731,12 @@ h3 {
   align-items: center;
   justify-content: center;
   gap: 7px;
-  margin-top: 13px;
+  margin-top: 11px;
   color: #c3afd2;
 }
 
 .local-notice p {
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.7;
 }
 
@@ -1745,7 +1745,7 @@ h3 {
   display: flex;
   align-items: flex-start;
   gap: 9px;
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
 .privacy-consent label {
@@ -1795,7 +1795,7 @@ h3 {
 
 .privacy-text {
   padding-top: 1px;
-  font-size: 10.5px;
+  font-size: 12px;
   line-height: 1.7;
   color: #b3a0c2;
 }
@@ -1803,7 +1803,7 @@ h3 {
 .privacy-consent>a {
   flex-shrink: 0;
   margin-top: 2px;
-  font-size: 10px;
+  font-size: 11px;
   color: #e0c9f5;
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -1834,7 +1834,7 @@ h3 {
 
 .whatsapp-option>span {
   color: #c3b1ce;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .whatsapp-cta {
@@ -1848,7 +1848,7 @@ h3 {
   border-radius: 30px;
   color: #e0c7f0;
   background: #261635;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   text-align: center;
 }
@@ -1866,7 +1866,7 @@ h3 {
 .whatsapp-note {
   flex-basis: 100%;
   max-width: 440px;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.7;
   color: #ae9bbd;
   text-align: center;

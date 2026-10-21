@@ -3,6 +3,7 @@ import '@fontsource-variable/manrope';
 import manropeLatin from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
 import Analytics from '../components/Analytics.astro';
 import Icon from '../components/Icon.astro';
+import BillEstimator from '../components/BillEstimator.astro';
 import InvoiceExplorer from '../components/InvoiceExplorer.astro';
 import '../styles/wattios.css';
 
@@ -13,15 +14,17 @@ const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(w
 const siteUrl = Astro.site ?? new URL('https://wattios.es');
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl);
 const ogImageUrl = new URL('/og-image.png', siteUrl);
-const pageTitle = 'Wattios — Revisa tus facturas de luz y gas y paga solo lo justo';
-const pageDescription = 'Sube tu factura de luz o gas a Wattios y comprueba si estás pagando de más. Recibe una comparativa clara, sin llamadas comerciales.';
+const pageTitle = '¿Pagas de más por la luz o el gas? Revisa tu factura con Wattios';
+const pageDescription = 'Envíanos tu factura de luz o gas. Wattios revisa tu tarifa, potencia y servicios adicionales para explicarte qué opciones tienes, sin obligación de cambiar.';
 
 const faqs = [
   { question: '¿Qué parte de la factura se revisa?', answer: 'El precio de la energía, la potencia contratada y los servicios adicionales, tanto en la factura de luz como en la de gas. El objetivo es entender qué pagas y qué opciones encajan con tu consumo.' },
   { question: '¿También revisáis la factura de gas?', answer: 'Sí. La factura de gas tiene sus propios conceptos —término fijo, consumo y peajes— y la revisamos con el mismo criterio que la de luz. Si nos envías las dos, las miramos juntas para darte una comparativa del conjunto.' },
   { question: '¿Me garantiza Wattios que voy a ahorrar?', answer: 'No. El ahorro depende de tu tarifa, de tu consumo y de las alternativas disponibles. Si tu situación ya es buena, una revisión también puede ayudarte a confirmarlo.' },
   { question: '¿Tengo que cambiar de compañía?', answer: 'No. Conocer otras opciones no implica contratar nada. Cualquier cambio debe ser una decisión tuya, después de conocer sus condiciones.' },
+  { question: '¿Para qué necesitáis mi teléfono o email?', answer: 'Para responder a tu solicitud y comunicarte el resultado de la revisión. Puedes elegir teléfono o email en el formulario. No utilizamos tus datos para publicidad; consulta la política de privacidad para saber cómo los tratamos.' },
   { question: '¿Qué ocurre cuando selecciono una factura?', answer: 'Nada hasta que tú confirmes. Los archivos se quedan en tu dispositivo y solo se envían a Wattios por email cuando pulsas «Enviar factura a Wattios».' },
+  { question: '¿Puedo hacer una estimación sin enviar mi factura?', answer: 'Sí. Elige luz, gas o ambas e introduce tu consumo y tus precios. Verás una estimación con el tipo de impuesto indirecto indicado para tu zona, que puedes ajustar, y podrás copiar el resumen para compartirlo tú mismo por WhatsApp. El cálculo se hace en tu navegador; no es una factura definitiva, una oferta ni una garantía de ahorro.' },
   { question: '¿Puedo enviarla por WhatsApp?', answer: 'Sí. Pulsa «Enviar por WhatsApp» para abrir el chat con Wattios en el +34 688 60 88 06. Adjunta la foto o el PDF y envía el mensaje desde WhatsApp. El archivo que selecciones en esta web no se transfiere al chat automáticamente.' },
 ];
 const steps = [
@@ -124,20 +127,20 @@ const jsonLd = {
     <a href="#top" class="skip-link">Saltar al contenido</a>
     <header class="nav-wrap">
       <a class="brand" href="#top" aria-label="Wattios, inicio"><span class="brand-mark"><Icon name="bolt" size={23} /></span><span translate="no">wattios</span></a>
-      <nav class="desktop-nav" aria-label="Navegación principal"><a href="#como-funciona">Cómo funciona</a><a href="#faq">Preguntas frecuentes</a></nav>
+      <nav class="desktop-nav" aria-label="Navegación principal"><a href="#como-funciona">Cómo funciona</a><a href="#calculadora">Calculadora</a><a href="#faq">Preguntas frecuentes</a></nav>
       <div class="nav-actions">
         <a class="nav-whatsapp" href={whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label="Enviar por WhatsApp"><Icon name="whatsapp" size={19} /></a>
         <a class="nav-cta" href="#revisar">Revisar mi factura<Icon name="arrow" size={18} /></a>
         <button class="menu-toggle" type="button" aria-label="Menú" aria-expanded="false" aria-controls="mobile-navigation"><Icon name="menu" size={20} /></button>
       </div>
-      <nav id="mobile-navigation" class="mobile-nav" aria-label="Navegación móvil" hidden><a href="#como-funciona">Cómo funciona</a><a href="#faq">Preguntas frecuentes</a><a href="#revisar">Revisar mi factura</a><a href={whatsappUrl} target="_blank" rel="noopener noreferrer">Enviar por WhatsApp</a></nav>
+      <nav id="mobile-navigation" class="mobile-nav" aria-label="Navegación móvil" hidden><a href="#como-funciona">Cómo funciona</a><a href="#calculadora">Calculadora</a><a href="#faq">Preguntas frecuentes</a><a href="#revisar">Revisar mi factura</a><a href={whatsappUrl} target="_blank" rel="noopener noreferrer">Enviar por WhatsApp</a></nav>
     </header>
 
     <main id="top" tabindex="-1">
       <section class="hero container" id="revisar" aria-labelledby="hero-heading" data-supply="luz">
         <div class="hero-copy">
-          <h1 id="hero-heading">Sube tu factura de luz o gas<br /><em>y comprueba si estás pagando de más.</em></h1>
-          <p class="hero-description">Te enviamos una comparativa clara.<br class="desktop-break" /> Cero llamadas comerciales: solo nos ponemos en contacto si tú nos lo pides.</p>
+          <h1 id="hero-heading">¿Estás pagando de más<br /><em>por la luz o el gas?</em></h1>
+          <p class="hero-description">Envíanos tu factura. Revisamos tu tarifa, potencia y servicios adicionales para explicarte si hay otras opciones que puedan interesarte.</p>
         </div>
         <div class="hero-layout">
           <div class="hero-note" aria-hidden="true"><span>Tal cual la recibes.</span><p>No necesitas descifrarla.<br />De eso nos encargamos.</p><svg viewBox="0 0 140 65" fill="none"><path d="M5 10c28 54 66 31 120 23m-13-8 15 8-12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
@@ -162,7 +165,7 @@ const jsonLd = {
               <p id="file-status" class="file-status" role="status" aria-live="polite"></p>
               <div class="contact-field">
                 <div class="contact-head">
-                  <label class="contact-label" id="contact-label" for="sender-contact">Déjanos un teléfono</label>
+                  <label class="contact-label" id="contact-label" for="sender-contact">Teléfono para responderte</label>
                   <button class="contact-switch" id="contact-switch" type="button">o usa tu email</button>
                 </div>
                 <input id="sender-contact" name="contact" type="tel" inputmode="tel" autocomplete="tel" spellcheck="false" placeholder="Por ejemplo, 600 123 456" aria-describedby="contact-error" required />
@@ -190,6 +193,7 @@ const jsonLd = {
               <a class="whatsapp-cta" href={whatsappUrl} target="_blank" rel="noopener noreferrer" aria-describedby="whatsapp-help"><Icon name="whatsapp" size={19} />Enviar por WhatsApp</a>
               <p id="whatsapp-help" class="whatsapp-note">Adjunta la foto o el PDF dentro del chat. El archivo seleccionado aquí no se transfiere a WhatsApp.</p>
             </div>
+            <a class="estimate-entry" href="#calculadora">¿Prefieres no enviarla? Haz una estimación a mano <Icon name="arrow" size={16} /></a>
           </div>
           <aside class="hero-journey" aria-label="De tu factura a una decisión clara">
             <div class="journey-art" aria-hidden="true"><div class="journey-sheet-back"><span class="art-icon art-back-gas"><Icon name="flame" size={14} /></span></div><div class="journey-sheet"><span class="art-icon art-luz"><Icon name="bolt" size={22} /></span><span class="art-icon art-gas"><Icon name="flame" size={22} /></span><i></i><i></i><i></i></div><div class="journey-result"><Icon name="check" size={25} /><span>Todo, más claro.</span><i></i><i></i></div></div>
@@ -198,6 +202,21 @@ const jsonLd = {
         </div>
         <a class="hero-scroll" href="#entender">¿Qué miramos en tu factura?<span><Icon name="arrow" size={17} /></span></a>
       </section>
+
+      <section class="trust-section container" aria-labelledby="trust-heading">
+        <div class="trust-intro">
+          <span class="trust-symbol" aria-hidden="true"><Icon name="shield" size={27} /></span>
+          <h2 id="trust-heading">Tu factura, bajo tu control.</h2>
+          <p>Antes de compartir tus datos, queremos que sepas qué ocurre con ellos.</p>
+        </div>
+        <div class="trust-details">
+          <p><strong>Tú decides cuándo enviarla.</strong> Seleccionar un archivo no lo envía: solo lo recibimos cuando confirmas el formulario.</p>
+          <p><strong>La decisión de cambiar es tuya.</strong> Te explicamos las opciones antes de que decidas; revisar tu factura no te obliga a contratar.</p>
+          <p><strong>Tu contacto es para esta solicitud.</strong> Lo usamos para responderte, no para publicidad. <a href="/privacidad">Consulta cómo tratamos tus datos</a>.</p>
+        </div>
+      </section>
+
+      <BillEstimator whatsappUrl={whatsappUrl} />
 
       <section class="how-section" id="como-funciona" aria-labelledby="how-heading">
         <div class="container">
@@ -208,6 +227,28 @@ const jsonLd = {
             {steps.map(step => <article class="process-step"><div class="step-visual"><span class="step-symbol"><Icon name={step.icon} size={29} /></span><span class="step-number">{step.number}</span></div><h3>{step.title}</h3><p>{step.text}</p></article>)}
           </div>
           <div class="principle"><span class="principle-symbol"><Icon name="shield" size={25} /></span><p>Una revisión no es un compromiso.<br /><strong>Entender primero. Decidir después.</strong></p><a href="#faq">Resuelve tus dudas<Icon name="arrow" size={18} /></a></div>
+        </div>
+      </section>
+
+      <section class="result-section container" id="comparativa" aria-labelledby="result-heading">
+        <div class="result-copy">
+          <span class="section-index">Después de la revisión</span>
+          <h2 id="result-heading">No solo un precio.<br />Una decisión con contexto.</h2>
+          <p>Contrastamos lo que pagas con las opciones disponibles y te explicamos las condiciones para que valores si te conviene cambiar o quedarte como estás.</p>
+          <p class="result-disclaimer">Esta muestra enseña el tipo de conceptos que se comparan. No corresponde a un cliente ni es un análisis real; el resultado depende de tu factura y de las alternativas disponibles.</p>
+          <a class="result-link" href="#revisar">Enviar mi factura<Icon name="arrow" size={18} /></a>
+        </div>
+        <div class="result-paper" aria-label="Ejemplo ilustrativo del formato de una comparativa">
+          <div class="result-paper-head"><span>Wattios <Icon name="bolt" size={16} /></span><span>Muestra de comparativa</span></div>
+          <p class="result-paper-title">Lo que miraríamos contigo</p>
+          <div class="result-table" role="table" aria-label="Conceptos de la comparativa ilustrativa">
+            <div class="result-row result-row-head" role="row"><span role="columnheader">Concepto</span><span role="columnheader">Tu factura</span><span role="columnheader">Otra opción</span></div>
+            <div class="result-row" role="row"><span role="cell">Coste anual estimado</span><span role="cell">Según tu consumo</span><span role="cell">Según condiciones</span></div>
+            <div class="result-row" role="row"><span role="cell">Servicios adicionales</span><span role="cell">Qué tienes contratado</span><span role="cell">Qué incluye</span></div>
+            <div class="result-row" role="row"><span role="cell">Condiciones</span><span role="cell">Tu contrato actual</span><span role="cell">Precio y permanencia</span></div>
+          </div>
+          <p class="result-paper-foot"><Icon name="check" size={18} /> Si no hay una opción que te interese, no tienes que cambiar nada.</p>
+          <p class="result-paper-caption">Formato ilustrativo · Sin datos ni ahorros simulados</p>
         </div>
       </section>
 
@@ -235,9 +276,11 @@ const jsonLd = {
         </div>
       </section>
 
-      <section class="faq container" id="faq" aria-labelledby="faq-heading">
-        <div class="faq-intro"><span class="section-index">Antes de empezar</span><h2 id="faq-heading">Todo claro.<br />Desde el principio.</h2><p>También lo que Wattios puede<br />y no puede hacer.</p></div>
-        <div class="faq-list">{faqs.map((faq, index) => <details name="questions"><summary><span class="faq-number">{String(index + 1).padStart(2, '0')}</span><span>{faq.question}</span><span class="faq-plus"><Icon name="plus" size={20} /></span></summary><p>{faq.answer}</p></details>)}</div>
+      <section class="faq" id="faq" aria-labelledby="faq-heading">
+        <div class="container faq-layout">
+          <div class="faq-intro"><span class="section-index">Antes de empezar</span><h2 id="faq-heading">Todo claro.<br />Desde el principio.</h2><p>También lo que Wattios puede<br />y no puede hacer.</p></div>
+          <div class="faq-list">{faqs.map((faq, index) => <details name="questions"><summary><span class="faq-number">{String(index + 1).padStart(2, '0')}</span><span>{faq.question}</span><span class="faq-plus"><Icon name="plus" size={20} /></span></summary><p>{faq.answer}</p></details>)}</div>
+        </div>
       </section>
     </main>
 
@@ -286,8 +329,8 @@ const jsonLd = {
   const contactSwitch = document.querySelector<HTMLButtonElement>('#contact-switch')!;
   const contactType = document.querySelector<HTMLInputElement>('#contact-type')!;
   const contactModes: Record<string, { label: string; switchText: string; type: string; autocomplete: string; inputmode: string; placeholder: string; pattern: string | null }> = {
-    phone: { label: 'Déjanos un teléfono', switchText: 'o usa tu email', type: 'tel', autocomplete: 'tel', inputmode: 'tel', placeholder: 'Por ejemplo, 600 123 456', pattern: '\\+?[0-9][0-9 \\-]{7,14}' },
-    email: { label: 'Déjanos tu email', switchText: 'o usa tu teléfono', type: 'email', autocomplete: 'email', inputmode: 'email', placeholder: 'Por ejemplo, tu@email.com', pattern: null },
+    phone: { label: 'Teléfono para responderte', switchText: 'o usa tu email', type: 'tel', autocomplete: 'tel', inputmode: 'tel', placeholder: 'Por ejemplo, 600 123 456', pattern: '\\+?[0-9][0-9 \\-]{7,14}' },
+    email: { label: 'Email para responderte', switchText: 'o usa tu teléfono', type: 'email', autocomplete: 'email', inputmode: 'email', placeholder: 'Por ejemplo, tu@email.com', pattern: null },
   };
   const sendButton = document.querySelector<HTMLButtonElement>('#send-invoice')!;
   const submitStatus = document.querySelector<HTMLElement>('#submit-status')!;

@@ -1,0 +1,364 @@
+---
+import Icon from './Icon.astro';
+
+interface Props { whatsappUrl: string; }
+const { whatsappUrl } = Astro.props;
+const supplies = [
+  { value: 'luz', label: 'Luz', icon: 'bolt' as const },
+  { value: 'gas', label: 'Gas', icon: 'flame' as const },
+  { value: 'ambas', label: 'Luz y gas', icon: 'bolt' as const },
+];
+const tariffs = {
+  luz: [
+    { value: '2.0TD', label: '2.0TD', detail: 'Hasta 15 kW contratados' },
+    { value: '3.0TD', label: '3.0TD', detail: 'Más de 15 kW contratados' },
+    { value: 'desconocida', label: 'No lo sé', detail: 'Puedes continuar igualmente' },
+  ],
+  gas: [
+    { value: 'RL1', label: 'RL1', detail: 'Hasta 5.000 kWh/año' },
+    { value: 'RL2', label: 'RL2', detail: 'Más de 5.000 hasta 15.000 kWh/año' },
+    { value: 'RL3', label: 'RL3', detail: 'Más de 15.000 hasta 50.000 kWh/año' },
+    { value: 'otra', label: 'Otra', detail: 'RL4 o superior' },
+    { value: 'desconocida', label: 'No lo sé', detail: 'Puedes continuar igualmente' },
+  ],
+};
+---
+<section class="estimator container" id="calculadora" aria-labelledby="estimator-title">
+  <div class="estimator-intro">
+    <div><span class="section-index">Una vía sin adjuntos</span><h2 id="estimator-title">Haz números. Sin enviar tu factura.</h2></div>
+    <div class="estimator-intro-aside">
+      <p>Calcula una referencia a partir de tu consumo y tus precios. Los datos se quedan en tu navegador.</p>
+      <a href="#revisar">Prefiero enviar mi factura<Icon name="arrow" size={18} /></a>
+      <figure class="estimate-visual" aria-hidden="true">
+        <div class="estimate-visual-head"><span class="estimate-visual-icons"><span class="estimate-icon-luz"><Icon name="bolt" size={13} /></span><span class="estimate-icon-gas"><Icon name="flame" size={13} /></span></span><span>Desglose</span></div>
+        <div class="estimate-visual-row"><span>Energía</span><i></i></div>
+        <div class="estimate-visual-row"><span>Fijos</span><i></i></div>
+        <div class="estimate-visual-row"><span>Impuesto</span><i></i></div>
+        <figcaption>Esquema sin cifras</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <div class="estimator-workspace">
+    <form id="estimate-form">
+      <fieldset id="estimate-controls" disabled>
+        <fieldset class="estimate-supply">
+          <legend>Primero, ¿qué quieres calcular?</legend>
+          <div class="estimate-supply-options">
+            {supplies.map(item => <label><input type="radio" name="estimate-supply" value={item.value} required /><span><Icon name={item.icon} size={17} />{item.label}</span></label>)}
+          </div>
+        </fieldset>
+
+        <div id="estimate-followup" hidden>
+          <div class="estimate-fields">
+            <div class="estimate-tax">
+              <div class="estimate-zone-field">
+                <label for="estimate-zone">¿Dónde está el suministro?</label>
+                <select id="estimate-zone" required disabled>
+                  <option value="">Elige una zona</option>
+                  <option value="iva">Península o Baleares (IVA)</option>
+                  <option value="igic">Canarias (IGIC)</option>
+                  <option value="ipsi">Ceuta o Melilla (IPSI)</option>
+                </select>
+              </div>
+              <div class="estimate-tax-rate">
+                <label for="estimate-tax-rate">Tipo de impuesto indirecto <span>%</span></label>
+                <input id="estimate-tax-rate" type="number" inputmode="decimal" min="0" max="100" step="any" placeholder="Introduce el porcentaje" required disabled />
+              </div>
+              <p id="estimate-tax-help">Selecciona la zona. El tipo aplicado aparecerá aquí y podrás ajustarlo si tu factura indica otro.</p>
+            </div>
+            <div class="estimate-supply-panels">
+            {(['luz', 'gas'] as const).map(type => <div class="estimate-supply-panel" data-panel={type} hidden>
+              <h3>{type === 'luz' ? 'Datos de luz' : 'Datos de gas'}</h3>
+              <fieldset class="estimate-tariffs">
+                <legend>{type === 'luz' ? 'Tarifa de acceso' : 'Tramo de consumo anual'}</legend>
+                <div class="estimate-tariff-options">
+                  {tariffs[type].map(tariff => <label><input type="radio" name={`estimate-tariff-${type}`} value={tariff.value} required disabled /><span><strong>{tariff.label}</strong><small>{tariff.detail}</small></span></label>)}
+                </div>
+              </fieldset>
+              <div class="estimate-grid">
+                <div class="estimate-field">
+                  <label for={`estimate-days-${type}`}>Días del periodo <span>días</span></label>
+                  <input id={`estimate-days-${type}`} type="number" inputmode="numeric" min="1" max="366" step="1" placeholder="Ej.: 30" required disabled />
+                </div>
+                <div class="estimate-field">
+                  <label for={`estimate-kwh-${type}`}>Consumo del periodo <span>kWh</span></label>
+                  <input id={`estimate-kwh-${type}`} type="number" inputmode="decimal" min="0" max="1000000" step="any" placeholder="Ej.: 200" required disabled />
+                </div>
+                <div class="estimate-field">
+                  <label for={`estimate-price-${type}`}>Precio de la energía <span>€ / kWh</span></label>
+                  <input id={`estimate-price-${type}`} type="number" inputmode="decimal" min="0" max="100" step="any" placeholder="Ej.: 0,15" required disabled />
+                </div>
+                {type === 'luz' ? <>
+                  <div class="estimate-field">
+                    <label for="estimate-power-luz">Potencia contratada <span>kW</span></label>
+                    <input id="estimate-power-luz" type="number" inputmode="decimal" min="0" max="10000" step="any" placeholder="Ej.: 4,6" required disabled />
+                  </div>
+                  <div class="estimate-field">
+                    <label for="estimate-power-price-luz">Precio total de potencia <span>€ / kW / día</span></label>
+                    <input id="estimate-power-price-luz" type="number" inputmode="decimal" min="0" max="100" step="any" placeholder="Ej.: 0,10" required disabled />
+                  </div>
+                </> : <div class="estimate-field">
+                  <label for="estimate-fixed-gas">Término fijo <span>€ / día</span></label>
+                  <input id="estimate-fixed-gas" type="number" inputmode="decimal" min="0" max="10000" step="any" placeholder="Ej.: 0,25" required disabled />
+                </div>}
+              </div>
+            </div>)}
+            </div>
+            <details class="estimate-help"><summary>¿Tienes varios periodos de precio?</summary><p>Usa un precio medio ponderado por consumo y suma los precios diarios de potencia. La tarifa de acceso describe tu suministro, pero no cambia la fórmula ni genera una oferta.</p></details>
+          </div>
+
+          <button class="estimate-submit" type="submit">Calcular mi estimación<Icon name="arrow" size={18} /></button>
+          <p class="estimate-privacy"><Icon name="shield" size={16} /> El cálculo ocurre en tu dispositivo. No se envían ni se guardan estos datos.</p>
+        </div>
+      </fieldset>
+    </form>
+    <p class="estimate-privacy" id="estimate-js-warning">Activa JavaScript para calcular. El formulario no enviará tus datos.</p>
+
+    <div class="estimate-result" id="estimate-result" role="status" aria-live="polite" tabindex="-1" hidden>
+      <div class="estimate-result-total">
+        <span class="estimate-result-label" id="estimate-result-label"></span>
+        <strong id="estimate-total"></strong>
+        <p id="estimate-subtotal"></p>
+      </div>
+      <div class="estimate-result-detail">
+        <p id="estimate-tax-amount"></p>
+        <div class="estimate-mix" role="img" aria-label="Desglose del coste estimado">
+          <span data-mix="energia"></span><span data-mix="fijo"></span><span data-mix="impuesto"></span>
+        </div>
+        <div class="estimate-mix-key" aria-hidden="true"><span>Energía</span><span>Fijos</span><span>Impuesto</span></div>
+        <p id="estimate-breakdown"></p>
+        <p id="estimate-warning"></p>
+      </div>
+    </div>
+    <details class="estimate-share" id="estimate-share" hidden>
+      <summary>Compartir este cálculo con Wattios <Icon name="arrow" size={17} /></summary>
+      <div class="estimate-share-content">
+        <p>¿Quieres comentar este cálculo con nosotros? Copia el resumen, abre WhatsApp, pégalo en el chat y decide si enviarlo.</p>
+        <label for="estimate-share-text">Resumen para compartir</label>
+        <textarea id="estimate-share-text" rows="6" readonly></textarea>
+        <div class="estimate-share-actions">
+          <button type="button" id="estimate-copy">Copiar resumen</button>
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">Abrir WhatsApp<Icon name="whatsapp" size={18} /></a>
+        </div>
+        <p id="estimate-copy-status" role="status" aria-live="polite"></p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#estimate-form')!;
+  const workspace = document.querySelector<HTMLElement>('.estimator-workspace')!;
+  const result = workspace.querySelector<HTMLElement>('#estimate-result')!;
+  const share = workspace.querySelector<HTMLDetailsElement>('#estimate-share')!;
+  const shareText = workspace.querySelector<HTMLTextAreaElement>('#estimate-share-text')!;
+  const zone = form.querySelector<HTMLSelectElement>('#estimate-zone')!;
+  const taxRate = form.querySelector<HTMLInputElement>('#estimate-tax-rate')!;
+  const money = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' });
+  const decimal = new Intl.NumberFormat('es-ES', { maximumFractionDigits: 4 });
+  const currentSupply = () => form.querySelector<HTMLInputElement>('input[name="estimate-supply"]:checked')?.value;
+  function clearResult() {
+    result.hidden = true;
+    result.classList.remove('is-ready');
+    share.hidden = true;
+    share.open = false;
+    shareText.value = '';
+    workspace.querySelector('#estimate-copy-status')!.textContent = '';
+  }
+  function syncQuestions() {
+    const supply = currentSupply();
+    workspace.querySelector<HTMLElement>('#estimate-followup')!.hidden = !supply;
+    workspace.querySelectorAll<HTMLElement>('[data-panel]').forEach(panel => {
+      panel.hidden = supply !== 'ambas' && supply !== panel.dataset.panel;
+    });
+    form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input, select').forEach(field => {
+      field.disabled = Boolean(field.closest('[hidden]'));
+    });
+    workspace.dataset.supply = supply ?? '';
+    workspace.closest<HTMLElement>('.estimator')!.dataset.supply = supply ?? '';
+    clearResult();
+  }
+  form.querySelectorAll<HTMLInputElement>('input[name="estimate-supply"]').forEach(radio => radio.addEventListener('change', syncQuestions));
+  zone.addEventListener('change', () => {
+    const defaults: Record<string, string> = { iva: '21', igic: '7' };
+    taxRate.value = defaults[zone.value] ?? '';
+    form.querySelector('#estimate-tax-help')!.textContent = zone.value === 'ipsi'
+      ? 'El IPSI varía según el suministro y la localidad: introduce el tipo aplicable. No asumimos uno.'
+      : 'Tipo general orientativo, editable. Comprueba el porcentaje aplicable a tu suministro y fecha antes de usarlo.';
+  });
+  form.addEventListener('change', clearResult);
+  form.addEventListener('input', clearResult);
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+    const amount = (id: string) => Number(form.querySelector<HTMLInputElement>(`#${id}`)!.value);
+    const types = currentSupply() === 'ambas' ? ['luz', 'gas'] : [currentSupply()!];
+    const parts = types.map(type => {
+      const days = amount(`estimate-days-${type}`);
+      const kwh = amount(`estimate-kwh-${type}`);
+      const price = amount(`estimate-price-${type}`);
+      const energy = kwh * price;
+      const fixed = type === 'gas'
+        ? days * amount('estimate-fixed-gas')
+        : days * amount('estimate-power-luz') * amount('estimate-power-price-luz');
+      const tariff = form.querySelector<HTMLInputElement>(`input[name="estimate-tariff-${type}"]:checked`)!.value;
+      return { type, tariff, days, kwh, price, energy, fixed, total: energy + fixed };
+    });
+    const rate = Number(taxRate.value);
+    const rawSubtotal = parts.reduce((sum, part) => sum + part.total, 0);
+    if (![rate, rawSubtotal].every(Number.isFinite)) return;
+    const subtotalCents = Math.round(rawSubtotal * 100);
+    const taxCents = Math.round(subtotalCents * rate / 100);
+    const subtotal = subtotalCents / 100;
+    const tax = taxCents / 100;
+    const total = (subtotalCents + taxCents) / 100;
+    const taxName = zone.value.toUpperCase();
+    const zoneName = zone.selectedOptions[0].textContent ?? '';
+    const breakdown = parts.map(part => `${part.type === 'luz' ? 'Luz' : 'Gas'} (${part.days} días): energía ${money.format(part.energy)} · ${part.type === 'gas' ? 'Término fijo' : 'Potencia'} ${money.format(part.fixed)}`).join(' | ');
+    const energyTotal = parts.reduce((sum, part) => sum + part.energy, 0);
+    const fixedTotal = parts.reduce((sum, part) => sum + part.fixed, 0);
+    const mixTotal = energyTotal + fixedTotal + tax;
+    const mix = workspace.querySelector<HTMLElement>('.estimate-mix')!;
+    mix.setAttribute('aria-label', `Energía ${money.format(energyTotal)}, términos fijos ${money.format(fixedTotal)}, impuesto ${money.format(tax)}`);
+    (['energia', 'fijo', 'impuesto'] as const).forEach((key, index) => {
+      const amount = [energyTotal, fixedTotal, tax][index];
+      mix.querySelector<HTMLElement>(`[data-mix="${key}"]`)!.style.width = `${mixTotal > 0 ? amount / mixTotal * 100 : 0}%`;
+    });
+    workspace.querySelector('#estimate-result-label')!.textContent = 'Total orientativo del periodo';
+    workspace.querySelector('#estimate-total')!.textContent = money.format(total);
+    workspace.querySelector('#estimate-subtotal')!.textContent = `Energía y términos fijos: ${money.format(subtotal)}`;
+    workspace.querySelector('#estimate-tax-amount')!.textContent = `${taxName} estimado (${decimal.format(rate)} %): ${money.format(tax)}`;
+    workspace.querySelector('#estimate-breakdown')!.textContent = breakdown;
+    workspace.querySelector('#estimate-warning')!.textContent = `El ${taxName} se calcula sobre energía y términos fijos, no sobre la base fiscal definitiva. Comprueba el tipo aplicado: no incluimos el impuesto especial de electricidad, el alquiler de contador, otros cargos o descuentos. No es una factura final ni una comparativa de ofertas.`;
+    shareText.value = [
+      'Hola, Wattios. He calculado una estimación en vuestra web:',
+      ...parts.map(part => `${part.type === 'luz' ? 'Luz' : 'Gas'} (${part.tariff}): ${part.days} días, ${decimal.format(part.kwh)} kWh a ${decimal.format(part.price)} €/kWh; energía ${money.format(part.energy)}; ${part.type === 'luz' ? `potencia ${decimal.format(amount('estimate-power-luz'))} kW a ${decimal.format(amount('estimate-power-price-luz'))} €/kW/día` : `término fijo ${decimal.format(amount('estimate-fixed-gas'))} €/día`} = ${money.format(part.fixed)}.`),
+      `Zona: ${zoneName}. Subtotal ${money.format(subtotal)}; ${taxName} ${decimal.format(rate)} %: ${money.format(tax)}; total orientativo ${money.format(total)}.`,
+      'No es una factura final. ¿Podéis ayudarme a revisar estas cifras?',
+    ].join('\n');
+    result.hidden = false;
+    share.hidden = false;
+    result.focus();
+    requestAnimationFrame(() => {
+      if (!result.hidden) result.classList.add('is-ready');
+    });
+  });
+  workspace.querySelector<HTMLButtonElement>('#estimate-copy')!.addEventListener('click', async () => {
+    const status = workspace.querySelector<HTMLElement>('#estimate-copy-status')!;
+    try {
+      await navigator.clipboard.writeText(shareText.value);
+      status.textContent = 'Resumen copiado. Abre WhatsApp, pégalo en el chat y envíalo solo si quieres.';
+    } catch {
+      shareText.focus();
+      shareText.select();
+      status.textContent = 'No se pudo copiar automáticamente. Selecciona y copia el texto antes de abrir WhatsApp.';
+    }
+  });
+  syncQuestions();
+  form.querySelector<HTMLFieldSetElement>('#estimate-controls')!.disabled = false;
+  workspace.querySelector<HTMLElement>('#estimate-js-warning')!.hidden = true;
+</script>
+
+<style>
+  .estimator { --estimate-signal: #f2c261; padding-block: 48px 58px; border-top: 1px solid var(--line); }
+  .estimator .section-index { color: var(--estimate-signal); }
+  .estimator-intro { display: grid; grid-template-columns: 1.1fr .9fr; gap: 7%; align-items: end; margin-bottom: 20px; }
+  .estimator-intro h2 { max-width: 660px; margin-top: 8px; font-size: clamp(32px, 3.8vw, 48px); }
+  .estimator-intro p { max-width: 410px; color: var(--muted); font-size: 15px; line-height: 1.75; }
+  .estimator-intro a { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; margin-top: 8px; color: #e4c9fc; font-size: 14px; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+  .estimator-intro a:hover { color: white; }
+  .estimator-intro-aside { position: relative; min-height: 124px; padding-right: 166px; }
+  .estimate-visual { position: absolute; top: -5px; right: 5px; width: 140px; margin: 0; padding: 10px 12px 8px; border-radius: 3px 14px 3px 3px; color: #3f2b49; background: #f3eaf8; box-shadow: 5px 9px 0 -5px #714894, 0 14px 28px #0a031a4d; transform: rotate(-3deg); }
+  .estimate-visual::after { position: absolute; top: 0; right: 0; width: 14px; height: 14px; border-radius: 0 12px 0 3px; background: #d7c2e8; content: ''; }
+  .estimate-visual-head { display: flex; align-items: center; justify-content: space-between; gap: 5px; margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid #7051874d; color: #6e4789; font-size: 9px; font-weight: 800; }
+  .estimate-visual-icons { display: inline-flex; align-items: center; }
+  .estimate-visual-icons .estimate-icon-gas { margin-left: -3px; }
+  .estimator[data-supply='luz'] .estimate-icon-gas, .estimator[data-supply='gas'] .estimate-icon-luz { display: none; }
+  .estimator[data-supply='gas'] .estimate-visual { background: #f8e9d7; transform: rotate(2deg) translateY(-3px); }
+  .estimator[data-supply='gas'] .estimate-visual::after { background: #edd2ae; }
+  .estimator[data-supply='gas'] .estimate-visual-head { color: #925528; }
+  .estimate-visual-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 15px; border-bottom: 1px dotted #70518740; font-size: 9px; font-weight: 650; }
+  .estimate-visual-row i { width: 12px; height: 2px; border-radius: 2px; background: #ac92bb; }
+  .estimate-visual figcaption { padding-top: 7px; color: #745f7f; font-size: 8px; font-weight: 700; }
+  .estimator-workspace { min-width: 0; padding: clamp(16px, 2.5vw, 28px); border: 1px solid #f2c26168; border-radius: 24px; background: linear-gradient(145deg, #34233e, #261536 70%); box-shadow: 0 18px 60px #09021250, 0 0 0 6px #f2c26108, inset 0 1px #fff2cb1c; }
+  #estimate-controls { min-width: 0; padding: 0; margin: 0; border: 0; }
+  .estimate-field label, .estimate-supply legend, .estimate-tax label, .estimate-tariffs legend { display: flex; justify-content: space-between; gap: 9px; margin-bottom: 6px; color: #e7d9f0; font-size: 13px; font-weight: 650; }
+  .estimate-fields label span { flex-shrink: 0; color: #bda9cc; font-size: 11px; font-weight: 500; }
+  .estimate-fields input[type='number'], .estimate-fields select { display: block; width: 100%; min-height: 44px; padding: 9px 12px; border: 1px solid #bd8fdd65; border-radius: 10px; background: #190f2580; color: white; font-size: 16px; color-scheme: dark; }
+  .estimate-fields input::placeholder { color: #b6a0c5; font-size: 13px; }
+  .estimate-fields>p { margin-top: 12px; color: #bda9cc; font-size: 12px; line-height: 1.6; }
+  .estimate-supply, .estimate-tariffs { min-width: 0; padding: 0; margin: 0; border: 0; }
+  .estimate-supply legend { padding: 0 0 6px; color: var(--estimate-signal); font-size: 15px; }
+  .estimate-supply-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .estimate-supply label, .estimate-tariffs label { position: relative; display: block; cursor: pointer; }
+  .estimate-supply input, .estimate-tariffs input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+  .estimate-supply label span { display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 7px; border: 1px solid #bd8fdd65; border-radius: 12px; font-size: 13px; }
+  .estimate-supply input:checked+span { color: #302036; background: var(--estimate-signal); border-color: var(--estimate-signal); }
+  .estimate-supply input:focus-visible+span, .estimate-tariffs input:focus-visible+span { outline: 3px solid #f2c261; outline-offset: 3px; }
+  .estimate-tax { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, .7fr); gap: 7px 18px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #f2c26136; }
+  .estimate-tax select { font-size: 14px; }
+  .estimate-tax p { grid-column: 1 / -1; color: #bdabc9; font-size: 12px; line-height: 1.6; }
+  .estimate-supply-panels { min-width: 0; }
+  .estimator-workspace[data-supply='ambas'] .estimate-supply-panels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+  .estimate-supply-panel { min-width: 0; margin-top: 16px; padding-top: 14px; border-top: 1px solid #f2c26136; }
+  .estimate-supply-panel h3 { margin-bottom: 10px; color: var(--estimate-signal); font-size: 19px; }
+  .estimate-tariffs { margin-bottom: 14px; }
+  .estimate-tariff-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+  .estimate-tariffs label span { display: block; min-height: 68px; padding: 9px 10px; border: 1px solid #bd8fdd65; border-radius: 10px; color: #f2e9fa; }
+  .estimate-tariffs label:hover span { border-color: #f2c2619c; }
+  .estimate-tariffs input:checked+span { border-color: var(--estimate-signal); background: var(--estimate-signal); color: #302036; }
+  .estimate-tariffs strong { display: block; font-size: 13px; line-height: 1.25; }
+  .estimate-tariffs small { display: block; margin-top: 4px; font-size: 11px; line-height: 1.35; }
+  .estimate-tariffs input:checked+span small { color: #423342; }
+  .estimate-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 14px; }
+  .estimator-workspace:not([data-supply='ambas']) .estimate-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .estimate-help { width: fit-content; max-width: 100%; margin-top: 14px; color: #d9c3e8; font-size: 12px; }
+  .estimate-help summary { display: flex; align-items: center; min-height: 44px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .estimate-help p { max-width: 720px; padding: 0 0 10px; color: #bdabc9; line-height: 1.6; }
+  .estimate-submit { display: inline-flex; justify-content: center; align-items: center; gap: 14px; min-height: 48px; margin-top: 10px; padding: 0 20px; border: 0; border-radius: 30px; color: #302036; background: var(--estimate-signal); font-size: 14px; font-weight: 750; }
+  .estimate-submit:hover { background: #ffda8a; }
+  .estimate-privacy { display: flex; align-items: flex-start; gap: 8px; margin-top: 14px; color: #c3afd2; font-size: 11px; line-height: 1.6; }
+  .estimate-privacy svg { margin-top: 1px; }
+  .estimate-result { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 24px; margin-top: 16px; padding: 24px; border: 1px solid #f2c2619c; border-left: 5px solid var(--estimate-signal); border-radius: 13px; background: #1f112e; color: #f9f1ff; }
+  .estimate-result-label { display: block; font-size: 13px; font-weight: 700; }
+  .estimate-result strong { display: block; margin-top: 4px; color: #f5d183; font-size: clamp(34px, 4vw, 52px); line-height: 1.15; letter-spacing: -.05em; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  .estimate-result p { margin-top: 10px; color: #eee2f5; font-size: 14px; line-height: 1.6; }
+  .estimate-result #estimate-tax-amount { margin-top: 0; color: #f5d183; font-weight: 750; }
+  .estimate-mix { display: flex; height: 10px; margin-top: 13px; overflow: hidden; border-radius: 20px; background: #ffffff22; }
+  .estimate-mix span { min-width: 0; }
+  .estimate-mix [data-mix='energia'] { background: #f2c261; }
+  .estimate-mix [data-mix='fijo'] { background: #ac8acb; }
+  .estimate-mix [data-mix='impuesto'] { background: #f3a573; }
+  .estimate-mix-key { display: flex; flex-wrap: wrap; gap: 5px 16px; margin-top: 8px; color: #e0d1eb; font-size: 11px; }
+  .estimate-mix-key span { display: inline-flex; align-items: center; gap: 5px; }
+  .estimate-mix-key span::before { content: ''; display: block; width: 7px; height: 7px; border-radius: 50%; background: #f2c261; }
+  .estimate-mix-key span:nth-child(2)::before { background: #ac8acb; }
+  .estimate-mix-key span:nth-child(3)::before { background: #f3a573; }
+  .estimate-result #estimate-breakdown, .estimate-result #estimate-warning { font-size: 12px; }
+  .estimate-result #estimate-warning { padding-top: 10px; border-top: 1px solid #f2c26140; color: #d7c5e3; }
+  .estimate-share { margin-top: 10px; border: 1px solid #bd8fdd65; border-radius: 13px; background: #1f112e; }
+  .estimate-share summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 54px; padding: 10px 18px; list-style: none; cursor: pointer; color: #f5d183; font-size: 14px; font-weight: 700; }
+  .estimate-share summary::-webkit-details-marker { display: none; }
+  .estimate-share[open] summary svg { transform: rotate(90deg); }
+  .estimate-share-content { padding: 4px 18px 18px; border-top: 1px solid #bd8fdd45; }
+  .estimate-share-content>p { margin-top: 12px; color: #e7d9f0; font-size: 13px; line-height: 1.6; }
+  .estimate-share label { display: block; margin-top: 14px; color: #f5d183; font-size: 12px; font-weight: 700; }
+  .estimate-share textarea { width: 100%; min-height: 100px; margin-top: 7px; padding: 12px; border: 1px solid #bd8fdd65; border-radius: 9px; color: #f9f1ff; background: #140c22; font-size: 12px; line-height: 1.6; resize: vertical; }
+  .estimate-share-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+  .estimate-share-actions button, .estimate-share-actions a { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 1px solid #f2c2619c; border-radius: 30px; background: transparent; color: #f5d183; font-size: 13px; font-weight: 700; }
+  .estimate-share-actions button:hover, .estimate-share-actions a:hover { background: #f2c26120; }
+  .estimate-share #estimate-copy-status { min-height: 0; margin-top: 7px; color: #f5d183; font-size: 12px; }
+  .estimate-share #estimate-copy-status:empty { display: none; }
+  @media (max-width: 1050px) { .estimator-intro { grid-template-columns: 1fr; gap: 14px; } .estimator-intro p { max-width: 630px; } .estimator-intro-aside { min-height: 0; padding-right: 0; } .estimate-visual { display: none; } }
+  @media (max-width: 760px) { .estimator { padding-block: 40px 50px; } .estimator-intro h2 { margin-top: 8px; } .estimator-workspace { padding: 18px; } .estimator-workspace[data-supply='ambas'] .estimate-supply-panels { grid-template-columns: 1fr; gap: 0; } }
+  @media (max-width: 600px) { .estimate-result { grid-template-columns: 1fr; gap: 14px; } }
+  @media (max-width: 480px) { .estimate-tax { grid-template-columns: 1fr; gap: 10px; } .estimate-grid, .estimator-workspace:not([data-supply='ambas']) .estimate-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 8px; } .estimate-grid .estimate-field:nth-child(3) { grid-column: 1 / -1; } .estimate-field label { flex-wrap: wrap; gap: 2px 6px; font-size: 12px; } .estimate-tariff-options { grid-template-columns: repeat(2, minmax(0, 1fr)); } .estimate-submit { width: 100%; } .estimate-share-actions>* { flex: 1; } }
+  @media (max-width: 350px) { .estimate-supply-options { gap: 5px; } .estimate-supply label span { gap: 3px; padding-inline: 4px; font-size: 11px; } }
+  @media (prefers-reduced-motion: no-preference) {
+    .estimate-visual { transition: transform 460ms cubic-bezier(.22, .75, .3, 1), background-color 460ms cubic-bezier(.22, .75, .3, 1); }
+    .estimate-result:not(.is-ready) .estimate-mix span { transform: scaleX(0); }
+    .estimate-mix span { transform-origin: left center; transition: transform 600ms cubic-bezier(.22, .75, .3, 1); }
+    .estimate-share summary svg { transition: transform 240ms cubic-bezier(.22, .75, .3, 1); }
+  }
+</style>

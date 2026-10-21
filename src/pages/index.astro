@@ -121,7 +121,6 @@ const jsonLd = {
     <link rel="preload" href={manropeLatin} as="font" type="font/woff2" crossorigin />
     <title>{pageTitle}</title>
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-    <Analytics />
   </head>
   <body>
     <a href="#top" class="skip-link">Saltar al contenido</a>
@@ -287,8 +286,9 @@ const jsonLd = {
     <footer class="footer container">
       <div class="footer-top"><p>La energía, sin tanto misterio.</p><a href="#top">Volver al inicio<Icon name="arrow" size={18} /></a></div>
       <div class="footer-signature" aria-hidden="true"><Icon name="bolt" size={180} /><span translate="no">wattios</span></div>
-      <div class="footer-bottom"><span>© {new Date().getFullYear()} Wattios</span><a class="footer-whatsapp" href={whatsappUrl} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={17} />WhatsApp: +34 688 60 88 06</a><a href="#revisar">Enviar mi factura</a><a href="/guias/">Guías</a><a href="/privacidad">Privacidad</a><a href="/aviso-legal">Aviso legal</a></div>
+      <div class="footer-bottom"><span>© {new Date().getFullYear()} Wattios</span><a class="footer-whatsapp" href={whatsappUrl} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={17} />WhatsApp: +34 688 60 88 06</a><a href="#revisar">Enviar mi factura</a><a href="/guias/">Guías</a><a href="/privacidad">Privacidad</a><a href="/aviso-legal">Aviso legal</a><button class="footer-cookie-settings" id="analytics-reopen" type="button" aria-controls="analytics-consent" aria-expanded="false" hidden>Cookies</button></div>
     </footer>
+    <Analytics />
   </body>
 </html>
 
@@ -474,6 +474,9 @@ const jsonLd = {
       const response = await fetch('/api/submit-invoice', { method: 'POST', body: new FormData(form) });
       const result = await response.json() as { ok?: boolean; error?: string };
       if (!response.ok || !result.ok) throw new Error(result.error ?? 'No se pudo enviar la factura.');
+      window.dispatchEvent(new CustomEvent('wattios:invoice-success', {
+        detail: { supply: form.querySelector<HTMLInputElement>('input[name="supply"]:checked')?.value },
+      }));
       form.classList.add('is-submitted');
       success.hidden = false;
       success.focus();

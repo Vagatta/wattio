@@ -1,5 +1,16 @@
 import { test, expect } from '@playwright/test';
 
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    if (location.search.includes('consent-test=1')) return;
+    try {
+      localStorage.setItem('wattios-analytics-consent-v1', JSON.stringify({ analytics: false, savedAt: Date.now() }));
+    } catch {
+      // Keep browser tests independent of persisted consent from previous runs.
+    }
+  });
+});
+
 for (const width of [320, 390, 768, 1024, 1440]) {
   test(`layout and sticky CTA at ${width}px`, async ({ page }, testInfo) => {
     await page.setViewportSize({ width, height: 900 });
@@ -424,4 +435,61 @@ test('reduced motion, local fonts and valid internal destinations', async ({ pag
   expect(await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior)).toBe('auto');
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: 'Saltar al contenido' })).toBeFocused();
+});
+
+test('analytics stays off until explicit consent and rejection persists', async ({ page }, testInfo) => {
+  const analyticsRequests: string[] = [];
+  page.on('request', request => {
+    if (/googletagmanager|google-analytics|cloudflareinsights|plausible/.test(request.url())) analyticsRequests.push(request.url());
+  });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/?consent-test=1');
+  await expect(page.locator('#analytics-consent')).toBeVisible();
+  await expect(page.locator('#analytics-optional')).not.toBeChecked();
+  expect(analyticsRequests).toEqual([]);
+  await page.locator('#analytics-consent').screenshot({ path: testInfo.outputPath('consent-desktop.png') });
+  await page.locator('#analytics-reject').click();
+  await expect(page.locator('#analytics-consent')).toBeHidden();
+  await expect(page.locator('#analytics-reopen')).toBeVisible();
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('wattios-analytics-consent-v1') ?? '{}').analytics)).toBe(false);
+  await page.reload();
+  await expect(page.locator('#analytics-consent')).toBeHidden();
+  expect(analyticsRequests).toEqual([]);
+  await page.evaluate(() => localStorage.removeItem('wattios-analytics-consent-v1'));
+  await page.setViewportSize({ width: 320, height: 740 });
+  await page.reload();
+  const banner = page.locator('#analytics-consent');
+  await expect(banner).toBeVisible();
+  const bannerBounds = await banner.boundingBox();
+  expect(bannerBounds!.x).toBeGreaterThanOrEqual(0);
+  expect(bannerBounds!.x + bannerBounds!.width).toBeLessThanOrEqual(320);
+  expect(bannerBounds!.y + bannerBounds!.height).toBeLessThanOrEqual(740);
+  await banner.screenshot({ path: testInfo.outputPath('consent-mobile.png') });
+});
+
+test('accepted analytics sends only allowlisted events and can be revoked', async ({ page }) => {
+  const analyticsRequests: string[] = [];
+  await page.route('https://www.googletagmanager.com/**', route => route.fulfill({ contentType: 'application/javascript', body: '' }));
+  await page.route('https://static.cloudflareinsights.com/**', route => route.fulfill({ contentType: 'application/javascript', body: '' }));
+  page.on('request', request => {
+    if (/googletagmanager|google-analytics|cloudflareinsights|plausible/.test(request.url())) analyticsRequests.push(request.url());
+  });
+  await page.goto('/?consent-test=1');
+  await page.locator('#analytics-accept').click();
+  await expect.poll(() => analyticsRequests.some(url => url.includes('googletagmanager.com/gtag/js?id=G-LCJ9VBQ2YJ'))).toBe(true);
+  await expect.poll(() => analyticsRequests.some(url => url.includes('cloudflareinsights.com/beacon.min.js'))).toBe(true);
+  await page.evaluate(() => window.dispatchEvent(new CustomEvent('wattios:estimate-complete', { detail: { supply: 'luz' } })));
+  const queuedData = await page.evaluate(() => JSON.stringify(window.dataLayer));
+  expect(queuedData).toContain('estimate_completed');
+  expect(queuedData).toContain('"supply":"luz"');
+  expect(queuedData).not.toContain('contact@example.com');
+
+  await page.locator('#analytics-reopen').click();
+  await expect(page.locator('#analytics-optional')).toBeChecked();
+  await page.locator('#analytics-optional').uncheck();
+  const reloaded = page.waitForEvent('load');
+  await page.locator('#analytics-save').click();
+  await reloaded;
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('wattios-analytics-consent-v1') ?? '{}').analytics)).toBe(false);
+  expect(await page.locator('script[src*="googletagmanager"]').count()).toBe(0);
 });

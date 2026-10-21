@@ -2014,6 +2014,21 @@ h3 {
   color: #fff;
 }
 
+.footer-cookie-settings {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.footer-cookie-settings:hover {
+  color: #fff;
+}
+
 .footer-signature {
   display: flex;
   align-items: center;

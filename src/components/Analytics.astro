@@ -1,19 +1,267 @@
 ---
-// Analítica sin cookies.
-// Cloudflare Web Analytics: activa solo en builds de producción (el dev local no ensucia métricas).
-// El token es público por diseño: cualquier visitante lo ve en el HTML, como en todas las webs que lo usan.
-// Alternativa: PUBLIC_ANALYTICS_DOMAIN activa Plausible/compatible; PUBLIC_ANALYTICS_SCRIPT apunta a otra instancia.
 const cfToken = 'bcb7b61451f34b6f9e9e97c5d1cddaa2';
+const gaMeasurementId = 'G-LCJ9VBQ2YJ';
 const domain = import.meta.env.PUBLIC_ANALYTICS_DOMAIN;
 const scriptSrc = import.meta.env.PUBLIC_ANALYTICS_SCRIPT ?? 'https://plausible.io/js/script.js';
+const isProduction = import.meta.env.PROD;
 ---
-{import.meta.env.PROD ? <script define:vars={{ cfToken }}>
-  window.addEventListener('load', () => {
-    const s = document.createElement('script');
-    s.type = 'module';
-    s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
-    s.dataset.cfBeacon = JSON.stringify({ token: cfToken });
-    document.head.appendChild(s);
+<aside class="analytics-consent" id="analytics-consent" aria-labelledby="analytics-title" hidden>
+  <div class="analytics-consent-heading">
+    <span class="analytics-signal" aria-hidden="true"></span>
+    <h2 id="analytics-title">Tu privacidad importa</h2>
+  </div>
+  <p class="analytics-consent-copy">Si aceptas, Google Analytics 4 (GA4) y Cloudflare Web Analytics medirán páginas vistas y uso general de la web. No enviamos tus facturas, datos de contacto ni cifras de consumo a analítica.</p>
+  <a class="analytics-privacy-link" href="/privacidad#cookies">Más información sobre cookies</a>
+
+  <div class="analytics-preferences" id="analytics-preferences" hidden>
+    <label class="analytics-toggle" for="analytics-optional">
+      <input id="analytics-optional" type="checkbox" />
+      <span><strong>Analítica opcional</strong><small>Google Analytics 4 y Cloudflare Web Analytics; Plausible si se configura.</small></span>
+    </label>
+  </div>
+
+  <div class="analytics-actions">
+    <button class="analytics-secondary" id="analytics-reject" type="button">Rechazar</button>
+    <button class="analytics-primary" id="analytics-accept" type="button">Aceptar analítica</button>
+    <button class="analytics-secondary" id="analytics-configure" type="button" aria-expanded="false" aria-controls="analytics-preferences">Configurar</button>
+    <button class="analytics-primary" id="analytics-save" type="button" hidden>Guardar selección</button>
+  </div>
+</aside>
+<script define:vars={{ cfToken, gaMeasurementId, domain, scriptSrc, isProduction }}>
+  const CONSENT_KEY = 'wattios-analytics-consent-v1';
+  const CONSENT_MAX_AGE = 180 * 24 * 60 * 60 * 1000;
+  const w = window;
+  let analyticsStarted = false;
+  let pageViewSent = false;
+  let volatileConsent = null;
+
+  const panel = document.querySelector('#analytics-consent');
+  const preferences = document.querySelector('#analytics-preferences');
+  const optionalCheckbox = document.querySelector('#analytics-optional');
+  const configureButton = document.querySelector('#analytics-configure');
+  const acceptButton = document.querySelector('#analytics-accept');
+  const rejectButton = document.querySelector('#analytics-reject');
+  const saveButton = document.querySelector('#analytics-save');
+  const reopenButton = document.querySelector('#analytics-reopen');
+
+  function readConsent() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(CONSENT_KEY) ?? 'null');
+      if (!saved || typeof saved.analytics !== 'boolean' || !Number.isFinite(saved.savedAt) || Date.now() - saved.savedAt > CONSENT_MAX_AGE) {
+        localStorage.removeItem(CONSENT_KEY);
+        return null;
+      }
+      return saved.analytics;
+    } catch {
+      return volatileConsent;
+    }
+  }
+
+  function clearAnalyticsCookies() {
+    const analyticsCookies = document.cookie.split(';').map(cookie => cookie.trim().split('=')[0])
+      .filter(name => /^_(ga|gid|gat|gcl)(_|$)/i.test(name));
+    const secure = location.protocol === 'https:' ? '; Secure' : '';
+    for (const name of analyticsCookies) {
+      document.cookie = `${name}=; Max-Age=0; path=/; SameSite=Lax${secure}`;
+      if (location.hostname.endsWith('wattios.es')) {
+        document.cookie = `${name}=; Max-Age=0; path=/; domain=.wattios.es; SameSite=Lax${secure}`;
+      }
+    }
+  }
+
+  function loadAnalytics() {
+    if (!isProduction || analyticsStarted || readConsent() !== true) return;
+    analyticsStarted = true;
+
+    if (gaMeasurementId) {
+      w.dataLayer = w.dataLayer || [];
+      w.gtag = (...args) => w.dataLayer.push(args);
+      w.gtag('consent', 'default', {
+        analytics_storage: 'denied',
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+      });
+      w.gtag('consent', 'update', {
+        analytics_storage: 'granted',
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+      });
+      w.gtag('js', new Date());
+      w.gtag('config', gaMeasurementId, {
+        send_page_view: false,
+        cookie_expires: 15552000,
+        allow_google_signals: false,
+        allow_ad_personalization_signals: false,
+      });
+      const googleTag = document.createElement('script');
+      googleTag.async = true;
+      googleTag.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(gaMeasurementId)}`;
+      document.head.appendChild(googleTag);
+    }
+
+    if (isProduction && cfToken) {
+      const loadCloudflare = () => {
+        if (readConsent() !== true || document.querySelector('[data-wattios-cloudflare]')) return;
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+        script.dataset.cfBeacon = JSON.stringify({ token: cfToken });
+        script.dataset.wattiosCloudflare = 'true';
+        document.head.appendChild(script);
+      };
+      if (document.readyState === 'complete') loadCloudflare();
+      else window.addEventListener('load', loadCloudflare, { once: true });
+    }
+
+    if (domain) {
+      const analyticsScript = document.createElement('script');
+      analyticsScript.defer = true;
+      analyticsScript.dataset.domain = domain;
+      analyticsScript.src = scriptSrc;
+      document.head.appendChild(analyticsScript);
+    }
+  }
+
+  function trackEvent(name, parameters = {}) {
+    if (!analyticsStarted || readConsent() !== true || typeof w.gtag !== 'function') return;
+    w.gtag('event', name, parameters);
+  }
+
+  function safePageLocation() {
+    const url = new URL(location.href);
+    const safeCampaignKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+    const campaign = safeCampaignKeys.flatMap(key => {
+      const value = url.searchParams.get(key)?.slice(0, 64);
+      return value && /^[a-z\d._-]+$/i.test(value) && !/^\d{7,}$/.test(value) ? [[key, value]] : [];
+    });
+    url.search = '';
+    url.hash = '';
+    campaign.forEach(([key, value]) => url.searchParams.set(key, value));
+    return url.href;
+  }
+
+  function registerPageView() {
+    if (!analyticsStarted || pageViewSent || typeof w.gtag !== 'function') return;
+    pageViewSent = true;
+    const referrer = document.referrer ? new URL(document.referrer).origin : '';
+    w.gtag('event', 'page_view', {
+      page_title: document.title,
+      page_location: safePageLocation(),
+      ...(referrer ? { page_referrer: referrer } : {}),
+    });
+  }
+
+  function persistConsent(analytics) {
+    try {
+      localStorage.setItem(CONSENT_KEY, JSON.stringify({ analytics, savedAt: Date.now() }));
+      volatileConsent = analytics;
+    } catch {
+      volatileConsent = analytics;
+    }
+    panel.hidden = true;
+    reopenButton.hidden = false;
+    reopenButton.setAttribute('aria-expanded', 'false');
+
+    if (analytics) {
+      reopenButton.focus();
+      loadAnalytics();
+      registerPageView();
+      return;
+    }
+
+    clearAnalyticsCookies();
+    if (analyticsStarted) {
+      location.reload();
+      return;
+    }
+    reopenButton.focus();
+  }
+
+  function openPanel(configure = false, moveFocus = true) {
+    panel.hidden = false;
+    reopenButton.hidden = true;
+    reopenButton.setAttribute('aria-expanded', 'true');
+    preferences.hidden = !configure;
+    configureButton.setAttribute('aria-expanded', String(configure));
+    configureButton.hidden = configure;
+    saveButton.hidden = !configure;
+    acceptButton.hidden = configure;
+    optionalCheckbox.checked = readConsent() === true;
+    if (moveFocus) (configure ? optionalCheckbox : rejectButton).focus();
+  }
+
+  configureButton.addEventListener('click', () => openPanel(true));
+  reopenButton.addEventListener('click', () => openPanel(true));
+  acceptButton.addEventListener('click', () => persistConsent(true));
+  rejectButton.addEventListener('click', () => persistConsent(false));
+  saveButton.addEventListener('click', () => persistConsent(optionalCheckbox.checked));
+
+  document.addEventListener('click', event => {
+    const link = event.target instanceof Element ? event.target.closest('a[href^="https://wa.me/"]') : null;
+    if (!link) return;
+    const placement = link.closest('.hero') ? 'hero' : link.closest('.footer') ? 'footer' : 'content';
+    trackEvent('whatsapp_click', { placement });
   });
-</script> : null}
-{domain ? <script defer data-domain={domain} src={scriptSrc} /> : null}
+  window.addEventListener('wattios:invoice-success', event => {
+    const supply = ['luz', 'gas', 'ambas'].includes(event.detail?.supply ?? '') ? event.detail.supply : 'unknown';
+    trackEvent('invoice_submission_success', { supply });
+  });
+  window.addEventListener('wattios:estimate-complete', event => {
+    const supply = ['luz', 'gas', 'ambas'].includes(event.detail?.supply ?? '') ? event.detail.supply : 'unknown';
+    trackEvent('estimate_completed', { supply });
+  });
+
+  if (readConsent() === null) openPanel(false, false);
+  else {
+    panel.hidden = true;
+    reopenButton.hidden = false;
+    if (readConsent() === true) {
+      loadAnalytics();
+      registerPageView();
+    }
+  }
+</script>
+
+<style>
+  .analytics-consent {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 80;
+    width: min(440px, calc(100vw - 32px));
+    padding: 20px;
+    border: 1px solid #d4c1e1;
+    border-radius: 18px;
+    color: #30213d;
+    background: #f4eff8;
+    box-shadow: 0 18px 55px #0a031a66;
+    color-scheme: light;
+  }
+
+  .analytics-consent-heading { display: flex; align-items: center; gap: 10px; }
+  .analytics-signal { width: 10px; height: 10px; flex: 0 0 auto; border-radius: 50%; background: #f2c261; box-shadow: 0 0 0 4px #f2c26135; }
+  .analytics-consent h2 { font-size: 17px; font-weight: 750; letter-spacing: -.03em; }
+  .analytics-consent-copy, .analytics-toggle small { display: block; margin-top: 8px; color: #594968; font-size: 13px; line-height: 1.55; }
+  .analytics-privacy-link { display: inline-block; margin-top: 6px; color: #633786; font-size: 12px; font-weight: 650; text-decoration: underline; text-underline-offset: 3px; }
+  .analytics-preferences { margin-top: 14px; padding-top: 12px; border-top: 1px solid #43245130; }
+  .analytics-toggle { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
+  .analytics-toggle input { width: 18px; height: 18px; margin: 2px 0 0; accent-color: #6e35a5; }
+  .analytics-toggle strong { color: #30213d; font-size: 13px; }
+  .analytics-toggle small { margin-top: 2px; font-size: 12px; }
+  .analytics-actions { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 8px; margin-top: 16px; }
+  .analytics-actions button { min-height: 44px; padding: 8px 10px; border: 1px solid #785995; border-radius: 10px; color: #402653; background: transparent; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .analytics-actions button:hover { background: #e9def1; }
+  .analytics-actions #analytics-reject, .analytics-actions .analytics-primary { border-color: #60328c; color: white; background: #60328c; }
+  .analytics-actions #analytics-reject:hover, .analytics-actions .analytics-primary:hover { background: #4d2475; }
+  .analytics-actions button:focus-visible { outline: 3px solid #8e60b5; outline-offset: 3px; }
+  [hidden] { display: none !important; }
+
+  @media (max-width: 480px) {
+    .analytics-consent { right: 10px; bottom: 10px; width: calc(100vw - 20px); padding: 16px; border-radius: 15px; }
+    .analytics-actions { grid-template-columns: 1fr 1fr; }
+    .analytics-actions #analytics-configure { grid-column: 1 / -1; }
+    .analytics-actions #analytics-save, .analytics-actions #analytics-accept { grid-column: 2; }
+  }
+</style>

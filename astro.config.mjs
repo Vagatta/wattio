@@ -9,7 +9,7 @@ const lastmod = {
   '/guias/': '2026-09-17',
   '/guias/como-leer-tu-factura-de-gas/': '2026-09-17',
   '/guias/como-leer-tu-factura-de-luz/': '2026-09-17',
-  '/privacidad/': '2026-09-18',
+  '/privacidad/': '2026-10-21',
 };
 
 export default defineConfig({

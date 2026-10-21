@@ -240,6 +240,7 @@ const tariffs = {
     result.hidden = false;
     share.hidden = false;
     result.focus();
+    window.dispatchEvent(new CustomEvent('wattios:estimate-complete', { detail: { supply: currentSupply() } }));
     requestAnimationFrame(() => {
       if (!result.hidden) result.classList.add('is-ready');
     });

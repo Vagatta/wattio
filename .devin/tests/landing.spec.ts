@@ -475,7 +475,10 @@ test('accepted analytics sends only allowlisted events and can be revoked', asyn
     if (/googletagmanager|google-analytics|cloudflareinsights|plausible/.test(request.url())) analyticsRequests.push(request.url());
   });
   await page.goto('/?consent-test=1');
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight / 2));
+  const scrollBeforeConsent = await page.evaluate(() => window.scrollY);
   await page.locator('#analytics-accept').click();
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(scrollBeforeConsent);
   await expect.poll(() => analyticsRequests.some(url => url.includes('googletagmanager.com/gtag/js?id=G-LCJ9VBQ2YJ'))).toBe(true);
   await expect.poll(() => analyticsRequests.some(url => url.includes('cloudflareinsights.com/beacon.min.js'))).toBe(true);
   await page.evaluate(() => window.dispatchEvent(new CustomEvent('wattios:estimate-complete', { detail: { supply: 'luz' } })));

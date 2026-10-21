@@ -27,6 +27,7 @@ const isProduction = import.meta.env.PROD;
     <button class="analytics-primary" id="analytics-save" type="button" hidden>Guardar selección</button>
   </div>
 </aside>
+<p class="analytics-status" id="analytics-status" role="status" aria-live="polite"></p>
 <script define:vars={{ cfToken, gaMeasurementId, domain, scriptSrc, isProduction }}>
   const CONSENT_KEY = 'wattios-analytics-consent-v1';
   const CONSENT_MAX_AGE = 180 * 24 * 60 * 60 * 1000;
@@ -43,6 +44,7 @@ const isProduction = import.meta.env.PROD;
   const rejectButton = document.querySelector('#analytics-reject');
   const saveButton = document.querySelector('#analytics-save');
   const reopenButton = document.querySelector('#analytics-reopen');
+  const consentStatus = document.querySelector('#analytics-status');
 
   function readConsent() {
     try {
@@ -163,9 +165,11 @@ const isProduction = import.meta.env.PROD;
     panel.hidden = true;
     reopenButton.hidden = false;
     reopenButton.setAttribute('aria-expanded', 'false');
+    consentStatus.textContent = analytics
+      ? 'Has aceptado la analítica opcional. Puedes cambiar tu elección desde «Cookies», al pie de la página.'
+      : 'Has rechazado la analítica opcional. Puedes cambiar tu elección desde «Cookies», al pie de la página.';
 
     if (analytics) {
-      reopenButton.focus();
       loadAnalytics();
       registerPageView();
       return;
@@ -176,7 +180,6 @@ const isProduction = import.meta.env.PROD;
       location.reload();
       return;
     }
-    reopenButton.focus();
   }
 
   function openPanel(configure = false, moveFocus = true) {
@@ -256,6 +259,7 @@ const isProduction = import.meta.env.PROD;
   .analytics-actions #analytics-reject, .analytics-actions .analytics-primary { border-color: #60328c; color: white; background: #60328c; }
   .analytics-actions #analytics-reject:hover, .analytics-actions .analytics-primary:hover { background: #4d2475; }
   .analytics-actions button:focus-visible { outline: 3px solid #8e60b5; outline-offset: 3px; }
+  .analytics-status { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
   [hidden] { display: none !important; }
 
   @media (max-width: 480px) {
